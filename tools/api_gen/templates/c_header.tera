@@ -13,19 +13,22 @@ extern "C" {
 #endif
 
 {%- for enum in enums %}
-{% for c in enum.doc_comments %}
+    {% for c in enum.doc_comments %}
 // {{ c }}
-{%- endfor %}
-{%- for entry in enum.entries %}
-    Fl{{ entry.name }}_{{ entry.name }} =
-    {%- if entry.value.Value %} 
-        {{ entry.value.Value }},
-    {% else %}
-        Fl{{ entry.name }}_{{ entry.value.OrList | first }}
+    {%- endfor %}
+typedef enum Fl{{ enum.name }} {
+    {%- for entry in enum.entries %}
+        {%- if entry.value.Value %} 
+    Fl{{ enum.name }}_{{ entry.name }} = {{ entry.value.Value }}
+        {%- else %}
+    Fl{{ enum.name }}_{{ entry.name }} = Fl{{ entry.name }}_{{ entry.value.OrList | first }}
         {%- for v in entry.value.OrList | slice(start=1) -%}
-        | Fl{{ entry.name }}_{{ v }}
+            | Fl{{ enum.name }}_{{ v }}
         {%- endfor %}
-    {% endif %}
+        {%- endif -%}
+    ,
+    {%- endfor %}
+} Fl{{ enum.name }};
 {%- endfor %}
 #ifdef __cplusplus
 }
