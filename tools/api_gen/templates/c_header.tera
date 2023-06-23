@@ -4,6 +4,9 @@
 
 #pragma once
 
+{%- for mod in mods %}
+#include "{{ mod }}.h" 
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
@@ -12,25 +15,4 @@
 extern "C" {
 #endif
 
-{%- for enum in enums %}
-    {% for c in enum.doc_comments %}
-// {{ c }}
-    {%- endfor %}
-typedef enum Fl{{ enum.name }} {
-    {%- for entry in enum.entries %}
-        {%- if entry.value.Value %} 
-    Fl{{ enum.name }}_{{ entry.name }} = {{ entry.value.Value }}
-        {%- else %}
-    Fl{{ enum.name }}_{{ entry.name }} = Fl{{ entry.name }}_{{ entry.value.OrList | first }}
-        {%- for v in entry.value.OrList | slice(start=1) -%}
-            | Fl{{ enum.name }}_{{ v }}
-        {%- endfor %}
-        {%- endif -%}
-    ,
-    {%- endfor %}
-} Fl{{ enum.name }};
-{%- endfor %}
-#ifdef __cplusplus
-}
-#endif
 
