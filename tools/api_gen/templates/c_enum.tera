@@ -4,6 +4,9 @@
     {%- endfor %}
 typedef enum Fl{{ enum.name }} {
     {%- for entry in enum.entries %}
+        {%- for c in entry.doc_comments %}
+    // {{ c }}
+        {%- endfor %}
         {%- if entry.value.Value %} 
     Fl{{ enum.name }}_{{ entry.name }} = {{ entry.value.Value }}
         {%- else %}

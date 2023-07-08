@@ -4,12 +4,14 @@
 
 #pragma once
 
-{%- for mod in mods %}
-#include "{{ mod }}.h" 
-
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "manual.h"
+
+{%- for mod in mods %}
+#include "{{ mod }}.h" 
+{%- endfor %}
 
 #ifdef __cplusplus
 extern "C" {
