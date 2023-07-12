@@ -62,21 +62,23 @@ typedef enum FlWindowFlags {
   // skipped by CTRL+TAB)
   FlWindowFlags_NoNavFocus = 1 << 18,
   // Display a dot next to the title. When used in a tab/docking context, tab is
-  // selected when clicking the X +
-  // closure is not assumed (will wait for user to stop submitting the tab).
-  // Otherwise closure is assumed when
-  // pressing the X, so if you keep submitting the tab may reappear at end of
-  // tab bar.
+  // selected when clicking the X +// closure is not assumed (will wait for user
+  // to stop submitting the tab). Otherwise closure is assumed when// pressing
+  // the X, so if you keep submitting the tab may reappear at end of tab bar.
   FlWindowFlags_UnsavedDocument = 1 << 19,
+
   FlWindowFlags_NoNav = FlNoNav_NoNavInputs | FlWindowFlags_NoNavFocus,
+
   FlWindowFlags_NoDecoration =
       FlNoDecoration_NoTitleBar | FlWindowFlags_NoResize |
       FlWindowFlags_NoScrollbar | FlWindowFlags_NoCollapse,
+
   FlWindowFlags_NoInputs = FlNoInputs_NoMouseInputs |
                            FlWindowFlags_NoNavInputs | FlWindowFlags_NoNavFocus,
 } FlWindowFlags;
 
 typedef enum FlFocusedFlags {
+
   FlFocusedFlags_None = 0,
   // Return true if any children of the window is focused
   FlFocusedFlags_ChildWindows = 1 << 0,
@@ -92,6 +94,7 @@ typedef enum FlFocusedFlags {
   // Consider docking hierarchy (treat dockspace host as parent of docked
   // window) (when used with _ChildWindows or _RootWindow)
   FlFocusedFlags_DockHierarchy = 1 << 4,
+
   FlFocusedFlags_RootAndChildWindows =
       FlRootAndChildWindows_RootWindow | FlFocusedFlags_ChildWindows,
 } FlFocusedFlags;
@@ -130,13 +133,15 @@ typedef enum FlHoveredFlags {
   // Disable using gamepad/keyboard navigation state when active, always query
   // mouse.
   FlHoveredFlags_NoNavOverride = 1 << 10,
+
   FlHoveredFlags_RectOnly = FlRectOnly_AllowWhenBlockedByPopup |
                             FlHoveredFlags_AllowWhenBlockedByActiveItem |
                             FlHoveredFlags_AllowWhenOverlapped,
+
   FlHoveredFlags_RootAndChildWindows =
       FlRootAndChildWindows_RootWindow | FlHoveredFlags_ChildWindows,
-  // Hovering delays (for tooltips)
-  // Return true after io.HoverDelayNormal elapsed (~0.30 sec)
+  // Hovering delays (for tooltips)// Return true after io.HoverDelayNormal
+  // elapsed (~0.30 sec)
   FlHoveredFlags_DelayNormal = 1 << 11,
   // Return true after io.HoverDelayShort elapsed (~0.10 sec)
   FlHoveredFlags_DelayShort = 1 << 12,

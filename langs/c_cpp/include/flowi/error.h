@@ -14,13 +14,21 @@ extern "C" {
 #endif
 
 typedef enum FlError {
+
   FlError_None = 0,
+
   FlError_Io = 1,
+
   FlError_Memory = 2,
+
   FlError_Font = 3,
+
   FlError_Style = 4,
+
   FlError_Image = 5,
+
   FlError_Utf8Malformed = 6,
+
   FlError_Generic = 7,
 } FlError;
 

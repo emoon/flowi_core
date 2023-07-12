@@ -26,10 +26,9 @@ typedef enum FlTextureFormat {
   // 4 byte R,G,B,A format (LINEAR)
   FlTextureFormat_Rgba8Linear = 4,
   // 16-bit single format. This will mostly be used for temporary things such as
-  // blurs that requires more
-  // than one pass rendering. i16 or f16 will allow better accuracy, but
-  // R8_LINEAR can be used in worst case
-  // in case the rendering backend doesn't support this format
+  // blurs that requires more// than one pass rendering. i16 or f16 will allow
+  // better accuracy, but R8_LINEAR can be used in worst case// in case the
+  // rendering backend doesn't support this format
   FlTextureFormat_I16OrF16Linear = 5,
 } FlTextureFormat;
 

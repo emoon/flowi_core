@@ -1,12 +1,10 @@
+{% import "macros.tera" as macros %}
+
 {%- for enum in enums %}
-    {% for c in enum.doc_comments %}
-// {{ c }}
-    {%- endfor %}
+{{ macros::gen_comments(comments=enum.doc_comments) }}
 typedef enum Fl{{ enum.name }} {
     {%- for entry in enum.entries %}
-        {%- for c in entry.doc_comments %}
-    // {{ c }}
-        {%- endfor %}
+        {{ macros::gen_comments(comments=entry.doc_comments) }}
         {%- if entry.value.Value %} 
     Fl{{ enum.name }}_{{ entry.name }} = {{ entry.value.Value }}
         {%- else %}

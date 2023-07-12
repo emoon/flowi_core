@@ -538,12 +538,16 @@ impl Cgen {
         Ok(())
     }
 
-    fn render_tera<W: Write, S: Serialize + Clone>(f: &mut W, data: &S, template: &str, tera: &Tera) -> io::Result<()> {
+    fn render_tera<W: Write, S: Serialize + Clone>(f: &mut W, data: &S, templates: &[&str], tera: &Tera) -> io::Result<()> {
         let t = data.clone();
         let ser_data = serde_json::to_value(t).unwrap();
         let ctx = Context::from_value(ser_data).unwrap();
-        let m = tera.render(template, &ctx).unwrap();
-        writeln!(f, "{}", m)
+        for template in templates {
+            let m = tera.render(template, &ctx).unwrap();
+            writeln!(f, "{}", m)?;
+        }
+
+        Ok(())
     }
 
     pub fn generate(path: &str, api_def: &ApiDef, tera: &Tera) -> io::Result<()> {
@@ -557,8 +561,10 @@ impl Cgen {
             let mut f = BufWriter::new(File::create(&filename)?);
             let mut fi = BufWriter::new(File::create(&inl_filename)?);
 
-            Self::render_tera(&mut f, &api_def, "c_header.tera", &tera)?;
-            Self::render_tera(&mut f, &api_def, "c_enum.tera", &tera)?;
+            Self::render_tera(&mut f, &api_def, &[
+                  "c_header.tera", 
+                  "c_enum.tera"], 
+                tera)?;
 
             /*
 
@@ -659,7 +665,7 @@ impl Cgen {
             writeln!(f, "{}", FOOTER)?;
         */
 
-            Self::render_tera(&mut f, &api_def, "c_footer.tera", &tera)?;
+            Self::render_tera(&mut f, &api_def, &["c_footer.tera"], tera)?;
         }
 
         run_clang_format(&filename);

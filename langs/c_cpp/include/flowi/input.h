@@ -14,159 +14,303 @@ extern "C" {
 #endif
 
 typedef enum FlKey {
+
   FlKey_Tab = 0,
+
   FlKey_LeftArrow = 1,
+
   FlKey_RightArrow = 2,
+
   FlKey_UpArrow = 3,
+
   FlKey_DownArrow = 4,
+
   FlKey_PageUp = 5,
+
   FlKey_PageDown = 6,
+
   FlKey_Home = 7,
+
   FlKey_End = 8,
+
   FlKey_Insert = 9,
+
   FlKey_Delete = 10,
+
   FlKey_Backspace = 11,
+
   FlKey_Space = 12,
+
   FlKey_Enter = 13,
+
   FlKey_Escape = 14,
+
   FlKey_LeftCtrl = 15,
+
   FlKey_LeftShift = 16,
+
   FlKey_LeftAlt = 17,
+
   FlKey_LeftSuper = 18,
+
   FlKey_RightCtrl = 19,
+
   FlKey_RightShift = 20,
+
   FlKey_RightAlt = 21,
+
   FlKey_RightSuper = 22,
+
   FlKey_Menu = 23,
+
   FlKey_Alpha0 = 24,
+
   FlKey_Alpha1 = 25,
+
   FlKey_Alpha2 = 26,
+
   FlKey_Alpha3 = 27,
+
   FlKey_Alpha4 = 28,
+
   FlKey_Alpha5 = 29,
+
   FlKey_Alpha6 = 30,
+
   FlKey_Alpha7 = 31,
+
   FlKey_Alpha8 = 32,
+
   FlKey_Alpha9 = 33,
+
   FlKey_A = 34,
+
   FlKey_B = 35,
+
   FlKey_C = 36,
+
   FlKey_D = 37,
+
   FlKey_E = 38,
+
   FlKey_F = 39,
+
   FlKey_G = 40,
+
   FlKey_H = 41,
+
   FlKey_I = 42,
+
   FlKey_J = 43,
+
   FlKey_K = 44,
+
   FlKey_L = 45,
+
   FlKey_M = 46,
+
   FlKey_N = 47,
+
   FlKey_O = 48,
+
   FlKey_P = 49,
+
   FlKey_Q = 50,
+
   FlKey_R = 51,
+
   FlKey_S = 52,
+
   FlKey_T = 53,
+
   FlKey_U = 54,
+
   FlKey_V = 55,
+
   FlKey_W = 56,
+
   FlKey_X = 57,
+
   FlKey_Y = 58,
+
   FlKey_Z = 59,
+
   FlKey_F1 = 60,
+
   FlKey_F2 = 61,
+
   FlKey_F3 = 62,
+
   FlKey_F4 = 63,
+
   FlKey_F5 = 64,
+
   FlKey_F6 = 65,
+
   FlKey_F7 = 66,
+
   FlKey_F8 = 67,
+
   FlKey_F9 = 68,
+
   FlKey_F10 = 69,
+
   FlKey_F11 = 70,
+
   FlKey_F12 = 71,
+
   FlKey_Apostrophe = 72,
+
   FlKey_Comma = 73,
+
   FlKey_Minus = 74,
+
   FlKey_Period = 75,
+
   FlKey_Slash = 76,
+
   FlKey_Semicolon = 77,
+
   FlKey_Equal = 78,
+
   FlKey_LeftBracket = 79,
+
   FlKey_Backslash = 80,
+
   FlKey_RightBracket = 81,
+
   FlKey_GraveAccent = 82,
+
   FlKey_CapsLock = 83,
+
   FlKey_ScrollLock = 84,
+
   FlKey_NumLock = 85,
+
   FlKey_PrintScreen = 86,
+
   FlKey_Pause = 87,
+
   FlKey_Keypad0 = 88,
+
   FlKey_Keypad1 = 89,
+
   FlKey_Keypad2 = 90,
+
   FlKey_Keypad3 = 91,
+
   FlKey_Keypad4 = 92,
+
   FlKey_Keypad5 = 93,
+
   FlKey_Keypad6 = 94,
+
   FlKey_Keypad7 = 95,
+
   FlKey_Keypad8 = 96,
+
   FlKey_Keypad9 = 97,
+
   FlKey_KeypadDecimal = 98,
+
   FlKey_KeypadDivide = 99,
+
   FlKey_KeypadMultiply = 100,
+
   FlKey_KeypadSubtract = 101,
+
   FlKey_KeypadAdd = 102,
+
   FlKey_KeypadEnter = 103,
+
   FlKey_KeypadEqual = 104,
+
   FlKey_GamepadStart = 105,
+
   FlKey_GamepadBack = 106,
+
   FlKey_GamepadFaceLeft = 107,
+
   FlKey_GamepadFaceRight = 108,
+
   FlKey_GamepadFaceUp = 109,
+
   FlKey_GamepadFaceDown = 110,
+
   FlKey_GamepadDpadLeft = 111,
+
   FlKey_GamepadDpadRight = 112,
+
   FlKey_GamepadDpadUp = 113,
+
   FlKey_GamepadDpadDown = 114,
+
   FlKey_GamepadL1 = 115,
+
   FlKey_GamepadR1 = 116,
+
   FlKey_GamepadL2 = 117,
+
   FlKey_GamepadR2 = 118,
+
   FlKey_GamepadL3 = 119,
+
   FlKey_GamepadR3 = 120,
+
   FlKey_GamepadLStickLeft = 121,
+
   FlKey_GamepadLStickRight = 122,
+
   FlKey_GamepadLStickUp = 123,
+
   FlKey_GamepadLStickDown = 124,
+
   FlKey_GamepadRStickLeft = 125,
+
   FlKey_GamepadRStickRight = 126,
+
   FlKey_GamepadRStickUp = 127,
+
   FlKey_GamepadRStickDown = 128,
+
   FlKey_MouseLeft = 129,
+
   FlKey_MouseRight = 130,
+
   FlKey_MouseMiddle = 131,
+
   FlKey_MouseX1 = 132,
+
   FlKey_MouseX2 = 133,
+
   FlKey_MouseWheelX = 134,
+
   FlKey_MouseWheelY = 135,
+
   FlKey_ReservedForModCtrl = 136,
+
   FlKey_ReservedForModShift = 137,
+
   FlKey_ReservedForModAlt = 138,
+
   FlKey_ReservedForModSuper = 139,
+
   FlKey_ModCtrl = 140,
+
   FlKey_ModShift = 141,
+
   FlKey_ModAlt = 142,
+
   FlKey_ModSuper = 143,
+
   FlKey_ModShortcut = 144,
 } FlKey;
 
 typedef enum FlMouseSource {
   // Input is coming from an actual mouse.
   FlMouseSource_Mouse = 0,
-  // Input is coming from a touch screen
-  // (no hovering prior to initial press, less precise initial press aiming,
-  // dual-axis wheeling possible).
+  // Input is coming from a touch screen // (no hovering prior to initial press,
+  // less precise initial press aiming, dual-axis wheeling possible).
   FlMouseSource_TouchScreen = 1,
   // Input is coming from a pressure/magnetic pen (often used in conjunction
   // with high-sampling rates).

@@ -17,8 +17,11 @@ extern "C" {
 #endif
 
 typedef enum FlPainterLayer {
+
   FlPainterLayer_ActiveWindow = 0,
+
   FlPainterLayer_Background = 1,
+
   FlPainterLayer_Foreground = 2,
 } FlPainterLayer;
 

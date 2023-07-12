@@ -14,7 +14,9 @@ extern "C" {
 #endif
 
 typedef enum FlDebugMode {
+
   FlDebugMode_Off = 0,
+
   FlDebugMode_Layout = 1,
 } FlDebugMode;
 
