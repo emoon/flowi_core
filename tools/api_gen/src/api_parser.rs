@@ -1,12 +1,12 @@
 use heck::ToSnakeCase;
 use pest::iterators::Pair;
 use pest::Parser;
+use serde::Serialize;
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
-use serde::Serialize;
 
 //#[cfg(debug_assertions)]
 const _GRAMMAR: &str = include_str!("api.pest");
@@ -246,6 +246,8 @@ pub struct ApiDef {
     pub callbacks: Vec<Function>,
     /// Structs that only holds data
     pub structs: Vec<Struct>,
+    /// Structs that are handle based
+    pub handle_structs: Vec<Struct>,
     /// Enums
     pub enums: Vec<Enum>,
 }
@@ -295,8 +297,11 @@ impl ApiParser {
                     let sdef = Self::fill_struct(chunk, &current_comments, &api_def.base_filename);
                     current_comments.clear();
 
-                    // If we have some variables in the struct we push it to pod_struct
-                    api_def.structs.push(sdef);
+                    if sdef.has_attribute("Handle") {
+                        api_def.handle_structs.push(sdef);
+                    } else {
+                        api_def.structs.push(sdef);
+                    }
                 }
 
                 Rule::callbackdef => {
@@ -625,7 +630,11 @@ impl ApiParser {
     }
 
     /// Get enum
-    fn get_enum(doc_comments: &Vec<String>, current_value: &mut u64, rule: Pair<Rule>) -> EnumEntry {
+    fn get_enum(
+        doc_comments: &Vec<String>,
+        current_value: &mut u64,
+        rule: Pair<Rule>,
+    ) -> EnumEntry {
         let mut name = String::new();
         let mut value = EnumValue::None;
 
@@ -647,8 +656,7 @@ impl ApiParser {
                 if let Ok(v) = v.parse::<u64>() {
                     *current_value = v;
                 }
-
-            },
+            }
 
             _ => (),
         }

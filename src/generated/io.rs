@@ -16,42 +16,42 @@ use crate::shader::*;
 pub struct IoFfiApi {
     pub(crate) data: *const core::ffi::c_void,
     pub(crate) load_image:
-        unsafe extern "C" fn(data: *const core::ffi::c_void, filename: FlString) -> u64,
+        unsafe extern "C" fn(data: *const core::ffi::c_void, filename: FlString) -> Image,
     pub(crate) load_image_async: unsafe extern "C" fn(
         data: *const core::ffi::c_void,
         filename: FlString,
         loader_type: LoaderType,
-    ) -> u64,
+    ) -> Image,
     pub(crate) load_file: unsafe extern "C" fn(
         data: *const core::ffi::c_void,
         filename: FlString,
         loader_type: LoaderType,
-    ) -> u64,
+    ) -> Image,
     pub(crate) load_shader_program_comp: unsafe extern "C" fn(
         data: *const core::ffi::c_void,
         vs_filename: FlString,
         ps_filename: FlString,
-    ) -> u64,
+    ) -> ShaderProgram,
 }
 
 #[cfg(any(feature = "static", feature = "tundra"))]
 extern "C" {
-    fn fl_io_load_image_impl(data: *const core::ffi::c_void, filename: FlString) -> u64;
+    fn fl_io_load_image_impl(data: *const core::ffi::c_void, filename: FlString) -> Image;
     fn fl_io_load_image_async_impl(
         data: *const core::ffi::c_void,
         filename: FlString,
         loader_type: LoaderType,
-    ) -> u64;
+    ) -> Image;
     fn fl_io_load_file_impl(
         data: *const core::ffi::c_void,
         filename: FlString,
         loader_type: LoaderType,
-    ) -> u64;
+    ) -> Image;
     fn fl_io_load_shader_program_comp_impl(
         data: *const core::ffi::c_void,
         vs_filename: FlString,
         ps_filename: FlString,
-    ) -> u64;
+    ) -> ShaderProgram;
 }
 
 #[no_mangle]
@@ -72,7 +72,7 @@ impl Io {
             let ret_val = fl_io_load_image_impl(_api.data, FlString::new(filename));
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.load_image)(_api.data, FlString::new(filename));
-            Image { handle: ret_value }
+            ret_val
         }
     }
 
@@ -85,11 +85,7 @@ impl Io {
                 fl_io_load_image_async_impl(_api.data, FlString::new(filename), loader_type);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.load_image_async)(_api.data, FlString::new(filename), loader_type);
-            if ret_val == 0 {
-                Err(get_last_error())
-            } else {
-                Ok(Image { handle: ret_val })
-            }
+            ret_val
         }
     }
 
@@ -101,11 +97,7 @@ impl Io {
             let ret_val = fl_io_load_file_impl(_api.data, FlString::new(filename), loader_type);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.load_file)(_api.data, FlString::new(filename), loader_type);
-            if ret_val == 0 {
-                Err(get_last_error())
-            } else {
-                Ok(Image { handle: ret_val })
-            }
+            ret_val
         }
     }
 
@@ -128,11 +120,7 @@ impl Io {
                 FlString::new(vs_filename),
                 FlString::new(ps_filename),
             );
-            if ret_val == 0 {
-                Err(get_last_error())
-            } else {
-                Ok(ShaderProgram { handle: ret_val })
-            }
+            ret_val
         }
     }
 }

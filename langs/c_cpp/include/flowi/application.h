@@ -1,6 +1,4 @@
 #include "button.h"
-#include "font.h"
-#include "image.h"
 #include "input.h"
 #include "io.h"
 #include "item.h"
@@ -20,8 +18,6 @@ typedef struct FlApplication {
     void (*main_loop)(FlMainLoopCallback callback, void* user_data);
     struct FlButtonApi* (*button_get_api)(struct FlInternalData* data, int api_version);
     struct FlCursorApi* (*cursor_get_api)(struct FlInternalData* data, int api_version);
-    struct FlFontApi* (*font_get_api)(struct FlInternalData* data, int api_version);
-    struct FlImageApi* (*image_get_api)(struct FlInternalData* data, int api_version);
     struct FlInputApi* (*input_get_api)(struct FlInternalData* data, int api_version);
     struct FlIoApi* (*io_get_api)(struct FlInternalData* data, int api_version);
     struct FlItemApi* (*item_get_api)(struct FlInternalData* data, int api_version);
@@ -39,8 +35,6 @@ FL_INLINE bool fl_application_create(FlApplicationSettings* settings) {
     FlApp* api = fl_application_create_impl(settings, 0);
     g_flowi_button_api = api->button_get_api(api->priv, 0);
     g_flowi_cursor_api = api->cursor_get_api(api->priv, 0);
-    g_flowi_font_api = api->font_get_api(api->priv, 0);
-    g_flowi_image_api = api->image_get_api(api->priv, 0);
     g_flowi_input_api = api->input_get_api(api->priv, 0);
     g_flowi_io_api = api->io_get_api(api->priv, 0);
     g_flowi_item_api = api->item_get_api(api->priv, 0);

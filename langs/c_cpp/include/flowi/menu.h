@@ -13,6 +13,9 @@
 extern "C" {
 #endif
 
+typedef struct FlMenu {
+} FlMenu;
+
 #ifdef __cplusplus
 }
 #endif

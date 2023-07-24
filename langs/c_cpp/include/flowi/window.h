@@ -151,6 +151,9 @@ typedef enum FlHoveredFlags {
   FlHoveredFlags_NoSharedDelay = 1 << 13,
 } FlHoveredFlags;
 
+typedef struct FlWindow {
+} FlWindow;
+
 #ifdef __cplusplus
 }
 #endif

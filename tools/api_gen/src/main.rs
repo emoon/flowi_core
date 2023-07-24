@@ -32,7 +32,9 @@ fn main() {
     // .build_global()
     // .unwrap();
 
-    let tera = Tera::new("templates/*").unwrap();
+    let mut tera = Tera::new("templates/*").unwrap();
+
+    tera.register_filter("gen_ctype", Cgen::tera_gen_ctype);
 
     // Dest directores for various langs
     let c_dest = "../../langs/c_cpp/include/flowi";
@@ -85,7 +87,7 @@ fn main() {
             // Render the template with the given context
             //let rendered = tera.render("c_header.tera", &context).unwrap();
             //println!("{}", rendered);
-            
+
             if index == 0 {
                 Cgen::generate_main_file(c_dest, &api_defs_read).unwrap();
                 RustGen::generate_mod_files(rust_dest, &api_defs_read).unwrap();

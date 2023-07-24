@@ -16,6 +16,9 @@
 extern "C" {
 #endif
 
+typedef struct FlUi {
+} FlUi;
+
 #ifdef __cplusplus
 }
 #endif

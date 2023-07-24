@@ -25,6 +25,9 @@ typedef enum FlPainterLayer {
   FlPainterLayer_Foreground = 2,
 } FlPainterLayer;
 
+typedef struct FlPainter {
+} FlPainter;
+
 #ifdef __cplusplus
 }
 #endif

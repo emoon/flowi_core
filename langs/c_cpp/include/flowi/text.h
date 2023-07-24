@@ -14,6 +14,9 @@
 extern "C" {
 #endif
 
+typedef struct FlText {
+} FlText;
+
 #ifdef __cplusplus
 }
 #endif

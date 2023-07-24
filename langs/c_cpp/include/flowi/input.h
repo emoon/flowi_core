@@ -317,6 +317,9 @@ typedef enum FlMouseSource {
   FlMouseSource_Pen = 2,
 } FlMouseSource;
 
+typedef struct FlInput {
+} FlInput;
+
 #ifdef __cplusplus
 }
 #endif

@@ -13,6 +13,23 @@
 extern "C" {
 #endif
 
+typedef struct FlRect {
+  i32 x;
+  i32 y;
+  i32 width;
+  i32 height;
+} FlRect;
+
+typedef struct FlVec2 {
+  f32 x;
+  f32 y;
+} FlVec2;
+
+typedef struct FlIVec2 {
+  i32 x;
+  i32 y;
+} FlIVec2;
+
 #ifdef __cplusplus
 }
 #endif

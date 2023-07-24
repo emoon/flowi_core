@@ -19,16 +19,16 @@ use crate::image::*;
 pub struct UiFfiApi {
     pub(crate) data: *const core::ffi::c_void,
     pub(crate) text: unsafe extern "C" fn(data: *const core::ffi::c_void, text: FlString),
-    pub(crate) image: unsafe extern "C" fn(data: *const core::ffi::c_void, image: u64),
+    pub(crate) image: unsafe extern "C" fn(data: *const core::ffi::c_void, image: Image),
     pub(crate) image_with_size:
-        unsafe extern "C" fn(data: *const core::ffi::c_void, image: u64, size: Vec2),
+        unsafe extern "C" fn(data: *const core::ffi::c_void, image: Image, size: Vec2),
     pub(crate) set_pos: unsafe extern "C" fn(data: *const core::ffi::c_void, pos: Vec2),
     pub(crate) get_last_widget_size:
         unsafe extern "C" fn(data: *const core::ffi::c_void, pos: Vec2) -> Rect,
     pub(crate) push_button_with_icon: unsafe extern "C" fn(
         data: *const core::ffi::c_void,
         text: FlString,
-        image: u64,
+        image: Image,
         text_pos: Vec2,
         image_scale: f32,
     ) -> bool,
@@ -39,14 +39,14 @@ pub struct UiFfiApi {
 #[cfg(any(feature = "static", feature = "tundra"))]
 extern "C" {
     fn fl_ui_text_impl(data: *const core::ffi::c_void, text: FlString);
-    fn fl_ui_image_impl(data: *const core::ffi::c_void, image: u64);
-    fn fl_ui_image_with_size_impl(data: *const core::ffi::c_void, image: u64, size: Vec2);
+    fn fl_ui_image_impl(data: *const core::ffi::c_void, image: Image);
+    fn fl_ui_image_with_size_impl(data: *const core::ffi::c_void, image: Image, size: Vec2);
     fn fl_ui_set_pos_impl(data: *const core::ffi::c_void, pos: Vec2);
     fn fl_ui_get_last_widget_size_impl(data: *const core::ffi::c_void, pos: Vec2) -> Rect;
     fn fl_ui_push_button_with_icon_impl(
         data: *const core::ffi::c_void,
         text: FlString,
-        image: u64,
+        image: Image,
         text_pos: Vec2,
         image_scale: f32,
     ) -> bool;
@@ -79,9 +79,9 @@ impl Ui {
         unsafe {
             let _api = &*g_flowi_ui_api;
             #[cfg(any(feature = "static", feature = "tundra"))]
-            fl_ui_image_impl(_api.data, image.handle);
+            fl_ui_image_impl(_api.data, image);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
-            (_api.image)(_api.data, image.handle);
+            (_api.image)(_api.data, image);
         }
     }
 
@@ -90,9 +90,9 @@ impl Ui {
         unsafe {
             let _api = &*g_flowi_ui_api;
             #[cfg(any(feature = "static", feature = "tundra"))]
-            fl_ui_image_with_size_impl(_api.data, image.handle, size);
+            fl_ui_image_with_size_impl(_api.data, image, size);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
-            (_api.image_with_size)(_api.data, image.handle, size);
+            (_api.image_with_size)(_api.data, image, size);
         }
     }
 
@@ -132,7 +132,7 @@ impl Ui {
             let ret_val = fl_ui_push_button_with_icon_impl(
                 _api.data,
                 FlString::new(text),
-                image.handle,
+                image,
                 text_pos,
                 image_scale,
             );
@@ -140,7 +140,7 @@ impl Ui {
             let ret_val = (_api.push_button_with_icon)(
                 _api.data,
                 FlString::new(text),
-                image.handle,
+                image,
                 text_pos,
                 image_scale,
             );

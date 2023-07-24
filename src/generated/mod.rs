@@ -41,10 +41,7 @@ pub mod ui;
 pub use ui::*;
 pub mod window;
 use crate::button::ButtonFfiApi;
-use crate::font::FontFfiApi;
 pub use crate::generated::button::Button;
-pub use crate::generated::font::Font;
-pub use crate::generated::image::Image;
 pub use crate::generated::input::Input;
 pub use crate::generated::io::Io;
 pub use crate::generated::item::Item;
@@ -55,7 +52,6 @@ pub use crate::generated::style::Style;
 pub use crate::generated::text::Text;
 pub use crate::generated::ui::Ui;
 pub use crate::generated::window::Window;
-use crate::image::ImageFfiApi;
 use crate::input::InputFfiApi;
 use crate::io::IoFfiApi;
 use crate::item::ItemFfiApi;
@@ -76,10 +72,6 @@ pub(crate) struct AppFfi {
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const ButtonFfiApi,
     pub(crate) cursor_get_api:
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const CursorFfiApi,
-    pub(crate) font_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const FontFfiApi,
-    pub(crate) image_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const ImageFfiApi,
     pub(crate) input_get_api:
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const InputFfiApi,
     pub(crate) io_get_api:
@@ -105,8 +97,6 @@ pub(crate) fn init_function_ptrs(api: *const AppFfi) {
         let api = &*api;
         g_flowi_button_api = (api.button_get_api)(api.data, 0);
         g_flowi_cursor_api = (api.cursor_get_api)(api.data, 0);
-        g_flowi_font_api = (api.font_get_api)(api.data, 0);
-        g_flowi_image_api = (api.image_get_api)(api.data, 0);
         g_flowi_input_api = (api.input_get_api)(api.data, 0);
         g_flowi_io_api = (api.io_get_api)(api.data, 0);
         g_flowi_item_api = (api.item_get_api)(api.data, 0);

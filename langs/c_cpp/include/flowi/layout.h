@@ -14,6 +14,9 @@
 extern "C" {
 #endif
 
+typedef struct FlCursor {
+} FlCursor;
+
 #ifdef __cplusplus
 }
 #endif

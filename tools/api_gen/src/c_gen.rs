@@ -1,11 +1,12 @@
 use crate::api_parser::*;
 use heck::{ToSnakeCase, ToUpperCamelCase};
+use serde::Serialize;
+use std::collections::HashMap;
 use std::fs::File;
 use std::io;
 use std::io::{BufWriter, Write};
 use std::process::Command;
 use tera::{Context, Tera};
-use serde::Serialize;
 
 pub static C_API_SUFFIX: &str = "Fl";
 pub static C_API_SUFIX_FUNCS: &str = "fl";
@@ -77,7 +78,6 @@ impl Cgen {
     fn get_enum_name(def_name: &str, entry_name: &str) -> String {
         format!("{}{}_{}", C_API_SUFFIX, def_name, entry_name)
     }
-
 
     /// Generate enums in the style of
     ///
@@ -492,7 +492,10 @@ impl Cgen {
         writeln!(f, "typedef void (*FlMainLoopCallback)(void* user_data);")?;
         writeln!(f, "\ntypedef struct FlApplication {{")?;
         writeln!(f, "   struct FlInternalData* priv;")?;
-        writeln!(f, "    void (*main_loop)(FlMainLoopCallback callback, void* user_data);")?;
+        writeln!(
+            f,
+            "    void (*main_loop)(FlMainLoopCallback callback, void* user_data);"
+        )?;
 
         // Generate accesors for the various APIs
         for s in &structs_with_funcs {
@@ -506,7 +509,6 @@ impl Cgen {
                     s.name.to_snake_case(),
                     arg_line(&fa.func_args, Ctx::No)
                 )?;
-
             } else {
                 writeln!(
                     f,
@@ -520,25 +522,36 @@ impl Cgen {
 
         writeln!(f, "}} FlApplication;\n")?;
         writeln!(f, "FlApplication* fl_application_create_impl(FlApplicationSettings* settings, int version);\n")?;
-        writeln!(f, "FL_INLINE bool fl_application_create(FlApplicationSettings* settings) {{")?;
-        writeln!(f, "    FlApp* api = fl_application_create_impl(settings, 0);")?;
+        writeln!(
+            f,
+            "FL_INLINE bool fl_application_create(FlApplicationSettings* settings) {{"
+        )?;
+        writeln!(
+            f,
+            "    FlApp* api = fl_application_create_impl(settings, 0);"
+        )?;
 
         for s in &structs_with_funcs {
-            let name_snake = s.name.to_snake_case(); 
+            let name_snake = s.name.to_snake_case();
             writeln!(
                 f,
                 "    g_flowi_{}_api = api->{}_get_api(api->priv, 0);",
                 name_snake, name_snake
             )?;
         }
-        
+
         writeln!(f, "    return api;")?;
         writeln!(f, "}}\n")?;
 
         Ok(())
     }
 
-    fn render_tera<W: Write, S: Serialize + Clone>(f: &mut W, data: &S, templates: &[&str], tera: &Tera) -> io::Result<()> {
+    fn render_tera<W: Write, S: Serialize + Clone>(
+        f: &mut W,
+        data: &S,
+        templates: &[&str],
+        tera: &Tera,
+    ) -> io::Result<()> {
         let t = data.clone();
         let ser_data = serde_json::to_value(t).unwrap();
         let ctx = Context::from_value(ser_data).unwrap();
@@ -548,6 +561,14 @@ impl Cgen {
         }
 
         Ok(())
+    }
+
+    pub fn tera_gen_ctype(
+        value: &tera::Value,
+        args: &HashMap<String, tera::Value>,
+    ) -> tera::Result<tera::Value> {
+        //Ok(tera::Value::String("Test".to_string()))
+        Ok(value.clone())
     }
 
     pub fn generate(path: &str, api_def: &ApiDef, tera: &Tera) -> io::Result<()> {
@@ -561,109 +582,115 @@ impl Cgen {
             let mut f = BufWriter::new(File::create(&filename)?);
             let mut fi = BufWriter::new(File::create(&inl_filename)?);
 
-            Self::render_tera(&mut f, &api_def, &[
-                  "c_header.tera", 
-                  "c_enum.tera"], 
-                tera)?;
-
+            Self::render_tera(
+                &mut f,
+                &api_def,
+                &[
+                    "c_header.tera",
+                    "c_enum.tera",
+                    "c_handle_type.tera",
+                    "c_struct.tera",
+                ],
+                tera,
+            )?;
             /*
 
-            for sdef in &api_def.structs {
-                Self::generate_struct(&mut f, sdef)?;
-            }
+                for sdef in &api_def.structs {
+                    Self::generate_struct(&mut f, sdef)?;
+                }
 
-            // Generate the structs for default arges
-            for sdef in &api_def.structs {
-                for func in &sdef.functions {
-                    let default_args = func.get_default_args();
+                // Generate the structs for default arges
+                for sdef in &api_def.structs {
+                    for func in &sdef.functions {
+                        let default_args = func.get_default_args();
 
-                    if !default_args.is_empty() {
-                        let name = get_args_name(func);
-                        Self::generate_default_args_struct(&mut f, &name, &default_args)?;
-                        //let name = get_args_name(func);
+                        if !default_args.is_empty() {
+                            let name = get_args_name(func);
+                            Self::generate_default_args_struct(&mut f, &name, &default_args)?;
+                            //let name = get_args_name(func);
+                        }
                     }
                 }
-            }
 
-            // Generate callback defs
+                // Generate callback defs
 
-            if !api_def.callbacks.is_empty() {
-                for func in &api_def.callbacks {
-                    Self::generate_callback_function(&mut f, func, "")?;
-                }
-                writeln!(f)?;
-            }
-
-            // generate defintion
-            for sdef in &api_def.structs {
-                //let context_name = format!("struct {}{}Api* api", C_API_SUFFIX, sdef.name);
-
-                for func in &sdef.functions {
-                    let with_ctx = Ctx::No;
-
-                    if sdef.has_attribute("Handle") {
-                        Self::generate_function_def(&mut f, func, &sdef.name, with_ctx)?;
-                    } else {
-                        Self::generate_function_def(
-                            &mut f,
-                            func,
-                            &format!("{}*", sdef.name),
-                            with_ctx,
-                        )?;
+                if !api_def.callbacks.is_empty() {
+                    for func in &api_def.callbacks {
+                        Self::generate_callback_function(&mut f, func, "")?;
                     }
+                    writeln!(f)?;
                 }
-            }
 
-            for sdef in &api_def.structs {
-                let context_name = format!("struct {}{}Api* api", C_API_SUFFIX, sdef.name);
-
-                // if we have functions for this struct and dynamic output we need to generate the
-                // dispatch table
-                if !sdef.functions.is_empty() && !sdef.has_attribute("NoContext") {
-                    writeln!(fi, "typedef struct {}{}Api {{", C_API_SUFFIX, sdef.name)?;
-                    writeln!(fi, "    struct FlInternalData* priv;")?;
+                // generate defintion
+                for sdef in &api_def.structs {
+                    //let context_name = format!("struct {}{}Api* api", C_API_SUFFIX, sdef.name);
 
                     for func in &sdef.functions {
-                        Self::generate_function_dynamic(
-                            &mut fi,
-                            func,
-                            &sdef.name,
-                            Ctx::Yes("struct FlInternalData* priv"),
-                        )?;
+                        let with_ctx = Ctx::No;
+
+                        if sdef.has_attribute("Handle") {
+                            Self::generate_function_def(&mut f, func, &sdef.name, with_ctx)?;
+                        } else {
+                            Self::generate_function_def(
+                                &mut f,
+                                func,
+                                &format!("{}*", sdef.name),
+                                with_ctx,
+                            )?;
+                        }
                     }
+                }
 
-                    writeln!(fi, "}} {}{}Api;\n", C_API_SUFFIX, sdef.name)?;
+                for sdef in &api_def.structs {
+                    let context_name = format!("struct {}{}Api* api", C_API_SUFFIX, sdef.name);
 
-                    writeln!(
-                        fi,
-                        "extern Fl{}Api* g_flowi_{}_api;\n",
-                        sdef.name, sdef.name.to_snake_case()
-                    )?;
+                    // if we have functions for this struct and dynamic output we need to generate the
+                    // dispatch table
+                    if !sdef.functions.is_empty() && !sdef.has_attribute("NoContext") {
+                        writeln!(fi, "typedef struct {}{}Api {{", C_API_SUFFIX, sdef.name)?;
+                        writeln!(fi, "    struct FlInternalData* priv;")?;
 
-                    writeln!(fi, "#ifdef FLOWI_STATIC")?;
+                        for func in &sdef.functions {
+                            Self::generate_function_dynamic(
+                                &mut fi,
+                                func,
+                                &sdef.name,
+                                Ctx::Yes("struct FlInternalData* priv"),
+                            )?;
+                        }
+
+                        writeln!(fi, "}} {}{}Api;\n", C_API_SUFFIX, sdef.name)?;
+
+                        writeln!(
+                            fi,
+                            "extern Fl{}Api* g_flowi_{}_api;\n",
+                            sdef.name, sdef.name.to_snake_case()
+                        )?;
+
+                        writeln!(fi, "#ifdef FLOWI_STATIC")?;
+
+                        for func in &sdef.functions {
+                            let with_ctx = Ctx::Yes("struct FlInternalData* priv");
+                            let fa = Self::generate_function_args(func, &sdef.name);
+
+                            let func_name = format!("{}_{}_{}", C_API_SUFIX_FUNCS, &sdef.name.to_snake_case(), func.name);
+
+                            #[rustfmt::skip]
+                            writeln!(fi, "{} {}_impl({});", fa.return_value, &func_name, arg_line(&fa.internal_args, with_ctx))?;
+                        }
+
+                        writeln!(fi, "#endif\n")?;
+                    }
 
                     for func in &sdef.functions {
-                        let with_ctx = Ctx::Yes("struct FlInternalData* priv");
-                        let fa = Self::generate_function_args(func, &sdef.name);
-            
-                        let func_name = format!("{}_{}_{}", C_API_SUFIX_FUNCS, &sdef.name.to_snake_case(), func.name);
-
-                        #[rustfmt::skip]
-                        writeln!(fi, "{} {}_impl({});", fa.return_value, &func_name, arg_line(&fa.internal_args, with_ctx))?;
+                        let with_ctx = Ctx::No;
+                        Self::generate_function(&mut fi, func, &sdef.name, with_ctx)?;
                     }
-
-                    writeln!(fi, "#endif\n")?;
                 }
 
-                for func in &sdef.functions {
-                    let with_ctx = Ctx::No;
-                    Self::generate_function(&mut fi, func, &sdef.name, with_ctx)?;
-                }
-            }
-
-            writeln!(f, "\n#include \"{}.inl\"", api_def.base_filename)?;
-            writeln!(f, "{}", FOOTER)?;
-        */
+                writeln!(f, "\n#include \"{}.inl\"", api_def.base_filename)?;
+                writeln!(f, "{}", FOOTER)?;
+            */
 
             Self::render_tera(&mut f, &api_def, &["c_footer.tera"], tera)?;
         }

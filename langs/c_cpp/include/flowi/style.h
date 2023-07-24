@@ -183,6 +183,9 @@ typedef enum FlStyleVec2 {
   FlStyleVec2_SelectableTextAlign = 8,
 } FlStyleVec2;
 
+typedef struct FlStyle {
+} FlStyle;
+
 #ifdef __cplusplus
 }
 #endif

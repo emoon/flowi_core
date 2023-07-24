@@ -13,6 +13,10 @@
 extern "C" {
 #endif
 
+typedef struct FlApplicationSettings {
+  u32 some_data;
+} FlApplicationSettings;
+
 #ifdef __cplusplus
 }
 #endif

@@ -26,6 +26,9 @@ typedef enum FlButtonFlags {
   FlButtonFlags_MouseButtonMiddled = 1 << 2,
 } FlButtonFlags;
 
+typedef struct FlButton {
+} FlButton;
+
 #ifdef __cplusplus
 }
 #endif

@@ -32,6 +32,58 @@ typedef enum FlTextureFormat {
   FlTextureFormat_I16OrF16Linear = 5,
 } FlTextureFormat;
 
+typedef struct FlRenderRect {
+  i32 x0;
+  i32 y0;
+  i32 x1;
+  i32 y1;
+} FlRenderRect;
+
+typedef struct FlVertPosUvColor {
+  f32 x;
+  f32 y;
+  u16 u;
+  u16 v;
+  u32 color;
+} FlVertPosUvColor;
+
+typedef struct FlVertPosColor {
+  f32 x;
+  f32 y;
+  u32 color;
+} FlVertPosColor;
+
+typedef struct FlTexturedTriangles {
+  u32 offset;
+  VertPosUvColor vertex_buffer;
+  u16 index_buffer;
+  u32 texture_id;
+} FlTexturedTriangles;
+
+typedef struct FlSolidTriangles {
+  u32 offset;
+  VertPosColor vertex_buffer;
+  u16 index_buffer;
+} FlSolidTriangles;
+
+typedef struct FlCreateTexture {
+  u8 data;
+  u16 id;
+  u16 format;
+  u16 width;
+  u16 height;
+} FlCreateTexture;
+
+typedef struct FlUpdateTexture {
+  u8 data;
+  RenderRect rect;
+  u16 texture_id;
+} FlUpdateTexture;
+
+typedef struct FlScissorRect {
+  RenderRect rect;
+} FlScissorRect;
+
 #ifdef __cplusplus
 }
 #endif

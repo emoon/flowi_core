@@ -322,8 +322,13 @@ impl RustGen {
 
             writeln!(f, "}}\n")?;
 
-            writeln!(f, "#[no_mangle]")?; 
-            writeln!(f, "pub static mut g_flowi_{}_api: *const {}FfiApi = std::ptr::null_mut();\n", s.name.to_snake_case(), s.name)?;
+            writeln!(f, "#[no_mangle]")?;
+            writeln!(
+                f,
+                "pub static mut g_flowi_{}_api: *const {}FfiApi = std::ptr::null_mut();\n",
+                s.name.to_snake_case(),
+                s.name
+            )?;
         }
 
         Ok(())
@@ -408,7 +413,10 @@ impl RustGen {
         let mut fa = FuncArgs::default();
 
         //fa.body.push_str("let _api = &*self.api;");
-        fa.body.push_str(&format!("let _api = &*g_flowi_{}_api;", self_name.to_snake_case()));
+        fa.body.push_str(&format!(
+            "let _api = &*g_flowi_{}_api;",
+            self_name.to_snake_case()
+        ));
 
         for (i, arg) in func.function_args.iter().enumerate() {
             // Static for rust means we that we are in a Ctx/Ui instance
@@ -554,9 +562,16 @@ impl RustGen {
 
         if let Some(ret_val) = func.return_val.as_ref() {
             writeln!(f, "#[cfg(any(feature = \"static\", feature = \"tundra\"))]")?;
-            writeln!(f, "let ret_val = fl_{}_{}_impl({});", struct_name, func.name, args)?;
+            writeln!(
+                f,
+                "let ret_val = fl_{}_{}_impl({});",
+                struct_name, func.name, args
+            )?;
 
-            writeln!(f, "#[cfg(any(feature = \"dynamic\", feature = \"plugin\"))]")?;
+            writeln!(
+                f,
+                "#[cfg(any(feature = \"dynamic\", feature = \"plugin\"))]"
+            )?;
             writeln!(f, "let ret_val = (_api.{})({});", func.name, args)?;
 
             if ret_val.is_handle_type {
@@ -591,7 +606,10 @@ impl RustGen {
             writeln!(f, "#[cfg(any(feature = \"static\", feature = \"tundra\"))]")?;
             writeln!(f, "fl_{}_{}_impl({});", struct_name, func.name, args)?;
 
-            writeln!(f, "#[cfg(any(feature = \"dynamic\", feature = \"plugin\"))]")?;
+            writeln!(
+                f,
+                "#[cfg(any(feature = \"dynamic\", feature = \"plugin\"))]"
+            )?;
             writeln!(f, "(_api.{})({});", func.name, args)?;
         }
 
@@ -702,7 +720,11 @@ impl RustGen {
                 for s in &api_def.structs {
                     if !s.functions.is_empty() && !s.has_attribute("NoContext") {
                         writeln!(f, "use crate::{}::{}FfiApi;", base_filename, s.name)?;
-                        writeln!(f, "pub use crate::generated::{}::{} as {};", base_filename, s.name, s.name)?;
+                        writeln!(
+                            f,
+                            "pub use crate::generated::{}::{} as {};",
+                            base_filename, s.name, s.name
+                        )?;
                     }
                 }
             }
@@ -732,8 +754,7 @@ impl RustGen {
                 writeln!(
                     f,
                     "   g_flowi_{}_api = (api.{}_get_api)(api.data, 0);",
-                    name,
-                    name,
+                    name, name,
                 )?;
             }
 

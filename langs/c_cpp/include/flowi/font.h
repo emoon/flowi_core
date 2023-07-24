@@ -13,6 +13,8 @@
 extern "C" {
 #endif
 
+typedef uint64_t FlFont;
+
 #ifdef __cplusplus
 }
 #endif

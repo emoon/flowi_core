@@ -15,6 +15,9 @@
 extern "C" {
 #endif
 
+typedef struct FlIo {
+} FlIo;
+
 #ifdef __cplusplus
 }
 #endif
