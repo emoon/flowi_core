@@ -1,7 +1,7 @@
 use heck::ToSnakeCase;
 use pest::iterators::Pair;
 use pest::Parser;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
@@ -21,7 +21,7 @@ const PRMITIVE_TYPES: &[&str] = &[
 ///
 /// Variable type
 ///
-#[derive(PartialEq, Debug, Clone, Copy, Serialize)]
+#[derive(PartialEq, Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum VariableType {
     None,
     /// Self (aka this pointer in C++ and self in Rust)
@@ -41,7 +41,7 @@ pub enum VariableType {
 ///
 /// Array Type
 ///
-#[derive(PartialEq, Debug, Clone, Default, Serialize)]
+#[derive(PartialEq, Debug, Clone, Default, Serialize, Deserialize)]
 pub enum ArrayType {
     /// Array is unsized
     #[default]
@@ -53,7 +53,7 @@ pub enum ArrayType {
 ///
 /// Holds the data for a variable. It's name and it's type and additional flags
 ///
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Variable {
     /// Documentation
     pub doc_comments: Vec<String>,
@@ -109,7 +109,7 @@ impl Default for Variable {
 ///
 /// Function type
 ///
-#[derive(Debug, Clone, Copy, PartialEq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum FunctionType {
     /// This is a regular function in a Qt Class
     Regular,
@@ -122,7 +122,7 @@ pub enum FunctionType {
 ///
 /// Holds the data for a function. Name, function_args, return_type, etc
 ///
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Function {
     /// Documentation
     pub doc_comments: Vec<String>,
@@ -160,7 +160,7 @@ impl Default for Function {
 ///
 /// Holds the data for a struct
 ///
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Struct {
     /// Docummentanion
     pub doc_comments: Vec<String>,
@@ -178,7 +178,7 @@ pub struct Struct {
     pub traits: Vec<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum EnumValue {
     /// Enum value with a value
     None,
@@ -189,7 +189,7 @@ pub enum EnumValue {
 }
 
 /// Enum
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct EnumEntry {
     /// Documentation
     pub doc_comments: Vec<String>,
@@ -203,7 +203,7 @@ pub struct EnumEntry {
 /// Enums in C++ can have same value for different enum ids. This isn't supported in Rust.
 /// Also Rust doesn't support that your "or" enums flags so we need to handle that.
 ///
-#[derive(Clone, Copy, Debug, PartialEq, Default, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub enum EnumType {
     /// All values are in sequantial order and no overlap
     #[default]
@@ -215,7 +215,7 @@ pub enum EnumType {
 ///
 /// Enum type
 ///
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Enum {
     /// Documentation
     pub doc_comments: Vec<String>,
@@ -234,7 +234,7 @@ pub struct Enum {
 ///
 /// Api definition for a file
 ///
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ApiDef {
     /// full filename path
     pub filename: String,

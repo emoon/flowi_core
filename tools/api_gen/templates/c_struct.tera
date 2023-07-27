@@ -1,7 +1,7 @@
 {% for sdef in structs %}
 typedef struct Fl{{ sdef.name }} {
     {%- for var in sdef.variables %}
-    {{ var.type_name | gen_ctype }} {{ var.name }};
+    {{ get_ctype_struct(var=var, self=sdef.name) }}
     {%- endfor %}
 } Fl{{ sdef.name }};
 {% endfor %}

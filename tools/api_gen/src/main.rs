@@ -34,7 +34,7 @@ fn main() {
 
     let mut tera = Tera::new("templates/*").unwrap();
 
-    tera.register_filter("gen_ctype", Cgen::tera_gen_ctype);
+    tera.register_function("get_ctype_struct", Cgen::get_type_struct);
 
     // Dest directores for various langs
     let c_dest = "../../langs/c_cpp/include/flowi";

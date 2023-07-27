@@ -14,20 +14,20 @@ extern "C" {
 #endif
 
 typedef struct FlRect {
-  i32 x;
-  i32 y;
-  i32 width;
-  i32 height;
+  int x;
+  int y;
+  int width;
+  int height;
 } FlRect;
 
 typedef struct FlVec2 {
-  f32 x;
-  f32 y;
+  float x;
+  float y;
 } FlVec2;
 
 typedef struct FlIVec2 {
-  i32 x;
-  i32 y;
+  int x;
+  int y;
 } FlIVec2;
 
 #ifdef __cplusplus

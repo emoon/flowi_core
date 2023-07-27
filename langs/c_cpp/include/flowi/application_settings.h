@@ -14,7 +14,7 @@ extern "C" {
 #endif
 
 typedef struct FlApplicationSettings {
-  u32 some_data;
+  uint32_t some_data;
 } FlApplicationSettings;
 
 #ifdef __cplusplus

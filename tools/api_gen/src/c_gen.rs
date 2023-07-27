@@ -6,7 +6,7 @@ use std::fs::File;
 use std::io;
 use std::io::{BufWriter, Write};
 use std::process::Command;
-use tera::{Context, Tera};
+use tera::{Context, Tera, Value};
 
 pub static C_API_SUFFIX: &str = "Fl";
 pub static C_API_SUFIX_FUNCS: &str = "fl";
@@ -563,12 +563,37 @@ impl Cgen {
         Ok(())
     }
 
-    pub fn tera_gen_ctype(
-        value: &tera::Value,
-        args: &HashMap<String, tera::Value>,
-    ) -> tera::Result<tera::Value> {
-        //Ok(tera::Value::String("Test".to_string()))
-        Ok(value.clone())
+    pub fn get_type_struct(args: &HashMap<String, Value>) -> tera::Result<Value> {
+        let var_type = match args.get("var") {
+            Some(val) => val,
+            None => return Err("var parameter not found".into()),
+        };
+
+        let self_name = match args.get("self") {
+            Some(val) => match val {
+                Value::String(s) => s,
+                _ => return Err("self parameter is not a string".into()),
+            }
+            None => return Err("self_name parameter not found".into()),
+        };
+
+        let var: Variable = serde_json::from_value(var_type.clone()).unwrap();
+        let c_type = Self::get_variable(&var, self_name);
+
+        // for arrays we generate a pointer and a size
+        match var.array {
+            None => Ok(Value::String(format!("{} {};", c_type, var.name))),
+            Some(ArrayType::Unsized) => {
+                Ok(Value::Array(vec![
+                    Value::String(format!("{}* {}", c_type, var.name)),
+                    Value::String(format!("uint32_t {}_size", var.name)),
+                ]))
+            }
+
+            Some(ArrayType::SizedArray(ref size)) => {
+                Ok(Value::String(format!("{}[{}];", var.name, size)))
+            }
+        }
     }
 
     pub fn generate(path: &str, api_def: &ApiDef, tera: &Tera) -> io::Result<()> {
@@ -590,6 +615,7 @@ impl Cgen {
                     "c_enum.tera",
                     "c_handle_type.tera",
                     "c_struct.tera",
+                    "c_footer.tera",
                 ],
                 tera,
             )?;
@@ -692,7 +718,7 @@ impl Cgen {
                 writeln!(f, "{}", FOOTER)?;
             */
 
-            Self::render_tera(&mut f, &api_def, &["c_footer.tera"], tera)?;
+            //Self::render_tera(&mut f, &api_def, &["c_footer.tera"], tera)?;
         }
 
         run_clang_format(&filename);
