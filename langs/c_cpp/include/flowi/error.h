@@ -32,6 +32,7 @@ typedef enum FlError {
   FlError_Generic = 7,
 } FlError;
 
+#include "error.inl"
 #ifdef __cplusplus
 }
 #endif

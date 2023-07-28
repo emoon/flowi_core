@@ -23,10 +23,13 @@ typedef enum FlSvgFlags {
 typedef uint64_t FlImage;
 
 typedef struct FlImageInfo {
+  // width of the image
   uint32_t width;
+  // height of the Image
   uint32_t height;
 } FlImageInfo;
 
+#include "image.inl"
 #ifdef __cplusplus
 }
 #endif

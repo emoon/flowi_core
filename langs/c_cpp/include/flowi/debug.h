@@ -20,6 +20,7 @@ typedef enum FlDebugMode {
   FlDebugMode_Layout = 1,
 } FlDebugMode;
 
+#include "debug.inl"
 #ifdef __cplusplus
 }
 #endif

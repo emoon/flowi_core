@@ -15,6 +15,7 @@ extern "C" {
 
 typedef uint64_t FlFont;
 
+#include "font.inl"
 #ifdef __cplusplus
 }
 #endif

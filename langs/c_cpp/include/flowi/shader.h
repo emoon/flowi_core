@@ -16,6 +16,7 @@ extern "C" {
 typedef uint64_t FlShader;
 typedef uint64_t FlShaderProgram;
 
+#include "shader.inl"
 #ifdef __cplusplus
 }
 #endif

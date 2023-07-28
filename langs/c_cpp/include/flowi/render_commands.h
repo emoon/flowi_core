@@ -33,56 +33,86 @@ typedef enum FlTextureFormat {
 } FlTextureFormat;
 
 typedef struct FlRenderRect {
+
   int x0;
+
   int y0;
+
   int x1;
+
   int y1;
 } FlRenderRect;
 
 typedef struct FlVertPosUvColor {
+
   float x;
+
   float y;
+
   uint16_t u;
+
   uint16_t v;
+
   uint32_t color;
 } FlVertPosUvColor;
 
 typedef struct FlVertPosColor {
+
   float x;
+
   float y;
+
   uint32_t color;
 } FlVertPosColor;
 
 typedef struct FlTexturedTriangles {
+  // Offset into the index buffer
   uint32_t offset;
-  [
-    FlVertPosUvColor * vertex_buffer, uint32_t vertex_buffer_size
-  ][uint16_t * index_buffer, uint32_t index_buffer_size] uint32_t texture_id;
+  // Vertices for the command
+  [ FlVertPosUvColor * vertex_buffer, uint32_t vertex_buffer_size ]
+      // Index buffer for the command
+      [uint16_t * index_buffer, uint32_t index_buffer_size]
+      // Texture id used for the command
+      uint32_t texture_id;
 } FlTexturedTriangles;
 
 typedef struct FlSolidTriangles {
+  // Offset into the index buffer
   uint32_t offset;
-  [
-    FlVertPosColor * vertex_buffer, uint32_t vertex_buffer_size
-  ][uint16_t * index_buffer, uint32_t index_buffer_size]
+  // Vertices for the command
+  [ FlVertPosColor * vertex_buffer, uint32_t vertex_buffer_size ]
+      // Index buffer for the command
+      [uint16_t * index_buffer, uint32_t index_buffer_size]
 } FlSolidTriangles;
 
 typedef struct FlCreateTexture {
-  [ uint8_t * data, uint32_t data_size ] uint16_t id;
+  // Data upload (can be NULL if data is uploaded later)
+  [ uint8_t * data, uint32_t data_size ]
+      // This is the id that will later be used when refering to the texture
+      uint16_t id;
+  // See [TextureFormat] for the type
   uint16_t format;
+  // width of the texture
   uint16_t width;
+  // height of the texture
   uint16_t height;
 } FlCreateTexture;
 
 typedef struct FlUpdateTexture {
-  [ uint8_t * data, uint32_t data_size ] FlRenderRect rect;
+  // Data to upload
+  [ uint8_t * data, uint32_t data_size ]
+      // area to update
+      FlRenderRect rect;
+  // Texture to update
   uint16_t texture_id;
 } FlUpdateTexture;
 
 typedef struct FlScissorRect {
+  // Area restricted for rendering
   FlRenderRect rect;
 } FlScissorRect;
 
+#include "render_commands.inl"
 #ifdef __cplusplus
 }
 #endif

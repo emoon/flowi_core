@@ -1,6 +1,9 @@
+{% import "macros.tera" as macros %}
+
 {% for sdef in structs %}
 typedef struct Fl{{ sdef.name }} {
     {%- for var in sdef.variables %}
+    {{ macros::gen_comments(comments=var.doc_comments) }}
     {{ get_ctype_struct(var=var, self=sdef.name) }}
     {%- endfor %}
 } Fl{{ sdef.name }};

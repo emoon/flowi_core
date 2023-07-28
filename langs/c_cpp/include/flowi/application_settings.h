@@ -14,9 +14,11 @@ extern "C" {
 #endif
 
 typedef struct FlApplicationSettings {
+
   uint32_t some_data;
 } FlApplicationSettings;
 
+#include "application_settings.inl"
 #ifdef __cplusplus
 }
 #endif
