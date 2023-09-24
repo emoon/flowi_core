@@ -7,6 +7,36 @@ use crate::manual::{get_last_error, Color, FlString, Result};
 use bitflags::bitflags;
 
 #[repr(C)]
+pub struct ImageFfiApi {
+    pub(crate) data: *const core::ffi::c_void,
+    pub(crate) create_from_file:
+        unsafe extern "C" fn(data: *const core::ffi::c_void, filename: FlString) -> u64,
+    pub(crate) create_from_memory: unsafe extern "C" fn(
+        data: *const core::ffi::c_void,
+        name: FlString,
+        data: *const u8,
+        data_size: u32,
+    ) -> u64,
+    pub(crate) get_info:
+        unsafe extern "C" fn(data: *const core::ffi::c_void, image: u64) -> *const ImageInfo,
+}
+
+#[cfg(feature = "static")]
+extern "C" {
+    fn fl_image_create_from_file_impl(data: *const core::ffi::c_void, filename: FlString) -> u64;
+    fn fl_image_create_from_memory_impl(
+        data: *const core::ffi::c_void,
+        name: FlString,
+        data: *const u8,
+        data_size: u32,
+    ) -> u64;
+    fn fl_image_get_info_impl(data: *const core::ffi::c_void, image: u64) -> *const ImageInfo;
+}
+
+#[no_mangle]
+pub static mut g_flowi_image_api: *const ImageFfiApi = std::ptr::null_mut();
+
+#[repr(C)]
 #[derive(Debug)]
 pub enum SvgFlags {
     /// Render the SVG image using RGBA format
@@ -22,4 +52,90 @@ pub struct ImageInfo {
     pub width: u32,
     /// height of the Image
     pub height: u32,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct Image {
+    pub handle: u64,
+}
+
+impl Image {
+    /// Load image from file. Supported formats are:
+    /// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
+    /// PNG 1/2/4/8/16-bit-per-channel
+    /// TGA
+    /// BMP non-1bpp, non-RLE
+    /// PSD (composited view only, no extra channels, 8/16 bit-per-channel)
+    /// GIF
+    /// HDR (radiance rgbE format)
+    /// PIC (Softimage PIC)
+    /// PNM (PPM and PGM binary only)
+    pub fn create_from_file(filename: &str) -> Result<Image> {
+        unsafe {
+            let _api = &*g_flowi_image_api;
+            #[cfg(feature = "static")]
+            let ret_val = fl_image_create_from_file_impl(_api.data, FlString::new(filename));
+            #[cfg(any(feature = "dynamic", feature = "plugin"))]
+            let ret_val = (_api.create_from_file)(_api.data, FlString::new(filename));
+            if ret_val == 0 {
+                Err(get_last_error())
+            } else {
+                Ok(Image { handle: ret_val })
+            }
+        }
+    }
+
+    /// Load image from memory. Supported formats are:
+    /// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
+    /// PNG 1/2/4/8/16-bit-per-channel
+    /// TGA
+    /// BMP non-1bpp, non-RLE
+    /// PSD (composited view only, no extra channels, 8/16 bit-per-channel)
+    /// GIF
+    /// HDR (radiance rgbE format)
+    /// PIC (Softimage PIC)
+    /// PNM (PPM and PGM binary only)
+    pub fn create_from_memory(name: &str, data: &[u8]) -> Result<Image> {
+        unsafe {
+            let _api = &*g_flowi_image_api;
+            #[cfg(feature = "static")]
+            let ret_val = fl_image_create_from_memory_impl(
+                _api.data,
+                FlString::new(name),
+                data.as_ptr(),
+                data.len() as _,
+            );
+            #[cfg(any(feature = "dynamic", feature = "plugin"))]
+            let ret_val = (_api.create_from_memory)(
+                _api.data,
+                FlString::new(name),
+                data.as_ptr(),
+                data.len() as _,
+            );
+            if ret_val == 0 {
+                Err(get_last_error())
+            } else {
+                Ok(Image { handle: ret_val })
+            }
+        }
+    }
+
+    /// Load SVG from file
+    /// Load SVG from memory
+    /// Get data amout the image
+    pub fn get_info<'a>(image: Image) -> Result<&'a ImageInfo> {
+        unsafe {
+            let _api = &*g_flowi_image_api;
+            #[cfg(feature = "static")]
+            let ret_val = fl_image_get_info_impl(_api.data, image.handle);
+            #[cfg(any(feature = "dynamic", feature = "plugin"))]
+            let ret_val = (_api.get_info)(_api.data, image.handle);
+            if ret_val.is_null() {
+                Err(get_last_error())
+            } else {
+                Ok(&*ret_val)
+            }
+        }
+    }
 }

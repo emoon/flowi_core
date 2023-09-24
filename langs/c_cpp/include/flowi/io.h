@@ -22,11 +22,10 @@ typedef struct FlIo {
 static FlImage fl_io_load_image(const char *filename);
 
 // Load image async from file/url. Supported formats are: JPG, PNG, WEBP
-static FlImage fl_io_load_image_async(const char *filename,
-                                      FlLoaderType loader_type);
+static FlImage fl_io_load_image_async(const char *filename);
 
 // Load image from file/url
-static FlImage fl_io_load_file(const char *filename, FlLoaderType loader_type);
+static FlImage fl_io_load_file(const char *filename);
 
 // Same as load_image_from_url, but async and gives back a handle to
 // check/access data later. Load a vertex shader be used for rendering. This

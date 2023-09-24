@@ -1,1 +1,4 @@
-pub mod key;
+pub mod generated;
+pub use generated::*;
+mod manual;
+

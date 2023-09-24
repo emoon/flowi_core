@@ -20,6 +20,10 @@ opt-level = 3
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }
 
+[features]
+default = ["static"]
+static = []
+
 [workspace]
 exclude = [
     "tools/api_gen", 

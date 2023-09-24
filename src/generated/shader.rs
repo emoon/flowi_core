@@ -5,3 +5,15 @@ use crate::manual::{get_last_error, Color, FlString, Result};
 
 #[allow(unused_imports)]
 use bitflags::bitflags;
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct Shader {
+    pub handle: u64,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct ShaderProgram {
+    pub handle: u64,
+}

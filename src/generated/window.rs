@@ -38,7 +38,7 @@ pub struct WindowFfiApi {
     pub(crate) size: unsafe extern "C" fn(data: *const core::ffi::c_void) -> Vec2,
 }
 
-#[cfg(any(feature = "static", feature = "tundra"))]
+#[cfg(feature = "static")]
 extern "C" {
     fn fl_window_set_pos_impl(data: *const core::ffi::c_void, pos: Vec2);
     fn fl_window_begin_impl(
@@ -183,7 +183,7 @@ impl Window {
     pub fn set_pos(pos: Vec2) {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_window_set_pos_impl(_api.data, pos);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.set_pos)(_api.data, pos);
@@ -194,7 +194,7 @@ impl Window {
     pub fn begin(name: &str, flags: WindowFlags) -> bool {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_window_begin_impl(_api.data, FlString::new(name), flags);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.begin)(_api.data, FlString::new(name), flags);
@@ -206,7 +206,7 @@ impl Window {
     pub fn end() {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_window_end_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.end)(_api.data);
@@ -217,7 +217,7 @@ impl Window {
     pub fn begin_child(id: &str, size: Vec2, border: bool, flags: WindowFlags) -> bool {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val =
                 fl_window_begin_child_impl(_api.data, FlString::new(id), size, border, flags);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
@@ -230,7 +230,7 @@ impl Window {
     pub fn end_child() {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_window_end_child_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.end_child)(_api.data);
@@ -241,7 +241,7 @@ impl Window {
     pub fn is_appearing() -> bool {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_window_is_appearing_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_appearing)(_api.data);
@@ -253,7 +253,7 @@ impl Window {
     pub fn is_collapsed() -> bool {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_window_is_collapsed_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_collapsed)(_api.data);
@@ -265,7 +265,7 @@ impl Window {
     pub fn is_focused(flags: FocusedFlags) -> bool {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_window_is_focused_impl(_api.data, flags);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_focused)(_api.data, flags);
@@ -279,7 +279,7 @@ impl Window {
     pub fn is_hovered(flags: HoveredFlags) -> bool {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_window_is_hovered_impl(_api.data, flags);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_hovered)(_api.data, flags);
@@ -291,7 +291,7 @@ impl Window {
     pub fn dpi_scale() -> f32 {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_window_dpi_scale_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.dpi_scale)(_api.data);
@@ -303,7 +303,7 @@ impl Window {
     pub fn pos() -> Vec2 {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_window_pos_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.pos)(_api.data);
@@ -315,7 +315,7 @@ impl Window {
     pub fn size() -> Vec2 {
         unsafe {
             let _api = &*g_flowi_window_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_window_size_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.size)(_api.data);

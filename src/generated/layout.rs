@@ -42,7 +42,7 @@ pub struct CursorFfiApi {
         unsafe extern "C" fn(data: *const core::ffi::c_void) -> f32,
 }
 
-#[cfg(any(feature = "static", feature = "tundra"))]
+#[cfg(feature = "static")]
 extern "C" {
     fn fl_cursor_separator_impl(data: *const core::ffi::c_void);
     fn fl_cursor_same_line_impl(
@@ -90,7 +90,7 @@ impl Cursor {
     pub fn separator() {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_separator_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.separator)(_api.data);
@@ -101,7 +101,7 @@ impl Cursor {
     pub fn same_line(offset_from_start_x: f32, spacing: f32) {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_same_line_impl(_api.data, offset_from_start_x, spacing);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.same_line)(_api.data, offset_from_start_x, spacing);
@@ -112,7 +112,7 @@ impl Cursor {
     pub fn new_line() {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_new_line_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.new_line)(_api.data);
@@ -123,7 +123,7 @@ impl Cursor {
     pub fn spacing() {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_spacing_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.spacing)(_api.data);
@@ -134,7 +134,7 @@ impl Cursor {
     pub fn dummy(size: Vec2) {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_dummy_impl(_api.data, size);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.dummy)(_api.data, size);
@@ -145,7 +145,7 @@ impl Cursor {
     pub fn indent(indent: f32) {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_indent_impl(_api.data, indent);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.indent)(_api.data, indent);
@@ -156,7 +156,7 @@ impl Cursor {
     pub fn unindent(indent_w: f32) {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_unindent_impl(_api.data, indent_w);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.unindent)(_api.data, indent_w);
@@ -166,7 +166,7 @@ impl Cursor {
     pub fn begin_group() {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_begin_group_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.begin_group)(_api.data);
@@ -176,7 +176,7 @@ impl Cursor {
     pub fn end_group() {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_end_group_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.end_group)(_api.data);
@@ -187,7 +187,7 @@ impl Cursor {
     pub fn get_pos() -> Vec2 {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_cursor_get_pos_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_pos)(_api.data);
@@ -198,7 +198,7 @@ impl Cursor {
     pub fn get_pos_x() -> f32 {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_cursor_get_pos_x_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_pos_x)(_api.data);
@@ -209,7 +209,7 @@ impl Cursor {
     pub fn get_pos_y() -> f32 {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_cursor_get_pos_y_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_pos_y)(_api.data);
@@ -221,7 +221,7 @@ impl Cursor {
     pub fn set_pos(pos: Vec2) {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_set_pos_impl(_api.data, pos);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.set_pos)(_api.data, pos);
@@ -231,7 +231,7 @@ impl Cursor {
     pub fn set_pos_x(x: f32) {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_set_pos_x_impl(_api.data, x);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.set_pos_x)(_api.data, x);
@@ -241,7 +241,7 @@ impl Cursor {
     pub fn set_pos_y(y: f32) {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_set_pos_y_impl(_api.data, y);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.set_pos_y)(_api.data, y);
@@ -254,7 +254,7 @@ impl Cursor {
     pub fn screen_pos() -> Vec2 {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_cursor_screen_pos_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.screen_pos)(_api.data);
@@ -265,7 +265,7 @@ impl Cursor {
     pub fn set_screen_pos(pos: Vec2) {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_set_screen_pos_impl(_api.data, pos);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.set_screen_pos)(_api.data, pos);
@@ -276,7 +276,7 @@ impl Cursor {
     pub fn align_text_to_frame_padding() {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_cursor_align_text_to_frame_padding_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.align_text_to_frame_padding)(_api.data);
@@ -287,7 +287,7 @@ impl Cursor {
     pub fn get_text_line_height() -> f32 {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_cursor_get_text_line_height_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_text_line_height)(_api.data);
@@ -299,7 +299,7 @@ impl Cursor {
     pub fn get_text_line_height_with_spacing() -> f32 {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_cursor_get_text_line_height_with_spacing_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_text_line_height_with_spacing)(_api.data);
@@ -311,7 +311,7 @@ impl Cursor {
     pub fn get_frame_height() -> f32 {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_cursor_get_frame_height_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_frame_height)(_api.data);
@@ -323,7 +323,7 @@ impl Cursor {
     pub fn get_frame_height_with_spacing() -> f32 {
         unsafe {
             let _api = &*g_flowi_cursor_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_cursor_get_frame_height_with_spacing_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_frame_height_with_spacing)(_api.data);

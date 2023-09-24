@@ -157,7 +157,7 @@ enum MouseSource {
 }
 
 /// The application is responsibe for calling these functions to update the input state.
-// This has to be done before fl_ctx_new_frame() is called.
+/// This has to be done before fl_ctx_new_frame() is called.
 struct Input {
     /// Queue a new key down/up event. 
     /// Key should be "translated" (as in, generally [Key::A] matches the key end-user would use to emit an 'A' character)
@@ -184,7 +184,7 @@ struct Input {
     [static] app_focus_event(focused: bool),
 
     /// Queue a new character input
-    [static] add_char_event(c: int),
+    [static] add_char_event(c: i32),
 }
 
 // vim: syntax=rust expandtab ts=4 sw=4

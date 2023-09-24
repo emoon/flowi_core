@@ -280,7 +280,10 @@ impl RustGen {
     }
 
     fn generate_ffi_functions<W: Write>(f: &mut W, api_def: &ApiDef) -> io::Result<()> {
-        for s in &api_def.structs {
+        for s in api_def.structs
+            .iter()
+            .chain(api_def.handle_structs.iter()) 
+        {
             if s.functions.is_empty() || s.has_attribute("NoContext") {
                 continue;
             }
@@ -304,12 +307,15 @@ impl RustGen {
     }
 
     fn generate_extern_ffi_functions<W: Write>(f: &mut W, api_def: &ApiDef) -> io::Result<()> {
-        for s in &api_def.structs {
+        for s in api_def.structs
+            .iter()
+            .chain(api_def.handle_structs.iter()) 
+        {
             if s.functions.is_empty() || s.has_attribute("NoContext") {
                 continue;
             }
 
-            writeln!(f, "#[cfg(any(feature = \"static\", feature = \"tundra\"))]")?;
+            writeln!(f, "#[cfg(feature = \"static\")]")?;
             writeln!(f, "extern \"C\" {{")?;
 
             for func in s
@@ -561,7 +567,7 @@ impl RustGen {
         let args = get_arg_line(&func_args.ffi_args);
 
         if let Some(ret_val) = func.return_val.as_ref() {
-            writeln!(f, "#[cfg(any(feature = \"static\", feature = \"tundra\"))]")?;
+            writeln!(f, "#[cfg(feature = \"static\")]")?;
             writeln!(
                 f,
                 "let ret_val = fl_{}_{}_impl({});",
@@ -582,7 +588,7 @@ impl RustGen {
                         ret_val.type_name
                     )?;
                 } else {
-                    writeln!(f, "{} {{ handle: ret_value }}", ret_val.type_name)?;
+                    writeln!(f, "{} {{ handle: ret_val }}", ret_val.type_name)?;
                 }
             } else if ret_val.const_pointer {
                 if ret_val.optional {
@@ -603,7 +609,7 @@ impl RustGen {
                 writeln!(f, "ret_val")?;
             }
         } else {
-            writeln!(f, "#[cfg(any(feature = \"static\", feature = \"tundra\"))]")?;
+            writeln!(f, "#[cfg(feature = \"static\")]")?;
             writeln!(f, "fl_{}_{}_impl({});", struct_name, func.name, args)?;
 
             writeln!(
@@ -682,12 +688,18 @@ impl RustGen {
                 }
             }
 
-            for sdef in &api_def.structs {
+            for sdef in api_def.structs
+                .iter()
+                .chain(api_def.handle_structs.iter()) 
+            {
                 Self::generate_struct(&mut f, sdef)?;
             }
 
             //for sdef in api_def.structs.iter().filter(|s| s.functions.is_empty()) {
-            for sdef in api_def.structs.iter() {
+            for sdef in api_def.structs
+                .iter()
+                .chain(api_def.handle_structs.iter()) 
+            {
                 Self::generate_struct_impl(&mut f, sdef)?;
             }
         }
@@ -714,6 +726,7 @@ impl RustGen {
                 writeln!(f, "pub use {}::*;", base_filename)?;
             }
 
+            /*
             for api_def in api_defs {
                 let base_filename = &api_def.base_filename;
 
@@ -728,6 +741,7 @@ impl RustGen {
                     }
                 }
             }
+            */
 
             writeln!(f)?;
 

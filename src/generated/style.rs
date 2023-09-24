@@ -28,7 +28,7 @@ pub struct StyleFfiApi {
     pub(crate) pop: unsafe extern "C" fn(data: *const core::ffi::c_void),
 }
 
-#[cfg(any(feature = "static", feature = "tundra"))]
+#[cfg(feature = "static")]
 extern "C" {
     fn fl_style_set_color_impl(data: *const core::ffi::c_void, color: StyleColor, value: Color);
     fn fl_style_set_color_u32_impl(data: *const core::ffi::c_void, color: StyleColor, value: u32);
@@ -149,7 +149,7 @@ impl Style {
     pub fn set_color(color: StyleColor, value: Color) {
         unsafe {
             let _api = &*g_flowi_style_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_style_set_color_impl(_api.data, color, value);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.set_color)(_api.data, color, value);
@@ -160,7 +160,7 @@ impl Style {
     pub fn set_color_u32(color: StyleColor, value: u32) {
         unsafe {
             let _api = &*g_flowi_style_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_style_set_color_u32_impl(_api.data, color, value);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.set_color_u32)(_api.data, color, value);
@@ -171,7 +171,7 @@ impl Style {
     pub fn push_color_u32(color: StyleColor, value: u32) {
         unsafe {
             let _api = &*g_flowi_style_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_style_push_color_u32_impl(_api.data, color, value);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.push_color_u32)(_api.data, color, value);
@@ -182,7 +182,7 @@ impl Style {
     pub fn push_color(color: StyleColor, value: Color) {
         unsafe {
             let _api = &*g_flowi_style_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_style_push_color_impl(_api.data, color, value);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.push_color)(_api.data, color, value);
@@ -193,7 +193,7 @@ impl Style {
     pub fn pop_color() {
         unsafe {
             let _api = &*g_flowi_style_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_style_pop_color_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.pop_color)(_api.data);
@@ -204,7 +204,7 @@ impl Style {
     pub fn push_single(style: StyleSingle, value: f32) {
         unsafe {
             let _api = &*g_flowi_style_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_style_push_single_impl(_api.data, style, value);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.push_single)(_api.data, style, value);
@@ -215,7 +215,7 @@ impl Style {
     pub fn push_vec2(style: StyleVec2, value: Vec2) {
         unsafe {
             let _api = &*g_flowi_style_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_style_push_vec2_impl(_api.data, style, value);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.push_vec2)(_api.data, style, value);
@@ -226,7 +226,7 @@ impl Style {
     pub fn pop() {
         unsafe {
             let _api = &*g_flowi_style_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_style_pop_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.pop)(_api.data);

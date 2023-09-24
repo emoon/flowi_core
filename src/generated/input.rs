@@ -21,10 +21,10 @@ pub struct InputFfiApi {
     pub(crate) add_mouse_source_event:
         unsafe extern "C" fn(data: *const core::ffi::c_void, source: MouseSource),
     pub(crate) app_focus_event: unsafe extern "C" fn(data: *const core::ffi::c_void, focused: bool),
-    pub(crate) add_char_event: unsafe extern "C" fn(data: *const core::ffi::c_void, c: int),
+    pub(crate) add_char_event: unsafe extern "C" fn(data: *const core::ffi::c_void, c: i32),
 }
 
-#[cfg(any(feature = "static", feature = "tundra"))]
+#[cfg(feature = "static")]
 extern "C" {
     fn fl_input_add_key_impl(data: *const core::ffi::c_void, key: Key);
     fn fl_input_add_key_analog_event_impl(
@@ -42,7 +42,7 @@ extern "C" {
     fn fl_input_add_mouse_wheel_event_impl(data: *const core::ffi::c_void, x: f32, y: f32);
     fn fl_input_add_mouse_source_event_impl(data: *const core::ffi::c_void, source: MouseSource);
     fn fl_input_app_focus_event_impl(data: *const core::ffi::c_void, focused: bool);
-    fn fl_input_add_char_event_impl(data: *const core::ffi::c_void, c: int);
+    fn fl_input_add_char_event_impl(data: *const core::ffi::c_void, c: i32);
 }
 
 #[no_mangle]
@@ -211,6 +211,7 @@ pub enum MouseSource {
 }
 
 /// The application is responsibe for calling these functions to update the input state.
+/// This has to be done before fl_ctx_new_frame() is called.
 #[repr(C)]
 #[derive(Debug)]
 pub struct Input {
@@ -223,7 +224,7 @@ impl Input {
     pub fn add_key(key: Key) {
         unsafe {
             let _api = &*g_flowi_input_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_input_add_key_impl(_api.data, key);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.add_key)(_api.data, key);
@@ -235,7 +236,7 @@ impl Input {
     pub fn add_key_analog_event(key: Key, down: bool, value: f32) {
         unsafe {
             let _api = &*g_flowi_input_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_input_add_key_analog_event_impl(_api.data, key, down, value);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.add_key_analog_event)(_api.data, key, down, value);
@@ -246,7 +247,7 @@ impl Input {
     pub fn add_mouse_pos_event(x: f32, y: f32) {
         unsafe {
             let _api = &*g_flowi_input_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_input_add_mouse_pos_event_impl(_api.data, x, y);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.add_mouse_pos_event)(_api.data, x, y);
@@ -257,7 +258,7 @@ impl Input {
     pub fn add_mouse_button_event(button: i32, down: bool) {
         unsafe {
             let _api = &*g_flowi_input_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_input_add_mouse_button_event_impl(_api.data, button, down);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.add_mouse_button_event)(_api.data, button, down);
@@ -269,7 +270,7 @@ impl Input {
     pub fn add_mouse_wheel_event(x: f32, y: f32) {
         unsafe {
             let _api = &*g_flowi_input_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_input_add_mouse_wheel_event_impl(_api.data, x, y);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.add_mouse_wheel_event)(_api.data, x, y);
@@ -280,7 +281,7 @@ impl Input {
     pub fn add_mouse_source_event(source: MouseSource) {
         unsafe {
             let _api = &*g_flowi_input_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_input_add_mouse_source_event_impl(_api.data, source);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.add_mouse_source_event)(_api.data, source);
@@ -291,7 +292,7 @@ impl Input {
     pub fn app_focus_event(focused: bool) {
         unsafe {
             let _api = &*g_flowi_input_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_input_app_focus_event_impl(_api.data, focused);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.app_focus_event)(_api.data, focused);
@@ -299,10 +300,10 @@ impl Input {
     }
 
     /// Queue a new character input
-    pub fn add_char_event(c: int) {
+    pub fn add_char_event(c: i32) {
         unsafe {
             let _api = &*g_flowi_input_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_input_add_char_event_impl(_api.data, c);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.add_char_event)(_api.data, c);

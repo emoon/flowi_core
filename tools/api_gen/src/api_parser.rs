@@ -396,6 +396,10 @@ impl ApiParser {
             }
         }
 
+        if sdef.name == "Image" {
+            dbg!(&sdef.attributes);
+        }
+
         sdef
     }
 
@@ -700,7 +704,10 @@ impl ApiParser {
         let mut handle_types = HashSet::new();
 
         for api_def in api_defs.iter() {
-            api_def.structs.iter().for_each(|s| {
+            api_def.structs
+                .iter().chain(api_def.handle_structs.iter())
+                .for_each(|s| 
+            {
                 if s.has_attribute("Handle") {
                     handle_types.insert(s.name.to_owned());
                 }
@@ -763,6 +770,24 @@ impl ApiParser {
 
                         if empty_structs.contains(&ret_var.type_name) {
                             ret_var.is_empty_struct = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        for api_def in api_defs.iter_mut() {
+            for s in &mut api_def.handle_structs {
+                for func in &mut s.functions {
+                    for arg in &mut func.function_args {
+                        if handle_types.contains(&arg.type_name) {
+                            arg.is_handle_type = true;
+                        }
+                    }
+
+                    if let Some(ret_var) = func.return_val.as_mut() {
+                        if handle_types.contains(&ret_var.type_name) {
+                            ret_var.is_handle_type = true;
                         }
                     }
                 }
