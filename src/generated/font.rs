@@ -35,25 +35,28 @@ pub struct FontFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_font_load_impl(data: *const core::ffi::c_void, filename: FlString, font_size: u32)
-        -> u64;
-    fn fl_font_load_with_range_impl(
+    pub fn fl_font_load_impl(
+        data: *const core::ffi::c_void,
+        filename: FlString,
+        font_size: u32,
+    ) -> u64;
+    pub fn fl_font_load_with_range_impl(
         data: *const core::ffi::c_void,
         filename: FlString,
         font_size: u32,
         glyph_range_start: u16,
         glyph_range_end: u16,
     ) -> u64;
-    fn fl_font_load_from_memory_impl(
+    pub fn fl_font_load_from_memory_impl(
         data: *const core::ffi::c_void,
         name: FlString,
         data: *const u8,
         data_size: u32,
         font_size: u32,
     ) -> u64;
-    fn fl_font_push_impl(data: *const core::ffi::c_void, font: u64);
-    fn fl_font_pop_impl(data: *const core::ffi::c_void);
-    fn fl_font_destroy_impl(data: *const core::ffi::c_void, font: u64);
+    pub fn fl_font_push_impl(data: *const core::ffi::c_void, font: u64);
+    pub fn fl_font_pop_impl(data: *const core::ffi::c_void);
+    pub fn fl_font_destroy_impl(data: *const core::ffi::c_void, font: u64);
 }
 
 #[no_mangle]

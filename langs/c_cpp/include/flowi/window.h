@@ -67,13 +67,13 @@ typedef enum FlWindowFlags {
   // the X, so if you keep submitting the tab may reappear at end of tab bar.
   FlWindowFlags_UnsavedDocument = 1 << 19,
 
-  FlWindowFlags_NoNav = FlNoNav_NoNavInputs | FlWindowFlags_NoNavFocus,
+  FlWindowFlags_NoNav = FlWindowFlags_NoNavInputs | FlWindowFlags_NoNavFocus,
 
   FlWindowFlags_NoDecoration =
-      FlNoDecoration_NoTitleBar | FlWindowFlags_NoResize |
+      FlWindowFlags_NoTitleBar | FlWindowFlags_NoResize |
       FlWindowFlags_NoScrollbar | FlWindowFlags_NoCollapse,
 
-  FlWindowFlags_NoInputs = FlNoInputs_NoMouseInputs |
+  FlWindowFlags_NoInputs = FlWindowFlags_NoMouseInputs |
                            FlWindowFlags_NoNavInputs | FlWindowFlags_NoNavFocus,
 } FlWindowFlags;
 
@@ -96,7 +96,7 @@ typedef enum FlFocusedFlags {
   FlFocusedFlags_DockHierarchy = 1 << 4,
 
   FlFocusedFlags_RootAndChildWindows =
-      FlRootAndChildWindows_RootWindow | FlFocusedFlags_ChildWindows,
+      FlFocusedFlags_RootWindow | FlFocusedFlags_ChildWindows,
 } FlFocusedFlags;
 
 typedef enum FlHoveredFlags {
@@ -134,12 +134,12 @@ typedef enum FlHoveredFlags {
   // mouse.
   FlHoveredFlags_NoNavOverride = 1 << 10,
 
-  FlHoveredFlags_RectOnly = FlRectOnly_AllowWhenBlockedByPopup |
+  FlHoveredFlags_RectOnly = FlHoveredFlags_AllowWhenBlockedByPopup |
                             FlHoveredFlags_AllowWhenBlockedByActiveItem |
                             FlHoveredFlags_AllowWhenOverlapped,
 
   FlHoveredFlags_RootAndChildWindows =
-      FlRootAndChildWindows_RootWindow | FlHoveredFlags_ChildWindows,
+      FlHoveredFlags_RootWindow | FlHoveredFlags_ChildWindows,
   // Hovering delays (for tooltips)// Return true after io.HoverDelayNormal
   // elapsed (~0.30 sec)
   FlHoveredFlags_DelayNormal = 1 << 11,
@@ -150,9 +150,6 @@ typedef enum FlHoveredFlags {
   // delays)
   FlHoveredFlags_NoSharedDelay = 1 << 13,
 } FlHoveredFlags;
-
-typedef struct FlWindow {
-} FlWindow;
 
 // Sets the position of the next window, call before begin()
 static void fl_window_set_pos(FlVec2 pos);

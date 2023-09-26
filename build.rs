@@ -116,6 +116,49 @@ fn build_cc(target_os: &str) {
     );
 
     build.compile("dear-imgui");
+
+    // Build cpp code
+
+    let mut build = cc::Build::new();
+    build.cpp(true);
+
+    println!("cargo:rerun-if-changed=src/c_cpp");
+
+    match target_os {
+        "linux" => {
+            build.flag("-std=c++11");
+        }
+
+        "macos" => {
+            build.flag("-std=c++11");
+        }
+
+        _ => (),
+    }
+
+    add_includes(
+        &mut build,
+        ".",
+        &[
+            "langs/c_cpp/include",
+            "external",
+            "external/nanosvg",
+            "external/dear-imgui",
+            "external/stb",
+            "external/freetype2/include",
+        ],
+    );
+
+
+    add_sources(
+        &mut build,
+        "src/c_cpp",
+        &[
+            "imgui_wrap.cpp",
+        ],
+    );
+
+    build.compile("flowi_cpp");
 }
 
 fn main() {

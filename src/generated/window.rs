@@ -40,28 +40,28 @@ pub struct WindowFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_window_set_pos_impl(data: *const core::ffi::c_void, pos: Vec2);
-    fn fl_window_begin_impl(
+    pub fn fl_window_set_pos_impl(data: *const core::ffi::c_void, pos: Vec2);
+    pub fn fl_window_begin_impl(
         data: *const core::ffi::c_void,
         name: FlString,
         flags: WindowFlags,
     ) -> bool;
-    fn fl_window_end_impl(data: *const core::ffi::c_void);
-    fn fl_window_begin_child_impl(
+    pub fn fl_window_end_impl(data: *const core::ffi::c_void);
+    pub fn fl_window_begin_child_impl(
         data: *const core::ffi::c_void,
         id: FlString,
         size: Vec2,
         border: bool,
         flags: WindowFlags,
     ) -> bool;
-    fn fl_window_end_child_impl(data: *const core::ffi::c_void);
-    fn fl_window_is_appearing_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_window_is_collapsed_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_window_is_focused_impl(data: *const core::ffi::c_void, flags: FocusedFlags) -> bool;
-    fn fl_window_is_hovered_impl(data: *const core::ffi::c_void, flags: HoveredFlags) -> bool;
-    fn fl_window_dpi_scale_impl(data: *const core::ffi::c_void) -> f32;
-    fn fl_window_pos_impl(data: *const core::ffi::c_void) -> Vec2;
-    fn fl_window_size_impl(data: *const core::ffi::c_void) -> Vec2;
+    pub fn fl_window_end_child_impl(data: *const core::ffi::c_void);
+    pub fn fl_window_is_appearing_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_window_is_collapsed_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_window_is_focused_impl(data: *const core::ffi::c_void, flags: FocusedFlags) -> bool;
+    pub fn fl_window_is_hovered_impl(data: *const core::ffi::c_void, flags: HoveredFlags) -> bool;
+    pub fn fl_window_dpi_scale_impl(data: *const core::ffi::c_void) -> f32;
+    pub fn fl_window_pos_impl(data: *const core::ffi::c_void) -> Vec2;
+    pub fn fl_window_size_impl(data: *const core::ffi::c_void) -> Vec2;
 }
 
 #[no_mangle]

@@ -38,23 +38,23 @@ pub struct ItemFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_item_is_hovered_impl(data: *const core::ffi::c_void, flags: HoveredFlags) -> bool;
-    fn fl_item_is_active_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_focused_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_clicked_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_visible_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_edited_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_activated_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_deactivated_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_deactivated_after_edit_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_toggled_open_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_any_hovered_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_any_active_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_any_focused_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_get_rect_min_impl(data: *const core::ffi::c_void) -> Vec2;
-    fn fl_item_get_rect_max_impl(data: *const core::ffi::c_void) -> Vec2;
-    fn fl_item_get_rect_size_impl(data: *const core::ffi::c_void) -> Vec2;
-    fn fl_item_set_allow_overlap_impl(data: *const core::ffi::c_void);
+    pub fn fl_item_is_hovered_impl(data: *const core::ffi::c_void, flags: HoveredFlags) -> bool;
+    pub fn fl_item_is_active_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_focused_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_clicked_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_visible_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_edited_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_activated_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_deactivated_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_deactivated_after_edit_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_toggled_open_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_any_hovered_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_any_active_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_any_focused_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_get_rect_min_impl(data: *const core::ffi::c_void) -> Vec2;
+    pub fn fl_item_get_rect_max_impl(data: *const core::ffi::c_void) -> Vec2;
+    pub fn fl_item_get_rect_size_impl(data: *const core::ffi::c_void) -> Vec2;
+    pub fn fl_item_set_allow_overlap_impl(data: *const core::ffi::c_void);
 }
 
 #[no_mangle]

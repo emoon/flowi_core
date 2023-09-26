@@ -53,29 +53,29 @@ pub struct PainterFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_painter_set_layer_impl(data: *const core::ffi::c_void, layer: PainterLayer);
-    fn fl_painter_draw_line_impl(
+    pub fn fl_painter_set_layer_impl(data: *const core::ffi::c_void, layer: PainterLayer);
+    pub fn fl_painter_draw_line_impl(
         data: *const core::ffi::c_void,
         p1: Vec2,
         p2: Vec2,
         color: Color,
         thickness: f32,
     );
-    fn fl_painter_draw_rect_impl(
+    pub fn fl_painter_draw_rect_impl(
         data: *const core::ffi::c_void,
         p1: Vec2,
         p2: Vec2,
         color: Color,
         rounding: f32,
     );
-    fn fl_painter_draw_rect_filled_impl(
+    pub fn fl_painter_draw_rect_filled_impl(
         data: *const core::ffi::c_void,
         p1: Vec2,
         p2: Vec2,
         color: Color,
         rounding: f32,
     );
-    fn fl_painter_draw_rect_filled_gradient_impl(
+    pub fn fl_painter_draw_rect_filled_gradient_impl(
         data: *const core::ffi::c_void,
         p1: Vec2,
         p2: Vec2,

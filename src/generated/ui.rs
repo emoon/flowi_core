@@ -38,19 +38,19 @@ pub struct UiFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_ui_text_impl(data: *const core::ffi::c_void, text: FlString);
-    fn fl_ui_image_impl(data: *const core::ffi::c_void, image: u64);
-    fn fl_ui_image_with_size_impl(data: *const core::ffi::c_void, image: u64, size: Vec2);
-    fn fl_ui_set_pos_impl(data: *const core::ffi::c_void, pos: Vec2);
-    fn fl_ui_get_last_widget_size_impl(data: *const core::ffi::c_void, pos: Vec2) -> Rect;
-    fn fl_ui_push_button_with_icon_impl(
+    pub fn fl_ui_text_impl(data: *const core::ffi::c_void, text: FlString);
+    pub fn fl_ui_image_impl(data: *const core::ffi::c_void, image: u64);
+    pub fn fl_ui_image_with_size_impl(data: *const core::ffi::c_void, image: u64, size: Vec2);
+    pub fn fl_ui_set_pos_impl(data: *const core::ffi::c_void, pos: Vec2);
+    pub fn fl_ui_get_last_widget_size_impl(data: *const core::ffi::c_void, pos: Vec2) -> Rect;
+    pub fn fl_ui_push_button_with_icon_impl(
         data: *const core::ffi::c_void,
         text: FlString,
         image: u64,
         text_pos: Vec2,
         image_scale: f32,
     ) -> bool;
-    fn fl_ui_push_button_impl(data: *const core::ffi::c_void, text: FlString) -> bool;
+    pub fn fl_ui_push_button_impl(data: *const core::ffi::c_void, text: FlString) -> bool;
 }
 
 #[no_mangle]

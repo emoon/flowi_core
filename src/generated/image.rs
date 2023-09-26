@@ -23,14 +23,17 @@ pub struct ImageFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_image_create_from_file_impl(data: *const core::ffi::c_void, filename: FlString) -> u64;
-    fn fl_image_create_from_memory_impl(
+    pub fn fl_image_create_from_file_impl(
+        data: *const core::ffi::c_void,
+        filename: FlString,
+    ) -> u64;
+    pub fn fl_image_create_from_memory_impl(
         data: *const core::ffi::c_void,
         name: FlString,
         data: *const u8,
         data_size: u32,
     ) -> u64;
-    fn fl_image_get_info_impl(data: *const core::ffi::c_void, image: u64) -> *const ImageInfo;
+    pub fn fl_image_get_info_impl(data: *const core::ffi::c_void, image: u64) -> *const ImageInfo;
 }
 
 #[no_mangle]

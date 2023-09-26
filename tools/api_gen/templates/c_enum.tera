@@ -8,7 +8,7 @@ typedef enum Fl{{ enum.name }} {
         {%- if entry.value.Value %} 
     Fl{{ enum.name }}_{{ entry.name }} = {{ entry.value.Value }}
         {%- else %}
-    Fl{{ enum.name }}_{{ entry.name }} = Fl{{ entry.name }}_{{ entry.value.OrList | first }}
+    Fl{{ enum.name }}_{{ entry.name }} = Fl{{ enum.name }}_{{ entry.value.OrList | first }}
         {%- for v in entry.value.OrList | slice(start=1) -%}
             | Fl{{ enum.name }}_{{ v }}
         {%- endfor %}

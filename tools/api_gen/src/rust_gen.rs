@@ -262,7 +262,7 @@ impl RustGen {
         if fa.ret_value.is_empty() {
             writeln!(
                 f,
-                "    fn fl_{}_{}_impl({});",
+                "    pub fn fl_{}_{}_impl({});",
                 self_name.to_snake_case(),
                 func.name,
                 get_arg_line(&fa.ffi_args)
@@ -270,7 +270,7 @@ impl RustGen {
         } else {
             writeln!(
                 f,
-                "    fn fl_{}_{}_impl({}) -> {};",
+                "    pub fn fl_{}_{}_impl({}) -> {};",
                 self_name.to_snake_case(),
                 func.name,
                 get_arg_line(&fa.ffi_args),

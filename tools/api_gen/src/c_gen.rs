@@ -591,16 +591,19 @@ impl Cgen {
         match var.array {
             None => Ok(Value::String(format!("{} {};", c_type, var.name))),
             Some(ArrayType::Unsized) => {
-                Ok(Value::Array(vec![
-                    Value::String(format!("{}* {}", c_type, var.name)),
-                    Value::String(format!("uint32_t {}_size", var.name)),
-                ]))
+                Ok(Value::String(format!("{}* {};\nuint32_t {}_size;", c_type, var.name, var.name)))
             }
 
             Some(ArrayType::SizedArray(ref size)) => {
                 Ok(Value::String(format!("{}[{}];", var.name, size)))
             }
         }
+    }
+
+    pub fn is_struct_not_empty(args: &HashMap<String, Value>) -> tera::Result<Value> {
+        let var_type = Self::get_tera_value("var", args)?;
+        let var: Struct = serde_json::from_value(var_type.clone()).unwrap();
+        Ok(Value::Bool(!var.variables.is_empty()))
     }
 
     pub fn generate(path: &str, api_def: &ApiDef, tera: &Tera) -> io::Result<()> {

@@ -38,21 +38,25 @@ pub struct MenuFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_menu_begin_bar_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_menu_end_bar_impl(data: *const core::ffi::c_void);
-    fn fl_menu_begin_main_bar_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_menu_end_main_bar_impl(data: *const core::ffi::c_void);
-    fn fl_menu_begin_impl(data: *const core::ffi::c_void, label: FlString, enabled: bool) -> bool;
-    fn fl_menu_end_impl(data: *const core::ffi::c_void);
-    fn fl_menu_item_impl(data: *const core::ffi::c_void, label: FlString) -> bool;
-    fn fl_menu_item_ex_impl(
+    pub fn fl_menu_begin_bar_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_menu_end_bar_impl(data: *const core::ffi::c_void);
+    pub fn fl_menu_begin_main_bar_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_menu_end_main_bar_impl(data: *const core::ffi::c_void);
+    pub fn fl_menu_begin_impl(
+        data: *const core::ffi::c_void,
+        label: FlString,
+        enabled: bool,
+    ) -> bool;
+    pub fn fl_menu_end_impl(data: *const core::ffi::c_void);
+    pub fn fl_menu_item_impl(data: *const core::ffi::c_void, label: FlString) -> bool;
+    pub fn fl_menu_item_ex_impl(
         data: *const core::ffi::c_void,
         label: FlString,
         shortcut: FlString,
         selected: bool,
         enabled: bool,
     ) -> bool;
-    fn fl_menu_item_toggle_impl(
+    pub fn fl_menu_item_toggle_impl(
         data: *const core::ffi::c_void,
         label: FlString,
         shortcut: FlString,

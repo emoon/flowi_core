@@ -30,10 +30,10 @@ pub struct IoFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_io_load_image_impl(data: *const core::ffi::c_void, filename: FlString) -> u64;
-    fn fl_io_load_image_async_impl(data: *const core::ffi::c_void, filename: FlString) -> u64;
-    fn fl_io_load_file_impl(data: *const core::ffi::c_void, filename: FlString) -> u64;
-    fn fl_io_load_shader_program_comp_impl(
+    pub fn fl_io_load_image_impl(data: *const core::ffi::c_void, filename: FlString) -> u64;
+    pub fn fl_io_load_image_async_impl(data: *const core::ffi::c_void, filename: FlString) -> u64;
+    pub fn fl_io_load_file_impl(data: *const core::ffi::c_void, filename: FlString) -> u64;
+    pub fn fl_io_load_shader_program_comp_impl(
         data: *const core::ffi::c_void,
         vs_filename: FlString,
         ps_filename: FlString,

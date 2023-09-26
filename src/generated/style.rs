@@ -30,14 +30,30 @@ pub struct StyleFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_style_set_color_impl(data: *const core::ffi::c_void, color: StyleColor, value: Color);
-    fn fl_style_set_color_u32_impl(data: *const core::ffi::c_void, color: StyleColor, value: u32);
-    fn fl_style_push_color_u32_impl(data: *const core::ffi::c_void, color: StyleColor, value: u32);
-    fn fl_style_push_color_impl(data: *const core::ffi::c_void, color: StyleColor, value: Color);
-    fn fl_style_pop_color_impl(data: *const core::ffi::c_void);
-    fn fl_style_push_single_impl(data: *const core::ffi::c_void, style: StyleSingle, value: f32);
-    fn fl_style_push_vec2_impl(data: *const core::ffi::c_void, style: StyleVec2, value: Vec2);
-    fn fl_style_pop_impl(data: *const core::ffi::c_void);
+    pub fn fl_style_set_color_impl(data: *const core::ffi::c_void, color: StyleColor, value: Color);
+    pub fn fl_style_set_color_u32_impl(
+        data: *const core::ffi::c_void,
+        color: StyleColor,
+        value: u32,
+    );
+    pub fn fl_style_push_color_u32_impl(
+        data: *const core::ffi::c_void,
+        color: StyleColor,
+        value: u32,
+    );
+    pub fn fl_style_push_color_impl(
+        data: *const core::ffi::c_void,
+        color: StyleColor,
+        value: Color,
+    );
+    pub fn fl_style_pop_color_impl(data: *const core::ffi::c_void);
+    pub fn fl_style_push_single_impl(
+        data: *const core::ffi::c_void,
+        style: StyleSingle,
+        value: f32,
+    );
+    pub fn fl_style_push_vec2_impl(data: *const core::ffi::c_void, style: StyleVec2, value: Vec2);
+    pub fn fl_style_pop_impl(data: *const core::ffi::c_void);
 }
 
 #[no_mangle]

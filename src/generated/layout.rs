@@ -44,32 +44,32 @@ pub struct CursorFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_cursor_separator_impl(data: *const core::ffi::c_void);
-    fn fl_cursor_same_line_impl(
+    pub fn fl_cursor_separator_impl(data: *const core::ffi::c_void);
+    pub fn fl_cursor_same_line_impl(
         data: *const core::ffi::c_void,
         offset_from_start_x: f32,
         spacing: f32,
     );
-    fn fl_cursor_new_line_impl(data: *const core::ffi::c_void);
-    fn fl_cursor_spacing_impl(data: *const core::ffi::c_void);
-    fn fl_cursor_dummy_impl(data: *const core::ffi::c_void, size: Vec2);
-    fn fl_cursor_indent_impl(data: *const core::ffi::c_void, indent: f32);
-    fn fl_cursor_unindent_impl(data: *const core::ffi::c_void, indent_w: f32);
-    fn fl_cursor_begin_group_impl(data: *const core::ffi::c_void);
-    fn fl_cursor_end_group_impl(data: *const core::ffi::c_void);
-    fn fl_cursor_get_pos_impl(data: *const core::ffi::c_void) -> Vec2;
-    fn fl_cursor_get_pos_x_impl(data: *const core::ffi::c_void) -> f32;
-    fn fl_cursor_get_pos_y_impl(data: *const core::ffi::c_void) -> f32;
-    fn fl_cursor_set_pos_impl(data: *const core::ffi::c_void, pos: Vec2);
-    fn fl_cursor_set_pos_x_impl(data: *const core::ffi::c_void, x: f32);
-    fn fl_cursor_set_pos_y_impl(data: *const core::ffi::c_void, y: f32);
-    fn fl_cursor_screen_pos_impl(data: *const core::ffi::c_void) -> Vec2;
-    fn fl_cursor_set_screen_pos_impl(data: *const core::ffi::c_void, pos: Vec2);
-    fn fl_cursor_align_text_to_frame_padding_impl(data: *const core::ffi::c_void);
-    fn fl_cursor_get_text_line_height_impl(data: *const core::ffi::c_void) -> f32;
-    fn fl_cursor_get_text_line_height_with_spacing_impl(data: *const core::ffi::c_void) -> f32;
-    fn fl_cursor_get_frame_height_impl(data: *const core::ffi::c_void) -> f32;
-    fn fl_cursor_get_frame_height_with_spacing_impl(data: *const core::ffi::c_void) -> f32;
+    pub fn fl_cursor_new_line_impl(data: *const core::ffi::c_void);
+    pub fn fl_cursor_spacing_impl(data: *const core::ffi::c_void);
+    pub fn fl_cursor_dummy_impl(data: *const core::ffi::c_void, size: Vec2);
+    pub fn fl_cursor_indent_impl(data: *const core::ffi::c_void, indent: f32);
+    pub fn fl_cursor_unindent_impl(data: *const core::ffi::c_void, indent_w: f32);
+    pub fn fl_cursor_begin_group_impl(data: *const core::ffi::c_void);
+    pub fn fl_cursor_end_group_impl(data: *const core::ffi::c_void);
+    pub fn fl_cursor_get_pos_impl(data: *const core::ffi::c_void) -> Vec2;
+    pub fn fl_cursor_get_pos_x_impl(data: *const core::ffi::c_void) -> f32;
+    pub fn fl_cursor_get_pos_y_impl(data: *const core::ffi::c_void) -> f32;
+    pub fn fl_cursor_set_pos_impl(data: *const core::ffi::c_void, pos: Vec2);
+    pub fn fl_cursor_set_pos_x_impl(data: *const core::ffi::c_void, x: f32);
+    pub fn fl_cursor_set_pos_y_impl(data: *const core::ffi::c_void, y: f32);
+    pub fn fl_cursor_screen_pos_impl(data: *const core::ffi::c_void) -> Vec2;
+    pub fn fl_cursor_set_screen_pos_impl(data: *const core::ffi::c_void, pos: Vec2);
+    pub fn fl_cursor_align_text_to_frame_padding_impl(data: *const core::ffi::c_void);
+    pub fn fl_cursor_get_text_line_height_impl(data: *const core::ffi::c_void) -> f32;
+    pub fn fl_cursor_get_text_line_height_with_spacing_impl(data: *const core::ffi::c_void) -> f32;
+    pub fn fl_cursor_get_frame_height_impl(data: *const core::ffi::c_void) -> f32;
+    pub fn fl_cursor_get_frame_height_with_spacing_impl(data: *const core::ffi::c_void) -> f32;
 }
 
 #[no_mangle]

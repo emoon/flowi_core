@@ -69,27 +69,32 @@ typedef struct FlTexturedTriangles {
   // Offset into the index buffer
   uint32_t offset;
   // Vertices for the command
-  [ FlVertPosUvColor * vertex_buffer, uint32_t vertex_buffer_size ]
-      // Index buffer for the command
-      [uint16_t * index_buffer, uint32_t index_buffer_size]
-      // Texture id used for the command
-      uint32_t texture_id;
+  FlVertPosUvColor *vertex_buffer;
+  uint32_t vertex_buffer_size;
+  // Index buffer for the command
+  uint16_t *index_buffer;
+  uint32_t index_buffer_size;
+  // Texture id used for the command
+  uint32_t texture_id;
 } FlTexturedTriangles;
 
 typedef struct FlSolidTriangles {
   // Offset into the index buffer
   uint32_t offset;
   // Vertices for the command
-  [ FlVertPosColor * vertex_buffer, uint32_t vertex_buffer_size ]
-      // Index buffer for the command
-      [uint16_t * index_buffer, uint32_t index_buffer_size]
+  FlVertPosColor *vertex_buffer;
+  uint32_t vertex_buffer_size;
+  // Index buffer for the command
+  uint16_t *index_buffer;
+  uint32_t index_buffer_size;
 } FlSolidTriangles;
 
 typedef struct FlCreateTexture {
   // Data upload (can be NULL if data is uploaded later)
-  [ uint8_t * data, uint32_t data_size ]
-      // This is the id that will later be used when refering to the texture
-      uint16_t id;
+  uint8_t *data;
+  uint32_t data_size;
+  // This is the id that will later be used when refering to the texture
+  uint16_t id;
   // See [TextureFormat] for the type
   uint16_t format;
   // width of the texture
@@ -100,9 +105,10 @@ typedef struct FlCreateTexture {
 
 typedef struct FlUpdateTexture {
   // Data to upload
-  [ uint8_t * data, uint32_t data_size ]
-      // area to update
-      FlRenderRect rect;
+  uint8_t *data;
+  uint32_t data_size;
+  // area to update
+  FlRenderRect rect;
   // Texture to update
   uint16_t texture_id;
 } FlUpdateTexture;

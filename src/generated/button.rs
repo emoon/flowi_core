@@ -40,27 +40,31 @@ pub struct ButtonFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_button_regular_impl(data: *const core::ffi::c_void, label: FlString) -> bool;
-    fn fl_button_regular_size_impl(
+    pub fn fl_button_regular_impl(data: *const core::ffi::c_void, label: FlString) -> bool;
+    pub fn fl_button_regular_size_impl(
         data: *const core::ffi::c_void,
         label: FlString,
         size: Vec2,
     ) -> bool;
-    fn fl_button_small_impl(data: *const core::ffi::c_void, label: FlString) -> bool;
-    fn fl_button_invisible_impl(
+    pub fn fl_button_small_impl(data: *const core::ffi::c_void, label: FlString) -> bool;
+    pub fn fl_button_invisible_impl(
         data: *const core::ffi::c_void,
         label: FlString,
         size: Vec2,
         flags: ButtonFlags,
     ) -> bool;
-    fn fl_button_check_box_impl(
+    pub fn fl_button_check_box_impl(
         data: *const core::ffi::c_void,
         label: FlString,
         state: *mut bool,
     ) -> bool;
-    fn fl_button_radio_impl(data: *const core::ffi::c_void, label: FlString, state: bool) -> bool;
-    fn fl_button_bullet_impl(data: *const core::ffi::c_void);
-    fn fl_button_image_with_text_impl(
+    pub fn fl_button_radio_impl(
+        data: *const core::ffi::c_void,
+        label: FlString,
+        state: bool,
+    ) -> bool;
+    pub fn fl_button_bullet_impl(data: *const core::ffi::c_void);
+    pub fn fl_button_image_with_text_impl(
         data: *const core::ffi::c_void,
         image: u64,
         label: FlString,

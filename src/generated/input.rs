@@ -26,23 +26,26 @@ pub struct InputFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_input_add_key_impl(data: *const core::ffi::c_void, key: Key);
-    fn fl_input_add_key_analog_event_impl(
+    pub fn fl_input_add_key_impl(data: *const core::ffi::c_void, key: Key);
+    pub fn fl_input_add_key_analog_event_impl(
         data: *const core::ffi::c_void,
         key: Key,
         down: bool,
         value: f32,
     );
-    fn fl_input_add_mouse_pos_event_impl(data: *const core::ffi::c_void, x: f32, y: f32);
-    fn fl_input_add_mouse_button_event_impl(
+    pub fn fl_input_add_mouse_pos_event_impl(data: *const core::ffi::c_void, x: f32, y: f32);
+    pub fn fl_input_add_mouse_button_event_impl(
         data: *const core::ffi::c_void,
         button: i32,
         down: bool,
     );
-    fn fl_input_add_mouse_wheel_event_impl(data: *const core::ffi::c_void, x: f32, y: f32);
-    fn fl_input_add_mouse_source_event_impl(data: *const core::ffi::c_void, source: MouseSource);
-    fn fl_input_app_focus_event_impl(data: *const core::ffi::c_void, focused: bool);
-    fn fl_input_add_char_event_impl(data: *const core::ffi::c_void, c: i32);
+    pub fn fl_input_add_mouse_wheel_event_impl(data: *const core::ffi::c_void, x: f32, y: f32);
+    pub fn fl_input_add_mouse_source_event_impl(
+        data: *const core::ffi::c_void,
+        source: MouseSource,
+    );
+    pub fn fl_input_app_focus_event_impl(data: *const core::ffi::c_void, focused: bool);
+    pub fn fl_input_add_char_event_impl(data: *const core::ffi::c_void, c: i32);
 }
 
 #[no_mangle]

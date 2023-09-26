@@ -25,12 +25,12 @@ pub struct TextFfiApi {
 
 #[cfg(feature = "static")]
 extern "C" {
-    fn fl_text_calc_size_impl(data: *const core::ffi::c_void, text: FlString) -> Vec2;
-    fn fl_text_bullet_impl(data: *const core::ffi::c_void, text: FlString);
-    fn fl_text_label_impl(data: *const core::ffi::c_void, label: FlString, text: FlString);
-    fn fl_text_show_color_impl(data: *const core::ffi::c_void, color: Color, text: FlString);
-    fn fl_text_show_impl(data: *const core::ffi::c_void, text: FlString);
-    fn fl_text_text_disabled_impl(data: *const core::ffi::c_void, text: FlString);
+    pub fn fl_text_calc_size_impl(data: *const core::ffi::c_void, text: FlString) -> Vec2;
+    pub fn fl_text_bullet_impl(data: *const core::ffi::c_void, text: FlString);
+    pub fn fl_text_label_impl(data: *const core::ffi::c_void, label: FlString, text: FlString);
+    pub fn fl_text_show_color_impl(data: *const core::ffi::c_void, color: Color, text: FlString);
+    pub fn fl_text_show_impl(data: *const core::ffi::c_void, text: FlString);
+    pub fn fl_text_text_disabled_impl(data: *const core::ffi::c_void, text: FlString);
 }
 
 #[no_mangle]
