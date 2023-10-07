@@ -4,50 +4,59 @@
 
 #pragma once
 
-#include "manual.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "manual.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef enum FlSvgFlags {
-  // Render the SVG image using RGBA format
-  FlSvgFlags_Rgba = 0,
-  // Render the SVG image using Alpha only
-  FlSvgFlags_Alpha = 1,
+    // Render the SVG image using RGBA format
+    FlSvgFlags_Rgba = 0,
+    // Render the SVG image using Alpha only
+    FlSvgFlags_Alpha = 1,
 } FlSvgFlags;
 
 typedef uint64_t FlImage;
 
 typedef struct FlImageInfo {
-  // width of the image
-  uint32_t width;
-  // height of the Image
-  uint32_t height;
+    // width of the image
+    uint32_t width;
+    // height of the Image
+    uint32_t height;
 } FlImageInfo;
 
 // Load image from file. Supported formats are:
-// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock
-// IJG lib) PNG 1/2/4/8/16-bit-per-channel TGA BMP non-1bpp, non-RLE PSD
-// (composited view only, no extra channels, 8/16 bit-per-channel) GIF HDR
-// (radiance rgbE format) PIC (Softimage PIC) PNM (PPM and PGM binary only)
-static FlImage fl_image_create_from_file(const char *filename);
+// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
+// PNG 1/2/4/8/16-bit-per-channel
+// TGA
+// BMP non-1bpp, non-RLE
+// PSD (composited view only, no extra channels, 8/16 bit-per-channel)
+// GIF
+// HDR (radiance rgbE format)
+// PIC (Softimage PIC)
+// PNM (PPM and PGM binary only)
+static FlImage fl_image_create_from_file(const char* filename);
 
 // Load image from memory. Supported formats are:
-// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock
-// IJG lib) PNG 1/2/4/8/16-bit-per-channel TGA BMP non-1bpp, non-RLE PSD
-// (composited view only, no extra channels, 8/16 bit-per-channel) GIF HDR
-// (radiance rgbE format) PIC (Softimage PIC) PNM (PPM and PGM binary only)
-static FlImage fl_image_create_from_memory(const char *name, uint8_t *data,
-                                           uint32_t data_size);
+// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
+// PNG 1/2/4/8/16-bit-per-channel
+// TGA
+// BMP non-1bpp, non-RLE
+// PSD (composited view only, no extra channels, 8/16 bit-per-channel)
+// GIF
+// HDR (radiance rgbE format)
+// PIC (Softimage PIC)
+// PNM (PPM and PGM binary only)
+static FlImage fl_image_create_from_memory(const char* name, uint8_t* data, uint32_t data_size);
 
 // Load SVG from file
 // Load SVG from memory
 // Get data amout the image
-static FlImageInfo *fl_image_get_info(FlImage image);
+static FlImageInfo* fl_image_get_info(FlImage image);
 
 #include "image.inl"
 #ifdef __cplusplus

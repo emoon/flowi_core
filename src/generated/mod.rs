@@ -43,46 +43,7 @@ pub mod window;
 pub use window::*;
 
 #[repr(C)]
-pub(crate) struct AppFfi {
-    pub(crate) data: *const c_void,
-    pub(crate) main_loop: unsafe fn(data: *const c_void, user_data: *mut c_void) -> bool,
-    pub(crate) button_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const ButtonFfiApi,
-    pub(crate) cursor_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const CursorFfiApi,
-    pub(crate) input_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const InputFfiApi,
-    pub(crate) io_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const IoFfiApi,
-    pub(crate) item_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const ItemFfiApi,
-    pub(crate) menu_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const MenuFfiApi,
-    pub(crate) painter_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const PainterFfiApi,
-    pub(crate) style_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const StyleFfiApi,
-    pub(crate) text_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const TextFfiApi,
-    pub(crate) ui_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const UiFfiApi,
-    pub(crate) window_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const WindowFfiApi,
-}
-
-pub(crate) fn init_function_ptrs(api: *const AppFfi) {
-    unsafe {
-        let api = &*api;
-        g_flowi_button_api = (api.button_get_api)(api.data, 0);
-        g_flowi_cursor_api = (api.cursor_get_api)(api.data, 0);
-        g_flowi_input_api = (api.input_get_api)(api.data, 0);
-        g_flowi_io_api = (api.io_get_api)(api.data, 0);
-        g_flowi_item_api = (api.item_get_api)(api.data, 0);
-        g_flowi_menu_api = (api.menu_get_api)(api.data, 0);
-        g_flowi_painter_api = (api.painter_get_api)(api.data, 0);
-        g_flowi_style_api = (api.style_get_api)(api.data, 0);
-        g_flowi_text_api = (api.text_get_api)(api.data, 0);
-        g_flowi_ui_api = (api.ui_get_api)(api.data, 0);
-        g_flowi_window_api = (api.window_get_api)(api.data, 0);
-    }
+pub struct AppFfi {
+    pub data: *const c_void,
+    pub main_loop: unsafe fn(data: *const c_void, user_data: *mut c_void) -> bool,
 }

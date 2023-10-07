@@ -7,6 +7,7 @@
 #include <flowi/button.h>
 #include <flowi/item.h>
 #include <flowi/painter.h>
+#include <flowi/input.h>
 #include "image_private.h"
 #include "internal.h"
 //#include "primitives.h"
@@ -116,7 +117,6 @@ extern "C" bool c_should_close(FlInternalData* state) {
 extern "C" void c_pre_update(FlInternalData* state) {
     ImGui::NewFrame();
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1319,11 +1319,7 @@ extern "C" void* c_create(const FlApplicationSettings* settings) {
     // Setup Dear ImGui context
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-    //io.ConfigViewportsNoAutoMerge = true;
-    //io.ConfigViewportsNoTaskBarIcon = true;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
     io.DisplaySize = ImVec2(1280.0f, 720.0f);
     io.DeltaTime = 1.0f / 60.0f;
@@ -1447,6 +1443,19 @@ extern "C" void* c_create(const FlApplicationSettings* settings) {
     state->ui_api.priv = state;
     state->style_api.priv = state;
     state->window_api.priv = state;
+    
+    // TODO: Move
+    g_flowi_button_api = &state->button_api;
+    g_flowi_cursor_api = &state->cursor_api;
+    g_flowi_input_api = nullptr;//&state->input_api;
+    g_flowi_io_api = &state->io_api;
+    g_flowi_item_api = &state->item_api;
+    g_flowi_menu_api = &state->menu_api;
+    g_flowi_painter_api = nullptr;//&state->painter_api;
+    g_flowi_style_api = &state->style_api;
+    g_flowi_text_api = &state->text_api;
+    g_flowi_ui_api = &state->ui_api;
+    g_flowi_window_api = &state->window_api;
 
     LinearAllocator_create_with_allocator(&state->frame_allocator, "string tracking allocator", &malloc_allocator,
                                           10 * 1024, true);

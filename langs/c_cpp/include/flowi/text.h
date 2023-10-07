@@ -4,33 +4,33 @@
 
 #pragma once
 
-#include "manual.h"
-#include "math_data.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "manual.h"
+#include "math_data.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // Calculate the size of a text string in pixels
-static FlVec2 fl_text_calc_size(const char *text);
+static FlVec2 fl_text_calc_size(const char* text);
 
 // Bullet text
-static void fl_text_bullet(const char *text);
+static void fl_text_bullet(const char* text);
 
 // Draw basic text
-static void fl_text_label(const char *label, const char *text);
+static void fl_text_label(const char* label, const char* text);
 
 // Draw basic text with a color
-static void fl_text_show_color(FlColor color, const char *text);
+static void fl_text_show_color(FlColor color, const char* text);
 
 // Show basic text
-static void fl_text_show(const char *text);
+static void fl_text_show(const char* text);
 
 // Draw text disabled
-static void fl_text_text_disabled(const char *text);
+static void fl_text_text_disabled(const char* text);
 
 #include "text.inl"
 #ifdef __cplusplus

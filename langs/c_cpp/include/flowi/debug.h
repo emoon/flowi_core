@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "manual.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "manual.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,9 +15,9 @@ extern "C" {
 
 typedef enum FlDebugMode {
 
-  FlDebugMode_Off = 0,
+    FlDebugMode_Off = 0,
 
-  FlDebugMode_Layout = 1,
+    FlDebugMode_Layout = 1,
 } FlDebugMode;
 
 #include "debug.inl"

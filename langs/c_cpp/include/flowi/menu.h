@@ -4,17 +4,16 @@
 
 #pragma once
 
-#include "manual.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "manual.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// Append to menu-bar of current window (requires [WindowFlags::MENU_BAR] flag
-// set on parent window).
+// Append to menu-bar of current window (requires [WindowFlags::MENU_BAR] flag set on parent window).
 static bool fl_menu_begin_bar();
 
 // only call end_bar() if begin_bar() returns true!
@@ -27,21 +26,19 @@ static bool fl_menu_begin_main_bar();
 static void fl_menu_end_main_bar();
 
 // create a sub-menu entry. only call EndMenu() if this returns true!
-static bool fl_menu_begin(const char *label, bool enabled);
+static bool fl_menu_begin(const char* label, bool enabled);
 
 // only call end_menu() if begin_menu() returns true!
 static void fl_menu_end();
 
 // return true when activated.
-static bool fl_menu_item(const char *label);
+static bool fl_menu_item(const char* label);
 
 // return true when activated. Includes some extra info such as shortcut, etc
-static bool fl_menu_item_ex(const char *label, const char *shortcut,
-                            bool selected, bool enabled);
+static bool fl_menu_item_ex(const char* label, const char* shortcut, bool selected, bool enabled);
 
 // return true when activated + toggle selected
-static bool fl_menu_item_toggle(const char *label, const char *shortcut,
-                                bool *selected, bool enabled);
+static bool fl_menu_item_toggle(const char* label, const char* shortcut, bool* selected, bool enabled);
 
 #include "menu.inl"
 #ifdef __cplusplus

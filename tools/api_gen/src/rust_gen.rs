@@ -748,18 +748,22 @@ impl RustGen {
             let structs_with_funcs = get_structs_with_functions(api_defs);
 
             writeln!(f, "#[repr(C)]")?;
-            writeln!(f, "pub(crate) struct AppFfi {{")?;
-            writeln!(f, "    pub(crate) data: *const c_void,")?;
-            writeln!(f, "    pub(crate) main_loop: unsafe fn(data: *const c_void, user_data: *mut c_void) -> bool,")?;
+            writeln!(f, "pub struct AppFfi {{")?;
+            writeln!(f, "    pub data: *const c_void,")?;
+            writeln!(f, "    pub main_loop: unsafe fn(data: *const c_void, user_data: *mut c_void) -> bool,")?;
 
+            /*
             for s in &structs_with_funcs {
                 let name = &s.name;
                 writeln!(f, "   pub(crate) {}_get_api: unsafe extern \"C\" fn(data: *const c_void, api_ver: u32) -> *const {}FfiApi,",
                 name.to_lowercase(), name)?;
             }
+            */
 
             writeln!(f, "}}\n")?;
-            writeln!(f, "pub(crate) fn init_function_ptrs(api: *const AppFfi) {{")?;
+            
+            /*
+            writeln!(f, "pub fn init_function_ptrs(api: *const AppFfi) {{")?;
             writeln!(f, "    unsafe {{")?;
             writeln!(f, "    let api = &*api;")?;
 
@@ -771,8 +775,9 @@ impl RustGen {
                     name, name,
                 )?;
             }
-
+            
             writeln!(f, "}}}}\n")?;
+            */
         }
 
         run_rustfmt(&flowi_mod);
