@@ -10,12 +10,17 @@ glam = "0.23.0"
 thiserror = "1.0"
 bitflags = "2.0.0-rc.1"
 notify = "5.1.0"
-png = "0.17.7"
+zune-png = "0.2"
+zune-jpeg = "0.3"
 sha2 = "0.10.6"
-fileorama = "0.0.2"
+bytemuck = "1.14.0"
+fileorama = { path = "../fileorama" }
 base64ct = { version = "1.6.0", features = ["alloc"] }
 
-[profile.dev.package.png]
+[profile.dev.package.zune-png]
+opt-level = 3
+
+[profile.dev.package.zune-jpeg]
 opt-level = 3
 
 [build-dependencies]

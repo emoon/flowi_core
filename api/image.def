@@ -1,10 +1,27 @@
 //mod render_commands
 
+enum ImageFormat {
+    /// 8-bit per channel Red, Green and Blue
+    Rgb,
+    /// 8-bit per channel Red, Green, Blue and Alpha
+    Rgba,
+    /// 8-bit per channel Blue, Green and Red
+    Bgr,
+    /// 8-bit per channel Blue, Green and Red and Alpha
+    Bgra,
+    /// 8-bit per channel Alpha only
+    Alpha,
+}
+
 struct ImageInfo {
+    /// Format of the image. See the ImageFormat enum
+    image_format: u32,
     /// width of the image
     width: u32,
     /// height of the Image
     height: u32,
+    /// Number of frames. This is 1 for static images and > 1 for animated images 
+    frame_count: u32,
 }
 
 enum SvgFlags {

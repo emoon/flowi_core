@@ -1,5 +1,7 @@
 use core::ffi::c_void;
+use fileorama::Fileorama;
 
+mod image_loader;
 pub mod generated;
 pub use generated::*;
 mod manual;
@@ -9,6 +11,7 @@ pub use manual::Result as Result;
 
 pub struct FlowiState {
     c_data: *const c_void,
+    pub vfs: Fileorama,
 }
 
 extern "C" {
@@ -18,8 +21,9 @@ extern "C" {
 }
 
 impl FlowiState {
-    pub fn new(settings: &ApplicationSettings) -> Self {
+    pub fn new(settings: &ApplicationSettings, vfs_thread_count: usize) -> Self {
         Self {
+            vfs: Fileorama::new(vfs_thread_count),
             c_data: unsafe { c_create(settings) },
         }
     }

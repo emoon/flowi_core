@@ -13,6 +13,19 @@
 extern "C" {
 #endif
 
+typedef enum FlImageFormat {
+    // 8-bit per channel Red, Green and Blue
+    FlImageFormat_Rgb = 0,
+    // 8-bit per channel Red, Green, Blue and Alpha
+    FlImageFormat_Rgba = 1,
+    // 8-bit per channel Blue, Green and Red
+    FlImageFormat_Bgr = 2,
+    // 8-bit per channel Blue, Green and Red and Alpha
+    FlImageFormat_Bgra = 3,
+    // 8-bit per channel Alpha only
+    FlImageFormat_Alpha = 4,
+} FlImageFormat;
+
 typedef enum FlSvgFlags {
     // Render the SVG image using RGBA format
     FlSvgFlags_Rgba = 0,
@@ -23,10 +36,14 @@ typedef enum FlSvgFlags {
 typedef uint64_t FlImage;
 
 typedef struct FlImageInfo {
+    // Format of the image. See the ImageFormat enum
+    uint32_t image_format;
     // width of the image
     uint32_t width;
     // height of the Image
     uint32_t height;
+    // Number of frames. This is 1 for static images and > 1 for animated images
+    uint32_t frame_count;
 } FlImageInfo;
 
 // Load image from file. Supported formats are:

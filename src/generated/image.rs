@@ -41,6 +41,21 @@ pub static mut g_flowi_image_api: *const ImageFfiApi = std::ptr::null_mut();
 
 #[repr(C)]
 #[derive(Debug)]
+pub enum ImageFormat {
+    /// 8-bit per channel Red, Green and Blue
+    Rgb = 0,
+    /// 8-bit per channel Red, Green, Blue and Alpha
+    Rgba = 1,
+    /// 8-bit per channel Blue, Green and Red
+    Bgr = 2,
+    /// 8-bit per channel Blue, Green and Red and Alpha
+    Bgra = 3,
+    /// 8-bit per channel Alpha only
+    Alpha = 4,
+}
+
+#[repr(C)]
+#[derive(Debug)]
 pub enum SvgFlags {
     /// Render the SVG image using RGBA format
     Rgba = 0,
@@ -51,10 +66,14 @@ pub enum SvgFlags {
 #[repr(C)]
 #[derive(Debug)]
 pub struct ImageInfo {
+    /// Format of the image. See the ImageFormat enum
+    pub image_format: u32,
     /// width of the image
     pub width: u32,
     /// height of the Image
     pub height: u32,
+    /// Number of frames. This is 1 for static images and > 1 for animated images
+    pub frame_count: u32,
 }
 
 #[repr(C)]
