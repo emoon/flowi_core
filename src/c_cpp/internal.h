@@ -39,6 +39,7 @@ extern "C" {
 void Errors_add(FlError err, const char* filename, int line, const char* fmt, ...);
 
 typedef struct FlInternalData {
+    void* rust_state; // has to be first
     struct ImGuiContext* imgui_ctx;
     FlButtonApi button_api;
     FlCursorApi cursor_api;

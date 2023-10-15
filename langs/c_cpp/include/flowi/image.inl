@@ -1,7 +1,7 @@
 typedef struct FlImageApi {
     struct FlInternalData* priv;
     FlImage (*create_from_file)(struct FlInternalData* priv, FlString filename);
-    FlImage (*create_from_memory)(struct FlInternalData* priv, FlString name, uint8_t* data, uint32_t data_size);
+    FlImage (*create_from_file_block)(struct FlInternalData* priv, FlString filename);
     FlImageInfo* (*get_info)(struct FlInternalData* priv, FlImage image);
 } FlImageApi;
 
@@ -9,20 +9,14 @@ extern FlImageApi* g_flowi_image_api;
 
 #ifdef FLOWI_STATIC
 FlImage fl_image_create_from_file_impl(struct FlInternalData* priv, FlString filename);
-FlImage fl_image_create_from_memory_impl(struct FlInternalData* priv, FlString name, uint8_t* data, uint32_t data_size);
+FlImage fl_image_create_from_file_block_impl(struct FlInternalData* priv, FlString filename);
 FlImageInfo* fl_image_get_info_impl(struct FlInternalData* priv, FlImage image);
 #endif
 
 // Load image from file. Supported formats are:
 // JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
 // PNG 1/2/4/8/16-bit-per-channel
-// TGA
-// BMP non-1bpp, non-RLE
-// PSD (composited view only, no extra channels, 8/16 bit-per-channel)
-// GIF
-// HDR (radiance rgbE format)
-// PIC (Softimage PIC)
-// PNM (PPM and PGM binary only)
+// Notice that this will return a async handle so the data may not be acceassable directly.
 FL_INLINE FlImage fl_image_create_from_file(const char* filename) {
     FlString filename_ = fl_cstr_to_flstring(filename);
 #ifdef FLOWI_STATIC
@@ -32,27 +26,19 @@ FL_INLINE FlImage fl_image_create_from_file(const char* filename) {
 #endif
 }
 
-// Load image from memory. Supported formats are:
+// Load image from file. Supported formats are:
 // JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
 // PNG 1/2/4/8/16-bit-per-channel
-// TGA
-// BMP non-1bpp, non-RLE
-// PSD (composited view only, no extra channels, 8/16 bit-per-channel)
-// GIF
-// HDR (radiance rgbE format)
-// PIC (Softimage PIC)
-// PNM (PPM and PGM binary only)
-FL_INLINE FlImage fl_image_create_from_memory(const char* name, uint8_t* data, uint32_t data_size) {
-    FlString name_ = fl_cstr_to_flstring(name);
+// This call will block until the loading has finished. It's recommended to use the async version instead.
+FL_INLINE FlImage fl_image_create_from_file_block(const char* filename) {
+    FlString filename_ = fl_cstr_to_flstring(filename);
 #ifdef FLOWI_STATIC
-    return fl_image_create_from_memory_impl(g_flowi_image_api->priv, name_, data, data_size);
+    return fl_image_create_from_file_block_impl(g_flowi_image_api->priv, filename_);
 #else
-    return (g_flowi_image_api->create_from_memory)(g_flowi_image_api->priv, name_, data, data_size);
+    return (g_flowi_image_api->create_from_file_block)(g_flowi_image_api->priv, filename_);
 #endif
 }
 
-// Load SVG from file
-// Load SVG from memory
 // Get data amout the image
 FL_INLINE FlImageInfo* fl_image_get_info(FlImage image) {
 #ifdef FLOWI_STATIC

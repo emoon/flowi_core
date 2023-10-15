@@ -1321,7 +1321,7 @@ extern "C" FlPainterApi* fl_get_painter_api(AppState* app_state, int version) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern "C" void* c_create(const FlApplicationSettings* settings) {
+extern "C" void* c_create(const FlApplicationSettings* settings, void* rust_state) {
     FL_UNUSED(settings);
 
     ImGui::CreateContext();
@@ -1430,6 +1430,7 @@ extern "C" void* c_create(const FlApplicationSettings* settings) {
     //glfwSetKeyCallback(window, key_callback);
 
     FlInternalData* state = new FlInternalData;
+    state->rust_state = rust_state;
     //state->window = window;
 
     state->button_api = g_button_funcs;
