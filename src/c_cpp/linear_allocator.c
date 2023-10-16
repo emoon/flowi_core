@@ -16,7 +16,7 @@ void LinearAllocator_create(LinearAllocator* self, const char* id, u8* data, int
 
 bool LinearAllocator_create_with_allocator(LinearAllocator* self, const char* id, FlAllocator* allocator, int len,
                                            bool allow_realloc) {
-    u8* mem = FlAllocator_alloc(allocator, len);
+    u8* mem = (u8*)FlAllocator_alloc(allocator, len);
 
     LinearAllocator_create(self, id, mem, len);
     self->allocator = allocator;
@@ -58,7 +58,7 @@ static u8* handle_out_of_memory(LinearAllocator* self, int size, int alignment) 
 
     // calculate the the original size and double it for the new alloc
     int memory_size = (int)((uintptr_t)self->end_data - (uintptr_t)self->start_data) * 2;
-    u8* data = FlAllocator_realloc(self->allocator, self->start_data, memory_size);
+    u8* data = (u8*)FlAllocator_realloc(self->allocator, self->start_data, memory_size);
 
     LinearAllocator_update_resize(self, data, memory_size);
     return internal_alloc_unchecked(self, size, alignment);

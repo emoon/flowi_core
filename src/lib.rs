@@ -7,6 +7,8 @@ pub mod image_api;
 pub use generated::*;
 mod manual;
 
+mod tests;
+
 pub mod imgui;
 pub use manual::Result;
 

@@ -1229,7 +1229,8 @@ void fl_style_init_priv() {
 }
 
 
-extern FlFontApi g_font_funcs;
+//extern FlFontApi g_font_funcs;
+//extern FlImageApi g_f
 //extern "C" FlImageApi g_image_funcs;
 //extern FlButtonApi g_button_funcs;
 //extern FlCursorApi g_cursor_funcs;
@@ -1318,6 +1319,17 @@ extern "C" FlPainterApi* fl_get_painter_api(AppState* app_state, int version) {
     FL_UNUSED(app_state);
     return nullptr;
 }
+
+extern "C" FlImage fl_image_create_from_file_impl(struct FlInternalData* priv, FlString filename);
+extern "C" FlImage fl_image_create_from_file_block_impl(struct FlInternalData* priv, FlString filename);
+extern "C" FlImageInfo* fl_image_get_info_impl(struct FlInternalData* priv, FlImage image);
+
+FlImageApi g_image_funcs = {
+    nullptr,
+    fl_image_create_from_file_impl,
+    fl_image_create_from_file_block_impl,
+    fl_image_get_info_impl
+};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1435,8 +1447,8 @@ extern "C" void* c_create(const FlApplicationSettings* settings, void* rust_stat
 
     state->button_api = g_button_funcs;
     state->cursor_api = g_cursor_funcs;
-    state->font_api = g_font_funcs;
-    //state->image_api = g_image_funcs;
+    //state->font_api = g_font_funcs;
+    state->image_api = g_image_funcs;
     state->item_api = g_item_funcs;
     state->menu_api = g_menu_funcs;
     state->text_api = g_text_funcs;
@@ -1459,6 +1471,7 @@ extern "C" void* c_create(const FlApplicationSettings* settings, void* rust_stat
     g_flowi_button_api = &state->button_api;
     g_flowi_cursor_api = &state->cursor_api;
     g_flowi_input_api = nullptr;//&state->input_api;
+    g_flowi_image_api = &state->image_api; 
     g_flowi_io_api = &state->io_api;
     g_flowi_item_api = &state->item_api;
     g_flowi_menu_api = &state->menu_api;

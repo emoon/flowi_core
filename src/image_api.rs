@@ -261,22 +261,30 @@ struct WrapState<'a> {
 }
 
 // FFI functions
+#[no_mangle]
 pub fn fl_image_create_from_file_block_impl(data: *mut core::ffi::c_void, filename: FlString) -> u64 {
     let state = &mut unsafe { &mut *(data as *mut WrapState) }.s;
     let name = filename.as_str();
-    create_from_file_sync(state, name).unwrap_or_else(|_| {
+    create_from_file_sync(state, name).unwrap_or_else(|e| {
+        panic!("{:?}", e);
         // TODO: set_last_error
         return 0;
     })
 }
 
 // FFI functions
+#[no_mangle]
 pub fn fl_image_create_from_file_impl(data: *mut core::ffi::c_void, filename: FlString) -> u64 {
     let state = &mut unsafe { &mut *(data as *mut WrapState) }.s;
     let name = filename.as_str();
-    create_from_file(state, name).unwrap_or_else(|_| {
+    create_from_file(state, name).unwrap_or_else(|e| {
+        panic!("{:?}", e);
         // TODO: set_last_error
         return 0;
     })
 }
 
+#[no_mangle]
+pub fn fl_image_get_info_impl(_data: *const core::ffi::c_void, _image: u64) -> *const ImageInfo {
+    std::ptr::null()
+}

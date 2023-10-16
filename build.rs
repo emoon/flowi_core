@@ -149,7 +149,13 @@ fn build_cc(target_os: &str) {
         ],
     );
 
-    add_sources(&mut build, "src/c_cpp", &["imgui_wrap.cpp"]);
+    add_sources(&mut build, "src/c_cpp", 
+        &[
+            "imgui_wrap.cpp",
+            "linear_allocator.c",
+            "string_allocator.c",
+        ],
+    );
 
     build.compile("flowi_cpp");
 }
