@@ -34,9 +34,12 @@ extern "C" {
 
 impl FlowiState {
     pub fn new(settings: &ApplicationSettings, vfs_thread_count: usize) -> Self {
+        let vfs = Fileorama::new(vfs_thread_count);
+        let image_handler = ImageHandler::new(&vfs);
+
         let state = Box::new(InternalState {
-            vfs: Fileorama::new(vfs_thread_count),
-            image_handler: ImageHandler::new(),
+            vfs,
+            image_handler,
         });
 
         let ptr = Box::into_raw(state);

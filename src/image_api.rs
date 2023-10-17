@@ -106,16 +106,20 @@ fn decode_jpeg(data: &[u8]) -> Result<LoadStatus, Error> {
 impl Driver for ImageLoader {
     /// We return true here as we don't know
     fn is_remote(&self) -> bool {
+        dbg!();
         true
     }
 
     fn name(&self) -> &'static str {
+        dbg!();
         "flowi_image_loader"
     }
 
-    fn supports_url(&self, _url: &str) -> bool {
+    fn supports_url(&self, url: &str) -> bool {
+        url.ends_with(".png")
+        //dbg!();
         // We always let other drivers load to memory
-        false
+        //false
     }
 
     // Create a new instance given data. The Driver will take ownership of the data
@@ -125,6 +129,7 @@ impl Driver for ImageLoader {
 
     // Get some data in and returns true if driver can be mounted from it
     fn can_load_from_data(&self, data: &[u8]) -> bool {
+        dbg!();
         let mut png_decoder = PngDecoder::new(data);
         let headers = png_decoder.decode_headers();
         headers.is_ok()
@@ -132,6 +137,7 @@ impl Driver for ImageLoader {
 
     // Create a new instance given data. The Driver will take ownership of the data
     fn create_from_data(&self, data: Box<[u8]>) -> Option<DriverType> {
+        dbg!();
         // Check if png or jpeg loader can open the data
         /*
         let jpeg_decoder = JpegDecoder::new(&data);
@@ -154,19 +160,22 @@ impl Driver for ImageLoader {
         None
     }
 
-    fn can_load_from_url(&self, _url: &str) -> bool {
-        false
+    fn can_load_from_url(&self, url: &str) -> bool {
+        url.ends_with(".png")
+        //dbg!();
+        //false
     }
 
     /// Used when creating an instance of the driver with a path to load from
     fn create_from_url(&self, _url: &str) -> Option<DriverType> {
+        dbg!();
         None
     }
 
     /// Returns a handle which updates the progress and returns the loaded data. This will try to
     fn load_url(&mut self, _path: &str, progress: &mut Progress) -> Result<LoadStatus, Error> {
-        //trace!("loading url: {} for image loader", path);
-        progress.set_step(1);
+        println!("loading url: {} for image loader", _path);
+        //progress.set_step(1);
 
         match self.image_type {
             ImageType::PngData(ref data) => match decode_png(data) {
@@ -212,7 +221,9 @@ pub(crate) struct ImageHandler {
 }
 
 impl ImageHandler {
-    pub fn new() -> Self {
+    pub fn new(vfs: &Fileorama) -> Self {
+        vfs.add_driver(Box::new(ImageLoader::default()));
+
         Self {
             images: HashMap::new(),
             id_counter: 1,

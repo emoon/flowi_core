@@ -6,16 +6,17 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-glam = "0.23.0"
-thiserror = "1.0"
+base64ct = { version = "1.6.0", features = ["alloc"] }
 bitflags = "2.0.0-rc.1"
-notify = "5.1.0"
-zune-png = "0.2"
-zune-jpeg = "0.3"
-sha2 = "0.10.6"
 bytemuck = "1.14.0"
 fileorama = { path = "../fileorama" }
-base64ct = { version = "1.6.0", features = ["alloc"] }
+glam = "0.23.0"
+log = "0.4"
+notify = "5.1.0"
+sha2 = "0.10.6"
+thiserror = "1.0"
+zune-jpeg = "0.3"
+zune-png = "0.2"
 
 [profile.dev.package.zune-png]
 opt-level = 3
