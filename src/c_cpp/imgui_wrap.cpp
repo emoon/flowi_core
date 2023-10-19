@@ -1475,7 +1475,7 @@ extern "C" void* c_create(const FlApplicationSettings* settings, void* rust_stat
     g_flowi_io_api = &state->io_api;
     g_flowi_item_api = &state->item_api;
     g_flowi_menu_api = &state->menu_api;
-    g_flowi_painter_api = nullptr;//&state->painter_api;
+    g_flowi_painter_api = nullptr;//&state->painterApplicationSettings::new());_api;
     g_flowi_style_api = &state->style_api;
     g_flowi_text_api = &state->text_api;
     g_flowi_ui_api = &state->ui_api;
