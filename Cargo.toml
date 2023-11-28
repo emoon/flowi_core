@@ -6,35 +6,33 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-glam = "0.23.0"
-thiserror = "1.0"
-bitflags = "2.0.0-rc.1"
-libloading = { version = "0.7.4", optional = true }
-notify = "5.1.0"
-png = "0.17.7"
-sha2 = "0.10.6"
 base64ct = { version = "1.6.0", features = ["alloc"] }
+bitflags = "2.0.0-rc.1"
+bytemuck = "1.14.0"
+fileorama = { path = "../fileorama" }
+glam = "0.23.0"
+log = "0.4"
+notify = "5.1.0"
+sha2 = "0.10.6"
+thiserror = "1.0"
+zune-jpeg = "0.3"
+zune-png = "0.2"
 
-[profile.dev.package.png]
+[profile.dev.package.zune-png]
 opt-level = 3
 
-[features]
-## reload_assets = ["notify"]
-### Build and link all the code the code the program
-static = []
-### Only include wrapping functionally, but allow for loading the shared object 
-dynamic = ["libloading"]
-### Only include the wrapper API
-plugin = []
-### Support incremental compilation of the C/C++ code
-tundra = []
+[profile.dev.package.zune-jpeg]
+opt-level = 3
 
 [build-dependencies]
 cc = { version = "1.0", features = ["parallel"] }
+
+[features]
+default = ["static"]
+static = []
 
 [workspace]
 exclude = [
     "tools/api_gen", 
 ]
-
 

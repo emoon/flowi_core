@@ -1,16 +1,59 @@
+use core::ffi::c_void;
+use fileorama::Fileorama;
+use image_api::ImageHandler;
+
 pub mod generated;
+pub mod image_api;
 pub use generated::*;
-pub mod manual;
-pub use manual::*;
+mod manual;
 
-pub use crate::application_settings::ApplicationSettings;
+mod tests;
 
-pub struct Instance {
-    pub dummy: u32,
+pub mod imgui;
+pub use manual::Result;
+
+#[repr(C)]
+pub(crate) struct InternalState {
+    pub(crate) vfs: Fileorama,
+    pub(crate) image_handler: ImageHandler,
 }
 
-impl Instance {
-    pub fn new(_settings: &ApplicationSettings) -> Self {
-        Self { dummy: 0 }
+pub struct FlowiState {
+    c_data: *const c_void,
+    state: Box<InternalState>,
+}
+
+extern "C" {
+    fn c_create(
+        settings: *const ApplicationSettings,
+        rust_state: *const InternalState,
+    ) -> *const c_void;
+    fn c_pre_update(data: *const c_void);
+    fn c_post_update(data: *const c_void);
+}
+
+impl FlowiState {
+    pub fn new(settings: &ApplicationSettings, vfs_thread_count: usize) -> Self {
+        let vfs = Fileorama::new(vfs_thread_count);
+        let image_handler = ImageHandler::new(&vfs);
+
+        let state = Box::new(InternalState {
+            vfs,
+            image_handler,
+        });
+
+        let ptr = Box::into_raw(state);
+        let c_data = unsafe { c_create(settings, ptr) };
+        let state = unsafe { Box::from_raw(ptr) };
+
+        Self { c_data, state }
+    }
+
+    pub fn pre_update(&self) {
+        unsafe { c_pre_update(self.c_data) }
+    }
+
+    pub fn post_update(&self) {
+        unsafe { c_post_update(self.c_data) }
     }
 }

@@ -21,6 +21,7 @@ pub mod style;
 pub mod text;
 pub mod ui;
 pub mod window;
+<<<<<<< HEAD
 use crate::button::ButtonFfiApi;
 use crate::font::FontFfiApi;
 pub use crate::generated::button::Button;
@@ -74,4 +75,12 @@ pub(crate) struct AppFfi {
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const UiFfiApi,
     pub(crate) window_get_api:
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const WindowFfiApi,
+=======
+pub use window::*;
+
+#[repr(C)]
+pub struct AppFfi {
+    pub data: *const c_void,
+    pub main_loop: unsafe fn(data: *const c_void, user_data: *mut c_void) -> bool,
+>>>>>>> main
 }

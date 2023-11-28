@@ -35,6 +35,7 @@ fn main() {
     let mut tera = Tera::new("templates/*").unwrap();
 
     tera.register_function("get_ctype_struct", Cgen::get_type_struct);
+    tera.register_function("is_struct_not_empty", Cgen::is_struct_not_empty);
 
     // Dest directores for various langs
     let c_dest = "../../langs/c_cpp/include/flowi";
@@ -80,13 +81,6 @@ fn main() {
             // On the first thread we start with generating a bunch of main files so we have this
             // generation running threaded as well. Next time when index isn't 0 anymore regular work
             // will come along here.
-
-            let mut context = tera::Context::new();
-            context.insert("modules", &vec!["test", "test2"]);
-
-            // Render the template with the given context
-            //let rendered = tera.render("c_header.tera", &context).unwrap();
-            //println!("{}", rendered);
 
             if index == 0 {
                 Cgen::generate_main_file(c_dest, &api_defs_read).unwrap();

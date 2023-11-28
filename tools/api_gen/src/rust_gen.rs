@@ -262,7 +262,7 @@ impl RustGen {
         if fa.ret_value.is_empty() {
             writeln!(
                 f,
-                "    fn fl_{}_{}_impl({});",
+                "    pub fn fl_{}_{}_impl({});",
                 self_name.to_snake_case(),
                 func.name,
                 get_arg_line(&fa.ffi_args)
@@ -270,7 +270,7 @@ impl RustGen {
         } else {
             writeln!(
                 f,
-                "    fn fl_{}_{}_impl({}) -> {};",
+                "    pub fn fl_{}_{}_impl({}) -> {};",
                 self_name.to_snake_case(),
                 func.name,
                 get_arg_line(&fa.ffi_args),
@@ -309,7 +309,7 @@ impl RustGen {
                 continue;
             }
 
-            writeln!(f, "#[cfg(any(feature = \"static\", feature = \"tundra\"))]")?;
+            writeln!(f, "#[cfg(feature = \"static\")]")?;
             writeln!(f, "extern \"C\" {{")?;
 
             for func in s
@@ -561,7 +561,7 @@ impl RustGen {
         let args = get_arg_line(&func_args.ffi_args);
 
         if let Some(ret_val) = func.return_val.as_ref() {
-            writeln!(f, "#[cfg(any(feature = \"static\", feature = \"tundra\"))]")?;
+            writeln!(f, "#[cfg(feature = \"static\")]")?;
             writeln!(
                 f,
                 "let ret_val = fl_{}_{}_impl({});",
@@ -582,7 +582,7 @@ impl RustGen {
                         ret_val.type_name
                     )?;
                 } else {
-                    writeln!(f, "{} {{ handle: ret_value }}", ret_val.type_name)?;
+                    writeln!(f, "{} {{ handle: ret_val }}", ret_val.type_name)?;
                 }
             } else if ret_val.const_pointer {
                 if ret_val.optional {
@@ -603,7 +603,7 @@ impl RustGen {
                 writeln!(f, "ret_val")?;
             }
         } else {
-            writeln!(f, "#[cfg(any(feature = \"static\", feature = \"tundra\"))]")?;
+            writeln!(f, "#[cfg(feature = \"static\")]")?;
             writeln!(f, "fl_{}_{}_impl({});", struct_name, func.name, args)?;
 
             writeln!(
@@ -682,12 +682,18 @@ impl RustGen {
                 }
             }
 
-            for sdef in &api_def.structs {
+            for sdef in api_def.structs
+                .iter()
+                .chain(api_def.handle_structs.iter()) 
+            {
                 Self::generate_struct(&mut f, sdef)?;
             }
 
             //for sdef in api_def.structs.iter().filter(|s| s.functions.is_empty()) {
-            for sdef in api_def.structs.iter() {
+            for sdef in api_def.structs
+                .iter()
+                .chain(api_def.handle_structs.iter()) 
+            {
                 Self::generate_struct_impl(&mut f, sdef)?;
             }
         }
@@ -714,6 +720,7 @@ impl RustGen {
                 //writeln!(f, "pub use {}::*;", base_filename)?;
             }
 
+            /*
             for api_def in api_defs {
                 let base_filename = &api_def.base_filename;
 
@@ -728,21 +735,24 @@ impl RustGen {
                     }
                 }
             }
+            */
 
             writeln!(f)?;
 
             let structs_with_funcs = get_structs_with_functions(api_defs);
 
             writeln!(f, "#[repr(C)]")?;
-            writeln!(f, "pub(crate) struct AppFfi {{")?;
-            writeln!(f, "    pub(crate) data: *const c_void,")?;
-            writeln!(f, "    pub(crate) main_loop: unsafe fn(data: *const c_void, user_data: *mut c_void) -> bool,")?;
+            writeln!(f, "pub struct AppFfi {{")?;
+            writeln!(f, "    pub data: *const c_void,")?;
+            writeln!(f, "    pub main_loop: unsafe fn(data: *const c_void, user_data: *mut c_void) -> bool,")?;
 
+            /*
             for s in &structs_with_funcs {
                 let name = &s.name;
                 writeln!(f, "   pub(crate) {}_get_api: unsafe extern \"C\" fn(data: *const c_void, api_ver: u32) -> *const {}FfiApi,",
                 name.to_lowercase(), name)?;
             }
+            */
 
             writeln!(f, "}}\n")?;
             /*
@@ -758,7 +768,7 @@ impl RustGen {
                     name, name,
                 )?;
             }
-
+            
             writeln!(f, "}}}}\n")?;
             */
         }

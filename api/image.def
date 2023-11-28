@@ -1,10 +1,27 @@
 //mod render_commands
 
+enum ImageFormat {
+    /// 8-bit per channel Red, Green and Blue
+    Rgb,
+    /// 8-bit per channel Red, Green, Blue and Alpha
+    Rgba,
+    /// 8-bit per channel Blue, Green and Red
+    Bgr,
+    /// 8-bit per channel Blue, Green and Red and Alpha
+    Bgra,
+    /// 8-bit per channel Alpha only
+    Alpha,
+}
+
 struct ImageInfo {
+    /// Format of the image. See the ImageFormat enum
+    image_format: u32,
     /// width of the image
     width: u32,
     /// height of the Image
     height: u32,
+    /// Number of frames. This is 1 for static images and > 1 for animated images 
+    frame_count: u32,
 }
 
 enum SvgFlags {
@@ -15,38 +32,17 @@ enum SvgFlags {
 }
 
 #[attributes(Handle)]
-//#[crate(Image)]
 struct Image {
     /// Load image from file. Supported formats are:
     /// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
     /// PNG 1/2/4/8/16-bit-per-channel
-    /// TGA
-    /// BMP non-1bpp, non-RLE
-    /// PSD (composited view only, no extra channels, 8/16 bit-per-channel)
-    /// GIF
-    /// HDR (radiance rgbE format)
-    /// PIC (Softimage PIC)
-    /// PNM (PPM and PGM binary only)
-    [static] create_from_file(filename: String) -> Image?,
-    /// Load image from memory. Supported formats are:
+    /// Notice that this will return a async handle so the data may not be acceassable directly.
     /// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
     /// PNG 1/2/4/8/16-bit-per-channel
-    /// TGA
-    /// BMP non-1bpp, non-RLE
-    /// PSD (composited view only, no extra channels, 8/16 bit-per-channel)
-    /// GIF
-    /// HDR (radiance rgbE format)
-    /// PIC (Softimage PIC)
-    /// PNM (PPM and PGM binary only)
-    //[static] create_from_memory(name: String, data: [u8]) -> Image?,
-    /// Load SVG from file
-    //[static] create_svg_from_file(filename: String, target_width: u32, flags: SvgFlags) -> Image?,
-    /// Load SVG from memory
-    //[static] create_svg_from_memory(name: String, data: [u8], target_width: u32, flags: SvgFlags) -> Image?,
+    /// This call will block until the loading has finished. It's recommended to use the async version instead.
+    [static] create_from_file_block(filename: String) -> Image?,
     /// Get data amout the image
     [static] get_info(image: Image) -> *const ImageInfo?,
-    /// Destroy the created image
-    //destroy(),
 }
 
 // vim: syntax=rust expandtab ts=4 sw=4

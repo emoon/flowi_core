@@ -764,6 +764,24 @@ impl ApiParser {
                 }
             }
         }
+
+        for api_def in api_defs.iter_mut() {
+            for s in &mut api_def.handle_structs {
+                for func in &mut s.functions {
+                    for arg in &mut func.function_args {
+                        if handle_types.contains(&arg.type_name) {
+                            arg.is_handle_type = true;
+                        }
+                    }
+
+                    if let Some(ret_var) = func.return_val.as_mut() {
+                        if handle_types.contains(&ret_var.type_name) {
+                            ret_var.is_handle_type = true;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -4,13 +4,13 @@
 
 #pragma once
 
+#include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
 #include "image.h"
 #include "layout.h"
 #include "manual.h"
 #include "math_data.h"
-#include <stdbool.h>
-#include <stdint.h>
-#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,35 +18,27 @@ extern "C" {
 
 typedef enum FlPainterLayer {
 
-  FlPainterLayer_ActiveWindow = 0,
+    FlPainterLayer_ActiveWindow = 0,
 
-  FlPainterLayer_Background = 1,
+    FlPainterLayer_Background = 1,
 
-  FlPainterLayer_Foreground = 2,
+    FlPainterLayer_Foreground = 2,
 } FlPainterLayer;
-
-typedef struct FlPainter {
-} FlPainter;
 
 // The current layer to draw on. Default is ActiveWindow.
 static void fl_painter_set_layer(FlPainterLayer layer);
 
 // Draw a line from `pos` to `end` with the given `color` and `thickness`.
-static void fl_painter_draw_line(FlVec2 p1, FlVec2 p2, FlColor color,
-                                 float thickness);
+static void fl_painter_draw_line(FlVec2 p1, FlVec2 p2, FlColor color, float thickness);
 
 // Draw a rectangle with the given `color` and `rounding`.
-static void fl_painter_draw_rect(FlVec2 p1, FlVec2 p2, FlColor color,
-                                 float rounding);
+static void fl_painter_draw_rect(FlVec2 p1, FlVec2 p2, FlColor color, float rounding);
 
 // Draw a filled rectangle with the given `color` and `rounding`.
-static void fl_painter_draw_rect_filled(FlVec2 p1, FlVec2 p2, FlColor color,
-                                        float rounding);
+static void fl_painter_draw_rect_filled(FlVec2 p1, FlVec2 p2, FlColor color, float rounding);
 
 // Draw a rectangle with a gradient
-static void fl_painter_draw_rect_filled_gradient(FlVec2 p1, FlVec2 p2,
-                                                 FlColor left, FlColor right,
-                                                 FlColor btm_right,
+static void fl_painter_draw_rect_filled_gradient(FlVec2 p1, FlVec2 p2, FlColor left, FlColor right, FlColor btm_right,
                                                  FlColor btm_left);
 
 #include "painter.inl"

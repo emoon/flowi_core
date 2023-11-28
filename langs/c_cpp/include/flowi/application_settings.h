@@ -4,20 +4,24 @@
 
 #pragma once
 
-#include "manual.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "manual.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct FlApplicationSettings {
+<<<<<<< HEAD
 
   uint32_t width;
 
   uint32_t height;
+=======
+    uint32_t some_data;
+>>>>>>> main
 } FlApplicationSettings;
 
 #include "application_settings.inl"

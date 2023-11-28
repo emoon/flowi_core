@@ -36,25 +36,25 @@ pub struct ItemFfiApi {
     pub(crate) set_allow_overlap: unsafe extern "C" fn(data: *const core::ffi::c_void),
 }
 
-#[cfg(any(feature = "static", feature = "tundra"))]
+#[cfg(feature = "static")]
 extern "C" {
-    fn fl_item_is_hovered_impl(data: *const core::ffi::c_void, flags: HoveredFlags) -> bool;
-    fn fl_item_is_active_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_focused_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_clicked_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_visible_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_edited_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_activated_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_deactivated_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_deactivated_after_edit_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_toggled_open_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_any_hovered_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_any_active_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_is_any_focused_impl(data: *const core::ffi::c_void) -> bool;
-    fn fl_item_get_rect_min_impl(data: *const core::ffi::c_void) -> Vec2;
-    fn fl_item_get_rect_max_impl(data: *const core::ffi::c_void) -> Vec2;
-    fn fl_item_get_rect_size_impl(data: *const core::ffi::c_void) -> Vec2;
-    fn fl_item_set_allow_overlap_impl(data: *const core::ffi::c_void);
+    pub fn fl_item_is_hovered_impl(data: *const core::ffi::c_void, flags: HoveredFlags) -> bool;
+    pub fn fl_item_is_active_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_focused_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_clicked_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_visible_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_edited_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_activated_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_deactivated_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_deactivated_after_edit_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_toggled_open_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_any_hovered_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_any_active_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_is_any_focused_impl(data: *const core::ffi::c_void) -> bool;
+    pub fn fl_item_get_rect_min_impl(data: *const core::ffi::c_void) -> Vec2;
+    pub fn fl_item_get_rect_max_impl(data: *const core::ffi::c_void) -> Vec2;
+    pub fn fl_item_get_rect_size_impl(data: *const core::ffi::c_void) -> Vec2;
+    pub fn fl_item_set_allow_overlap_impl(data: *const core::ffi::c_void);
 }
 
 #[no_mangle]
@@ -71,7 +71,7 @@ impl Item {
     pub fn is_hovered(flags: HoveredFlags) -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_hovered_impl(_api.data, flags);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_hovered)(_api.data, flags);
@@ -83,7 +83,7 @@ impl Item {
     pub fn is_active() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_active_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_active)(_api.data);
@@ -95,7 +95,7 @@ impl Item {
     pub fn is_focused() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_focused_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_focused)(_api.data);
@@ -107,7 +107,7 @@ impl Item {
     pub fn is_clicked() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_clicked_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_clicked)(_api.data);
@@ -119,7 +119,7 @@ impl Item {
     pub fn is_visible() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_visible_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_visible)(_api.data);
@@ -131,7 +131,7 @@ impl Item {
     pub fn is_edited() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_edited_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_edited)(_api.data);
@@ -143,7 +143,7 @@ impl Item {
     pub fn is_activated() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_activated_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_activated)(_api.data);
@@ -155,7 +155,7 @@ impl Item {
     pub fn is_deactivated() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_deactivated_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_deactivated)(_api.data);
@@ -167,7 +167,7 @@ impl Item {
     pub fn is_deactivated_after_edit() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_deactivated_after_edit_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_deactivated_after_edit)(_api.data);
@@ -179,7 +179,7 @@ impl Item {
     pub fn is_toggled_open() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_toggled_open_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_toggled_open)(_api.data);
@@ -191,7 +191,7 @@ impl Item {
     pub fn is_any_hovered() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_any_hovered_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_any_hovered)(_api.data);
@@ -203,7 +203,7 @@ impl Item {
     pub fn is_any_active() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_any_active_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_any_active)(_api.data);
@@ -215,7 +215,7 @@ impl Item {
     pub fn is_any_focused() -> bool {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_is_any_focused_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.is_any_focused)(_api.data);
@@ -227,7 +227,7 @@ impl Item {
     pub fn get_rect_min() -> Vec2 {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_get_rect_min_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_rect_min)(_api.data);
@@ -239,7 +239,7 @@ impl Item {
     pub fn get_rect_max() -> Vec2 {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_get_rect_max_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_rect_max)(_api.data);
@@ -251,7 +251,7 @@ impl Item {
     pub fn get_rect_size() -> Vec2 {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             let ret_val = fl_item_get_rect_size_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_rect_size)(_api.data);
@@ -263,7 +263,7 @@ impl Item {
     pub fn set_allow_overlap() {
         unsafe {
             let _api = &*g_flowi_item_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
+            #[cfg(feature = "static")]
             fl_item_set_allow_overlap_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.set_allow_overlap)(_api.data);

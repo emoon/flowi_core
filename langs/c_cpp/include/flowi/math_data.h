@@ -4,38 +4,37 @@
 
 #pragma once
 
-#include "manual.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "manual.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct FlRect {
+    int x;
 
-  int x;
+    int y;
 
-  int y;
+    int width;
 
-  int width;
-
-  int height;
+    int height;
 } FlRect;
 
 typedef struct FlVec2 {
-  // x position
-  float x;
-  // y position
-  float y;
+    // x position
+    float x;
+    // y position
+    float y;
 } FlVec2;
 
 typedef struct FlIVec2 {
-  // x position
-  int x;
-  // y position
-  int y;
+    // x position
+    int x;
+    // y position
+    int y;
 } FlIVec2;
 
 #include "math_data.inl"

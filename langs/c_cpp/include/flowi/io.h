@@ -4,19 +4,36 @@
 
 #pragma once
 
-#include "image.h"
-#include "manual.h"
-#include "shader.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "image.h"
+#include "manual.h"
+#include "shader.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+<<<<<<< HEAD
 typedef struct FlIo {
 } FlIo;
+=======
+// Load image from file/url. Supported formats are: JPG, PNG, WEBP
+static FlImage fl_io_load_image(const char* filename);
+
+// Load image async from file/url. Supported formats are: JPG, PNG, WEBP
+static FlImage fl_io_load_image_async(const char* filename);
+
+// Load image from file/url
+static FlImage fl_io_load_file(const char* filename);
+
+// Same as load_image_from_url, but async and gives back a handle to check/access data later.
+// Load a vertex shader be used for rendering. This will also compile the shader.
+// Load a pixel shader to be used for rendering. This will also compile the shader.
+// Load a vertex shader and pixel shader to be used as a shader program. This will also compile the shaders.
+static FlShaderProgram fl_io_load_shader_program_comp(const char* vs_filename, const char* ps_filename);
+>>>>>>> main
 
 #include "io.inl"
 #ifdef __cplusplus
