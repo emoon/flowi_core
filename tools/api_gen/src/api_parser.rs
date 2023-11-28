@@ -765,6 +765,7 @@ impl ApiParser {
             }
         }
 
+        /*
         for api_def in api_defs.iter_mut() {
             for s in &mut api_def.handle_structs {
                 for func in &mut s.functions {
@@ -782,6 +783,7 @@ impl ApiParser {
                 }
             }
         }
+        */
     }
 }
 

@@ -1,5 +1,5 @@
 use core::ffi::c_void;
-use fileorama::Fileorama;
+//use fileorama::Fileorama;
 use image_api::ImageHandler;
 
 pub mod generated;
@@ -14,11 +14,11 @@ pub use manual::Result;
 
 #[repr(C)]
 pub(crate) struct InternalState {
-    pub(crate) vfs: Fileorama,
+    //pub(crate) vfs: Fileorama,
     pub(crate) image_handler: ImageHandler,
 }
 
-pub struct FlowiState {
+pub struct Instance {
     c_data: *const c_void,
     state: Box<InternalState>,
 }
@@ -32,13 +32,14 @@ extern "C" {
     fn c_post_update(data: *const c_void);
 }
 
-impl FlowiState {
-    pub fn new(settings: &ApplicationSettings, vfs_thread_count: usize) -> Self {
-        let vfs = Fileorama::new(vfs_thread_count);
-        let image_handler = ImageHandler::new(&vfs);
+impl Instance {
+    pub fn new(settings: &ApplicationSettings) -> Self {
+        //let vfs = Fileorama::new(vfs_thread_count);
+        //let image_handler = ImageHandler::new(&vfs);
+        let image_handler = ImageHandler::new();
 
         let state = Box::new(InternalState {
-            vfs,
+            //vfs,
             image_handler,
         });
 
@@ -57,3 +58,5 @@ impl FlowiState {
         unsafe { c_post_update(self.c_data) }
     }
 }
+
+pub use crate::application_settings::ApplicationSettings;

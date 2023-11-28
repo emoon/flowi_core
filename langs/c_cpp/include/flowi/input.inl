@@ -1,18 +1,4 @@
 typedef struct FlInputApi {
-<<<<<<< HEAD
-  struct FlInternalData *priv;
-  void (*add_key)(struct FlInternalData *priv, FlKey key);
-  void (*add_key_analog_event)(struct FlInternalData *priv, FlKey key,
-                               bool down, float value);
-  void (*add_mouse_pos_event)(struct FlInternalData *priv, float x, float y);
-  void (*add_mouse_button_event)(struct FlInternalData *priv, int button,
-                                 bool down);
-  void (*add_mouse_wheel_event)(struct FlInternalData *priv, float x, float y);
-  void (*add_mouse_source_event)(struct FlInternalData *priv,
-                                 FlMouseSource source);
-  void (*app_focus_event)(struct FlInternalData *priv, bool focused);
-  void (*add_char_event)(struct FlInternalData *priv, int c);
-=======
     struct FlInternalData* priv;
     void (*add_key)(struct FlInternalData* priv, FlKey key);
     void (*add_key_analog_event)(struct FlInternalData* priv, FlKey key, bool down, float value);
@@ -22,27 +8,11 @@ typedef struct FlInputApi {
     void (*add_mouse_source_event)(struct FlInternalData* priv, FlMouseSource source);
     void (*app_focus_event)(struct FlInternalData* priv, bool focused);
     void (*add_char_event)(struct FlInternalData* priv, int c);
->>>>>>> main
 } FlInputApi;
 
 extern FlInputApi* g_flowi_input_api;
 
 #ifdef FLOWI_STATIC
-<<<<<<< HEAD
-void fl_input_add_key_impl(struct FlInternalData *priv, FlKey key);
-void fl_input_add_key_analog_event_impl(struct FlInternalData *priv, FlKey key,
-                                        bool down, float value);
-void fl_input_add_mouse_pos_event_impl(struct FlInternalData *priv, float x,
-                                       float y);
-void fl_input_add_mouse_button_event_impl(struct FlInternalData *priv,
-                                          int button, bool down);
-void fl_input_add_mouse_wheel_event_impl(struct FlInternalData *priv, float x,
-                                         float y);
-void fl_input_add_mouse_source_event_impl(struct FlInternalData *priv,
-                                          FlMouseSource source);
-void fl_input_app_focus_event_impl(struct FlInternalData *priv, bool focused);
-void fl_input_add_char_event_impl(struct FlInternalData *priv, int c);
-=======
 void fl_input_add_key_impl(struct FlInternalData* priv, FlKey key);
 void fl_input_add_key_analog_event_impl(struct FlInternalData* priv, FlKey key, bool down, float value);
 void fl_input_add_mouse_pos_event_impl(struct FlInternalData* priv, float x, float y);
@@ -51,7 +21,6 @@ void fl_input_add_mouse_wheel_event_impl(struct FlInternalData* priv, float x, f
 void fl_input_add_mouse_source_event_impl(struct FlInternalData* priv, FlMouseSource source);
 void fl_input_app_focus_event_impl(struct FlInternalData* priv, bool focused);
 void fl_input_add_char_event_impl(struct FlInternalData* priv, int c);
->>>>>>> main
 #endif
 
 // Queue a new key down/up event.

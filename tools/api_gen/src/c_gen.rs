@@ -630,9 +630,7 @@ impl Cgen {
             )?;
 
             // generate defintion
-            for sdef in api_def.structs
-                .iter()
-                .chain(api_def.handle_structs.iter()) {
+            for sdef in &api_def.structs {
                 for func in &sdef.functions {
                     let with_ctx = Ctx::No;
 
@@ -649,9 +647,7 @@ impl Cgen {
                 }
             }
 
-            for sdef in api_def.structs
-                .iter()
-                .chain(api_def.handle_structs.iter()) {
+            for sdef in &api_def.structs {
                 //let context_name = format!("struct {}{}Api* api", C_API_SUFFIX, sdef.name);
 
                 // if we have functions for this struct and dynamic output we need to generate the

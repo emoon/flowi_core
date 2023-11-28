@@ -682,18 +682,12 @@ impl RustGen {
                 }
             }
 
-            for sdef in api_def.structs
-                .iter()
-                .chain(api_def.handle_structs.iter()) 
-            {
+            for sdef in &api_def.structs {
                 Self::generate_struct(&mut f, sdef)?;
             }
 
             //for sdef in api_def.structs.iter().filter(|s| s.functions.is_empty()) {
-            for sdef in api_def.structs
-                .iter()
-                .chain(api_def.handle_structs.iter()) 
-            {
+            for sdef in &api_def.structs {
                 Self::generate_struct_impl(&mut f, sdef)?;
             }
         }

@@ -44,24 +44,8 @@ typedef struct FlImageInfo {
     uint32_t frame_count;
 } FlImageInfo;
 
-<<<<<<< HEAD
 typedef uint64_t FlImage;
 
-// Load image from file. Supported formats are:
-// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock
-// IJG lib) PNG 1/2/4/8/16-bit-per-channel TGA BMP non-1bpp, non-RLE PSD
-// (composited view only, no extra channels, 8/16 bit-per-channel) GIF HDR
-// (radiance rgbE format) PIC (Softimage PIC) PNM (PPM and PGM binary only)
-static FlImage fl_image_create_from_file(const char *filename);
-
-// Load image from memory. Supported formats are:
-// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock
-// IJG lib) PNG 1/2/4/8/16-bit-per-channel TGA BMP non-1bpp, non-RLE PSD
-// (composited view only, no extra channels, 8/16 bit-per-channel) GIF HDR
-// (radiance rgbE format) PIC (Softimage PIC) PNM (PPM and PGM binary only) Load
-// SVG from file Load SVG from memory Get data amout the image
-static FlImageInfo *fl_image_get_info(FlImage image);
-=======
 // Load image from file. Supported formats are:
 // JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
 // PNG 1/2/4/8/16-bit-per-channel
@@ -76,7 +60,6 @@ static FlImage fl_image_create_from_file_block(const char* filename);
 
 // Get data amout the image
 static FlImageInfo* fl_image_get_info(FlImage image);
->>>>>>> main
 
 #include "image.inl"
 #ifdef __cplusplus

@@ -60,15 +60,12 @@ extern "C" {
     ) -> bool;
     pub fn fl_button_radio_impl(
         data: *const core::ffi::c_void,
-<<<<<<< HEAD
-=======
         label: FlString,
         state: bool,
     ) -> bool;
     pub fn fl_button_bullet_impl(data: *const core::ffi::c_void);
     pub fn fl_button_image_with_text_impl(
         data: *const core::ffi::c_void,
->>>>>>> main
         image: u64,
         label: FlString,
     ) -> bool;
@@ -184,11 +181,7 @@ impl Button {
     pub fn image_with_text(image: Image, label: &str) -> bool {
         unsafe {
             let _api = &*g_flowi_button_api;
-<<<<<<< HEAD
-            #[cfg(any(feature = "static", feature = "tundra"))]
-=======
             #[cfg(feature = "static")]
->>>>>>> main
             let ret_val =
                 fl_button_image_with_text_impl(_api.data, image.handle, FlString::new(label));
             #[cfg(any(feature = "dynamic", feature = "plugin"))]

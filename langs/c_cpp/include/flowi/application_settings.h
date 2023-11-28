@@ -14,14 +14,9 @@ extern "C" {
 #endif
 
 typedef struct FlApplicationSettings {
-<<<<<<< HEAD
+    uint32_t width;
 
-  uint32_t width;
-
-  uint32_t height;
-=======
-    uint32_t some_data;
->>>>>>> main
+    uint32_t height;
 } FlApplicationSettings;
 
 #include "application_settings.inl"

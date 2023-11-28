@@ -13,6 +13,9 @@
 extern "C" {
 #endif
 
+typedef struct FlMenu {
+} FlMenu;
+
 // Append to menu-bar of current window (requires [WindowFlags::MENU_BAR] flag set on parent window).
 static bool fl_menu_begin_bar();
 

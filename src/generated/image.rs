@@ -11,21 +11,12 @@ pub struct ImageFfiApi {
     pub(crate) data: *const core::ffi::c_void,
     pub(crate) create_from_file:
         unsafe extern "C" fn(data: *const core::ffi::c_void, filename: FlString) -> u64,
-<<<<<<< HEAD
-=======
     pub(crate) create_from_file_block:
         unsafe extern "C" fn(data: *const core::ffi::c_void, filename: FlString) -> u64,
->>>>>>> main
     pub(crate) get_info:
         unsafe extern "C" fn(data: *const core::ffi::c_void, image: u64) -> *const ImageInfo,
 }
 
-<<<<<<< HEAD
-#[cfg(any(feature = "static", feature = "tundra"))]
-extern "C" {
-    fn fl_image_create_from_file_impl(data: *const core::ffi::c_void, filename: FlString) -> u64;
-    fn fl_image_get_info_impl(data: *const core::ffi::c_void, image: u64) -> *const ImageInfo;
-=======
 #[cfg(feature = "static")]
 extern "C" {
     pub fn fl_image_create_from_file_impl(
@@ -37,15 +28,12 @@ extern "C" {
         filename: FlString,
     ) -> u64;
     pub fn fl_image_get_info_impl(data: *const core::ffi::c_void, image: u64) -> *const ImageInfo;
->>>>>>> main
 }
 
 #[no_mangle]
 pub static mut g_flowi_image_api: *const ImageFfiApi = std::ptr::null_mut();
 
 #[repr(C)]
-<<<<<<< HEAD
-=======
 #[derive(Debug)]
 pub enum ImageFormat {
     /// 8-bit per channel Red, Green and Blue
@@ -61,7 +49,6 @@ pub enum ImageFormat {
 }
 
 #[repr(C)]
->>>>>>> main
 #[derive(Debug)]
 pub enum SvgFlags {
     /// Render the SVG image using RGBA format
@@ -133,67 +120,6 @@ impl Image {
         unsafe {
             let _api = &*g_flowi_image_api;
             #[cfg(feature = "static")]
-            let ret_val = fl_image_get_info_impl(_api.data, image.handle);
-            #[cfg(any(feature = "dynamic", feature = "plugin"))]
-            let ret_val = (_api.get_info)(_api.data, image.handle);
-            if ret_val.is_null() {
-                Err(get_last_error())
-            } else {
-                Ok(&*ret_val)
-            }
-        }
-    }
-}
-
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct Image {
-    pub handle: u64,
-}
-
-impl Image {
-    /// Load image from file. Supported formats are:
-    /// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
-    /// PNG 1/2/4/8/16-bit-per-channel
-    /// TGA
-    /// BMP non-1bpp, non-RLE
-    /// PSD (composited view only, no extra channels, 8/16 bit-per-channel)
-    /// GIF
-    /// HDR (radiance rgbE format)
-    /// PIC (Softimage PIC)
-    /// PNM (PPM and PGM binary only)
-    pub fn create_from_file(filename: &str) -> Result<Image> {
-        unsafe {
-            let _api = &*g_flowi_image_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
-            let ret_val = fl_image_create_from_file_impl(_api.data, FlString::new(filename));
-            #[cfg(any(feature = "dynamic", feature = "plugin"))]
-            let ret_val = (_api.create_from_file)(_api.data, FlString::new(filename));
-            if ret_val == 0 {
-                Err(get_last_error())
-            } else {
-                Ok(Image { handle: ret_val })
-            }
-        }
-    }
-
-    /// Load image from memory. Supported formats are:
-    /// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
-    /// PNG 1/2/4/8/16-bit-per-channel
-    /// TGA
-    /// BMP non-1bpp, non-RLE
-    /// PSD (composited view only, no extra channels, 8/16 bit-per-channel)
-    /// GIF
-    /// HDR (radiance rgbE format)
-    /// PIC (Softimage PIC)
-    /// PNM (PPM and PGM binary only)
-    /// Load SVG from file
-    /// Load SVG from memory
-    /// Get data amout the image
-    pub fn get_info<'a>(image: Image) -> Result<&'a ImageInfo> {
-        unsafe {
-            let _api = &*g_flowi_image_api;
-            #[cfg(any(feature = "static", feature = "tundra"))]
             let ret_val = fl_image_get_info_impl(_api.data, image.handle);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.get_info)(_api.data, image.handle);

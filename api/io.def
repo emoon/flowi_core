@@ -4,6 +4,7 @@ mod shader
 struct Io {
     /// Load image from file/url. Supported formats are: JPG, PNG, WEBP
     //[static] load_image(filename: String) -> Image,
+    [static] dummy(),
     /// Load image async from file/url. Supported formats are: JPG, PNG, WEBP
     //[static] load_image_async(filename: String, loader_type: LoaderType) -> async Image?,
     /// Load image from file/url

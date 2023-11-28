@@ -14,6 +14,9 @@
 extern "C" {
 #endif
 
+typedef struct FlText {
+} FlText;
+
 // Calculate the size of a text string in pixels
 static FlVec2 fl_text_calc_size(const char* text);
 

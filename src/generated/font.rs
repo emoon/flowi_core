@@ -33,13 +33,6 @@ pub struct FontFfiApi {
     pub(crate) destroy: unsafe extern "C" fn(data: *const core::ffi::c_void, font: u64),
 }
 
-<<<<<<< HEAD
-#[cfg(any(feature = "static", feature = "tundra"))]
-extern "C" {
-    fn fl_font_load_impl(data: *const core::ffi::c_void, filename: FlString, font_size: u32)
-        -> u64;
-    fn fl_font_load_with_range_impl(
-=======
 #[cfg(feature = "static")]
 extern "C" {
     pub fn fl_font_load_impl(
@@ -48,33 +41,22 @@ extern "C" {
         font_size: u32,
     ) -> u64;
     pub fn fl_font_load_with_range_impl(
->>>>>>> main
         data: *const core::ffi::c_void,
         filename: FlString,
         font_size: u32,
         glyph_range_start: u16,
         glyph_range_end: u16,
     ) -> u64;
-<<<<<<< HEAD
-    fn fl_font_load_from_memory_impl(
-=======
     pub fn fl_font_load_from_memory_impl(
->>>>>>> main
         data: *const core::ffi::c_void,
         name: FlString,
         data: *const u8,
         data_size: u32,
         font_size: u32,
     ) -> u64;
-<<<<<<< HEAD
-    fn fl_font_push_impl(data: *const core::ffi::c_void, font: u64);
-    fn fl_font_pop_impl(data: *const core::ffi::c_void);
-    fn fl_font_destroy_impl(data: *const core::ffi::c_void, font: u64);
-=======
     pub fn fl_font_push_impl(data: *const core::ffi::c_void, font: u64);
     pub fn fl_font_pop_impl(data: *const core::ffi::c_void);
     pub fn fl_font_destroy_impl(data: *const core::ffi::c_void, font: u64);
->>>>>>> main
 }
 
 #[no_mangle]
@@ -92,11 +74,7 @@ impl Font {
     pub fn load(filename: &str, font_size: u32) -> Result<Font> {
         unsafe {
             let _api = &*g_flowi_font_api;
-<<<<<<< HEAD
-            #[cfg(any(feature = "static", feature = "tundra"))]
-=======
             #[cfg(feature = "static")]
->>>>>>> main
             let ret_val = fl_font_load_impl(_api.data, FlString::new(filename), font_size);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             let ret_val = (_api.load)(_api.data, FlString::new(filename), font_size);
@@ -117,11 +95,7 @@ impl Font {
     ) -> Result<Font> {
         unsafe {
             let _api = &*g_flowi_font_api;
-<<<<<<< HEAD
-            #[cfg(any(feature = "static", feature = "tundra"))]
-=======
             #[cfg(feature = "static")]
->>>>>>> main
             let ret_val = fl_font_load_with_range_impl(
                 _api.data,
                 FlString::new(filename),
@@ -150,11 +124,7 @@ impl Font {
     pub fn load_from_memory(name: &str, data: &[u8], font_size: u32) -> Result<Font> {
         unsafe {
             let _api = &*g_flowi_font_api;
-<<<<<<< HEAD
-            #[cfg(any(feature = "static", feature = "tundra"))]
-=======
             #[cfg(feature = "static")]
->>>>>>> main
             let ret_val = fl_font_load_from_memory_impl(
                 _api.data,
                 FlString::new(name),
@@ -182,11 +152,7 @@ impl Font {
     pub fn push(font: Font) {
         unsafe {
             let _api = &*g_flowi_font_api;
-<<<<<<< HEAD
-            #[cfg(any(feature = "static", feature = "tundra"))]
-=======
             #[cfg(feature = "static")]
->>>>>>> main
             fl_font_push_impl(_api.data, font.handle);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.push)(_api.data, font.handle);
@@ -197,11 +163,7 @@ impl Font {
     pub fn pop() {
         unsafe {
             let _api = &*g_flowi_font_api;
-<<<<<<< HEAD
-            #[cfg(any(feature = "static", feature = "tundra"))]
-=======
             #[cfg(feature = "static")]
->>>>>>> main
             fl_font_pop_impl(_api.data);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.pop)(_api.data);
@@ -212,11 +174,7 @@ impl Font {
     pub fn destroy(font: Font) {
         unsafe {
             let _api = &*g_flowi_font_api;
-<<<<<<< HEAD
-            #[cfg(any(feature = "static", feature = "tundra"))]
-=======
             #[cfg(feature = "static")]
->>>>>>> main
             fl_font_destroy_impl(_api.data, font.handle);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.destroy)(_api.data, font.handle);
