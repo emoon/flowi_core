@@ -349,7 +349,7 @@ static void fl_input_add_mouse_source_event(FlMouseSource source);
 static void fl_input_app_focus_event(bool focused);
 
 // Queue a new character input
-static void fl_input_add_char_event(Flint c);
+static void fl_input_add_char_event(int c);
 
 #include "input.inl"
 #ifdef __cplusplus

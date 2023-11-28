@@ -620,7 +620,7 @@ impl Cgen {
                 &[
                     "c_header.tera",
                     "c_enum.tera",
-                    "c_handle_type.tera",
+                    //"c_handle_type.tera",
                     "c_struct.tera",
                 ],
                 tera,

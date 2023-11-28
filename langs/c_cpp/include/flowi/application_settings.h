@@ -15,7 +15,9 @@ extern "C" {
 
 typedef struct FlApplicationSettings {
 
-  uint32_t some_data;
+  uint32_t width;
+
+  uint32_t height;
 } FlApplicationSettings;
 
 #include "application_settings.inl"

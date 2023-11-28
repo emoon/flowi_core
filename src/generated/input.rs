@@ -21,7 +21,7 @@ pub struct InputFfiApi {
     pub(crate) add_mouse_source_event:
         unsafe extern "C" fn(data: *const core::ffi::c_void, source: MouseSource),
     pub(crate) app_focus_event: unsafe extern "C" fn(data: *const core::ffi::c_void, focused: bool),
-    pub(crate) add_char_event: unsafe extern "C" fn(data: *const core::ffi::c_void, c: int),
+    pub(crate) add_char_event: unsafe extern "C" fn(data: *const core::ffi::c_void, c: i32),
 }
 
 #[cfg(any(feature = "static", feature = "tundra"))]
@@ -42,7 +42,7 @@ extern "C" {
     fn fl_input_add_mouse_wheel_event_impl(data: *const core::ffi::c_void, x: f32, y: f32);
     fn fl_input_add_mouse_source_event_impl(data: *const core::ffi::c_void, source: MouseSource);
     fn fl_input_app_focus_event_impl(data: *const core::ffi::c_void, focused: bool);
-    fn fl_input_add_char_event_impl(data: *const core::ffi::c_void, c: int);
+    fn fl_input_add_char_event_impl(data: *const core::ffi::c_void, c: i32);
 }
 
 #[no_mangle]
@@ -211,6 +211,7 @@ pub enum MouseSource {
 }
 
 /// The application is responsibe for calling these functions to update the input state.
+/// This has to be done before fl_ctx_new_frame() is called.
 #[repr(C)]
 #[derive(Debug)]
 pub struct Input {
@@ -299,7 +300,7 @@ impl Input {
     }
 
     /// Queue a new character input
-    pub fn add_char_event(c: int) {
+    pub fn add_char_event(c: i32) {
         unsafe {
             let _api = &*g_flowi_input_api;
             #[cfg(any(feature = "static", feature = "tundra"))]

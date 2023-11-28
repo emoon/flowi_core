@@ -9,5 +9,6 @@ use bitflags::bitflags;
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct ApplicationSettings {
-    pub some_data: u32,
+    pub width: u32,
+    pub height: u32,
 }

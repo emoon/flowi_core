@@ -35,7 +35,7 @@ pub struct ButtonFfiApi {
         unsafe extern "C" fn(data: *const core::ffi::c_void, label: FlString, state: bool) -> bool,
     pub(crate) bullet: unsafe extern "C" fn(data: *const core::ffi::c_void),
     pub(crate) image_with_text:
-        unsafe extern "C" fn(data: *const core::ffi::c_void, image: Image, label: FlString) -> bool,
+        unsafe extern "C" fn(data: *const core::ffi::c_void, image: u64, label: FlString) -> bool,
 }
 
 #[cfg(any(feature = "static", feature = "tundra"))]
@@ -62,7 +62,7 @@ extern "C" {
     fn fl_button_bullet_impl(data: *const core::ffi::c_void);
     fn fl_button_image_with_text_impl(
         data: *const core::ffi::c_void,
-        image: Image,
+        image: u64,
         label: FlString,
     ) -> bool;
 }
@@ -178,9 +178,10 @@ impl Button {
         unsafe {
             let _api = &*g_flowi_button_api;
             #[cfg(any(feature = "static", feature = "tundra"))]
-            let ret_val = fl_button_image_with_text_impl(_api.data, image, FlString::new(label));
+            let ret_val =
+                fl_button_image_with_text_impl(_api.data, image.handle, FlString::new(label));
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
-            let ret_val = (_api.image_with_text)(_api.data, image, FlString::new(label));
+            let ret_val = (_api.image_with_text)(_api.data, image.handle, FlString::new(label));
             ret_val
         }
     }

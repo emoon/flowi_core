@@ -279,8 +279,8 @@ impl RustGen {
         }
     }
 
-    fn generate_ffi_functions<W: Write>(f: &mut W, api_def: &ApiDef) -> io::Result<()> {
-        for s in &api_def.structs {
+    fn generate_ffi_functions<W: Write>(f: &mut W, structs: &[Struct]) -> io::Result<()> {
+        for s in structs {
             if s.functions.is_empty() || s.has_attribute("NoContext") {
                 continue;
             }
@@ -294,7 +294,7 @@ impl RustGen {
                 .iter()
                 .filter(|&func| func.func_type != FunctionType::Manual && func.name != s.name)
             {
-                Self::generate_ffi_function(f, func, &s.name, false, Ctx::Yes)?;
+                Self::generate_ffi_function(f, func, &s.name, s.has_attribute("Handle"), Ctx::Yes)?;
             }
 
             writeln!(f, "}}\n")?;
@@ -303,8 +303,8 @@ impl RustGen {
         Ok(())
     }
 
-    fn generate_extern_ffi_functions<W: Write>(f: &mut W, api_def: &ApiDef) -> io::Result<()> {
-        for s in &api_def.structs {
+    fn generate_extern_ffi_functions<W: Write>(f: &mut W, structs: &[Struct]) -> io::Result<()> {
+        for s in structs {
             if s.functions.is_empty() || s.has_attribute("NoContext") {
                 continue;
             }
@@ -317,7 +317,7 @@ impl RustGen {
                 .iter()
                 .filter(|&func| func.func_type != FunctionType::Manual && func.name != s.name)
             {
-                Self::generate_extern_ffi_function(f, func, &s.name, false, Ctx::Yes)?;
+                Self::generate_extern_ffi_function(f, func, &s.name, s.has_attribute("Handle"), Ctx::Yes)?;
             }
 
             writeln!(f, "}}\n")?;
@@ -664,8 +664,8 @@ impl RustGen {
                 writeln!(f, "use crate::{}::*;\n", m)?;
             }
 
-            Self::generate_ffi_functions(&mut f, api_def)?;
-            Self::generate_extern_ffi_functions(&mut f, api_def)?;
+            Self::generate_ffi_functions(&mut f, &api_def.structs)?;
+            Self::generate_extern_ffi_functions(&mut f, &api_def.structs)?;
 
             if !api_def.callbacks.is_empty() {
                 for func in &api_def.callbacks {
@@ -711,7 +711,7 @@ impl RustGen {
             for api_def in api_defs {
                 let base_filename = &api_def.base_filename;
                 writeln!(f, "pub mod {};", base_filename)?;
-                writeln!(f, "pub use {}::*;", base_filename)?;
+                //writeln!(f, "pub use {}::*;", base_filename)?;
             }
 
             for api_def in api_defs {
@@ -745,6 +745,7 @@ impl RustGen {
             }
 
             writeln!(f, "}}\n")?;
+            /*
             writeln!(f, "pub(crate) fn init_function_ptrs(api: *const AppFfi) {{")?;
             writeln!(f, "    unsafe {{")?;
             writeln!(f, "    let api = &*api;")?;
@@ -759,6 +760,7 @@ impl RustGen {
             }
 
             writeln!(f, "}}}}\n")?;
+            */
         }
 
         run_rustfmt(&flowi_mod);

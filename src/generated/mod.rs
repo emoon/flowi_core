@@ -2,48 +2,31 @@
 
 use core::ffi::c_void;
 pub mod application_settings;
-pub use application_settings::*;
 pub mod button;
-pub use button::*;
 pub mod context;
-pub use context::*;
 pub mod debug;
-pub use debug::*;
 pub mod error;
-pub use error::*;
 pub mod font;
-pub use font::*;
 pub mod image;
-pub use image::*;
 pub mod input;
-pub use input::*;
 pub mod io;
-pub use io::*;
 pub mod item;
-pub use item::*;
 pub mod layout;
-pub use layout::*;
 pub mod math_data;
-pub use math_data::*;
 pub mod menu;
-pub use menu::*;
 pub mod painter;
-pub use painter::*;
 pub mod render_commands;
-pub use render_commands::*;
 pub mod shader;
-pub use shader::*;
 pub mod style;
-pub use style::*;
 pub mod text;
-pub use text::*;
 pub mod ui;
-pub use ui::*;
 pub mod window;
 use crate::button::ButtonFfiApi;
+use crate::font::FontFfiApi;
 pub use crate::generated::button::Button;
+pub use crate::generated::font::Font;
+pub use crate::generated::image::Image;
 pub use crate::generated::input::Input;
-pub use crate::generated::io::Io;
 pub use crate::generated::item::Item;
 pub use crate::generated::layout::Cursor;
 pub use crate::generated::menu::Menu;
@@ -52,8 +35,8 @@ pub use crate::generated::style::Style;
 pub use crate::generated::text::Text;
 pub use crate::generated::ui::Ui;
 pub use crate::generated::window::Window;
+use crate::image::ImageFfiApi;
 use crate::input::InputFfiApi;
-use crate::io::IoFfiApi;
 use crate::item::ItemFfiApi;
 use crate::layout::CursorFfiApi;
 use crate::menu::MenuFfiApi;
@@ -62,7 +45,6 @@ use crate::style::StyleFfiApi;
 use crate::text::TextFfiApi;
 use crate::ui::UiFfiApi;
 use crate::window::WindowFfiApi;
-pub use window::*;
 
 #[repr(C)]
 pub(crate) struct AppFfi {
@@ -72,10 +54,12 @@ pub(crate) struct AppFfi {
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const ButtonFfiApi,
     pub(crate) cursor_get_api:
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const CursorFfiApi,
+    pub(crate) font_get_api:
+        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const FontFfiApi,
+    pub(crate) image_get_api:
+        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const ImageFfiApi,
     pub(crate) input_get_api:
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const InputFfiApi,
-    pub(crate) io_get_api:
-        unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const IoFfiApi,
     pub(crate) item_get_api:
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const ItemFfiApi,
     pub(crate) menu_get_api:
@@ -90,21 +74,4 @@ pub(crate) struct AppFfi {
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const UiFfiApi,
     pub(crate) window_get_api:
         unsafe extern "C" fn(data: *const c_void, api_ver: u32) -> *const WindowFfiApi,
-}
-
-pub(crate) fn init_function_ptrs(api: *const AppFfi) {
-    unsafe {
-        let api = &*api;
-        g_flowi_button_api = (api.button_get_api)(api.data, 0);
-        g_flowi_cursor_api = (api.cursor_get_api)(api.data, 0);
-        g_flowi_input_api = (api.input_get_api)(api.data, 0);
-        g_flowi_io_api = (api.io_get_api)(api.data, 0);
-        g_flowi_item_api = (api.item_get_api)(api.data, 0);
-        g_flowi_menu_api = (api.menu_get_api)(api.data, 0);
-        g_flowi_painter_api = (api.painter_get_api)(api.data, 0);
-        g_flowi_style_api = (api.style_get_api)(api.data, 0);
-        g_flowi_text_api = (api.text_get_api)(api.data, 0);
-        g_flowi_ui_api = (api.ui_get_api)(api.data, 0);
-        g_flowi_window_api = (api.window_get_api)(api.data, 0);
-    }
 }

@@ -14,8 +14,8 @@ enum SvgFlags {
     Alpha = 1,
 }
 
-#[attributes(Handle, Drop)]
-#[crate(Image)]
+#[attributes(Handle)]
+//#[crate(Image)]
 struct Image {
     /// Load image from file. Supported formats are:
     /// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
@@ -27,7 +27,7 @@ struct Image {
     /// HDR (radiance rgbE format)
     /// PIC (Softimage PIC)
     /// PNM (PPM and PGM binary only)
-    //[static] create_from_file(filename: String) -> Image?,
+    [static] create_from_file(filename: String) -> Image?,
     /// Load image from memory. Supported formats are:
     /// JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
     /// PNG 1/2/4/8/16-bit-per-channel

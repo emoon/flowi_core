@@ -10,7 +10,7 @@ typedef struct FlInputApi {
   void (*add_mouse_source_event)(struct FlInternalData *priv,
                                  FlMouseSource source);
   void (*app_focus_event)(struct FlInternalData *priv, bool focused);
-  void (*add_char_event)(struct FlInternalData *priv, Flint c);
+  void (*add_char_event)(struct FlInternalData *priv, int c);
 } FlInputApi;
 
 extern FlInputApi *g_flowi_input_api;
@@ -28,7 +28,7 @@ void fl_input_add_mouse_wheel_event_impl(struct FlInternalData *priv, float x,
 void fl_input_add_mouse_source_event_impl(struct FlInternalData *priv,
                                           FlMouseSource source);
 void fl_input_app_focus_event_impl(struct FlInternalData *priv, bool focused);
-void fl_input_add_char_event_impl(struct FlInternalData *priv, Flint c);
+void fl_input_add_char_event_impl(struct FlInternalData *priv, int c);
 #endif
 
 // Queue a new key down/up event.
@@ -105,7 +105,7 @@ FL_INLINE void fl_input_app_focus_event(bool focused) {
 }
 
 // Queue a new character input
-FL_INLINE void fl_input_add_char_event(Flint c) {
+FL_INLINE void fl_input_add_char_event(int c) {
 #ifdef FLOWI_STATIC
   fl_input_add_char_event_impl(g_flowi_input_api->priv, c);
 #else

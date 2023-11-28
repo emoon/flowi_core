@@ -176,6 +176,8 @@ pub struct Struct {
     pub attributes: Vec<String>,
     /// Traits
     pub traits: Vec<String>,
+    /// If struct is a handle
+    pub is_handle_type: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -246,8 +248,6 @@ pub struct ApiDef {
     pub callbacks: Vec<Function>,
     /// Structs that only holds data
     pub structs: Vec<Struct>,
-    /// Structs that are handle based
-    pub handle_structs: Vec<Struct>,
     /// Enums
     pub enums: Vec<Enum>,
 }
@@ -296,12 +296,7 @@ impl ApiParser {
                 Rule::structdef => {
                     let sdef = Self::fill_struct(chunk, &current_comments, &api_def.base_filename);
                     current_comments.clear();
-
-                    if sdef.has_attribute("Handle") {
-                        api_def.handle_structs.push(sdef);
-                    } else {
-                        api_def.structs.push(sdef);
-                    }
+                    api_def.structs.push(sdef);
                 }
 
                 Rule::callbackdef => {
@@ -396,6 +391,7 @@ impl ApiParser {
             }
         }
 
+        sdef.is_handle_type = sdef.has_attribute("Handle");
         sdef
     }
 
@@ -701,10 +697,10 @@ impl ApiParser {
 
         for api_def in api_defs.iter() {
             api_def.structs.iter().for_each(|s| {
-                if s.has_attribute("Handle") {
+                if s.is_handle_type {
                     handle_types.insert(s.name.to_owned());
                 }
-                if s.variables.is_empty() && !s.has_attribute("Handle") {
+                if s.variables.is_empty() && !s.is_handle_type {
                     empty_structs.insert(s.name.to_owned());
                 }
                 type_def_file.insert(s.name.to_owned(), s.def_file.to_owned());

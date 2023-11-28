@@ -1,4 +1,5 @@
 #[attributes(Copy)]
 struct ApplicationSettings {
-    some_data: u32,
+    width: u32,
+    height: u32,
 }
