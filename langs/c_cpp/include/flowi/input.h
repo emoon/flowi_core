@@ -318,6 +318,9 @@ static void fl_input_add_focus_event(bool focused);
 // Queue a new character input
 static void fl_input_add_char_event(int c);
 
+// This is a bit temporary and should be moved
+static void fl_input_update_screen_size_time(float display_h, float display_w, float w, float h, float delta_time);
+
 #include "input.inl"
 #ifdef __cplusplus
 }

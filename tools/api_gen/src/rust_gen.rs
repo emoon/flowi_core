@@ -68,7 +68,7 @@ impl RustGen {
 
         writeln!(
             f,
-            "#[repr(C)]\n#[derive(Debug, Copy, Clone)]\npub enum {} {{",
+            "#[repr(C)]\n#[derive(Debug, Copy, Clone, PartialEq)]\npub enum {} {{",
             enum_def.name
         )?;
 

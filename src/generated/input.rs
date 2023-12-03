@@ -23,6 +23,14 @@ pub struct InputFfiApi {
         unsafe extern "C" fn(data: *const core::ffi::c_void, source: MouseSource),
     pub(crate) add_focus_event: unsafe extern "C" fn(data: *const core::ffi::c_void, focused: bool),
     pub(crate) add_char_event: unsafe extern "C" fn(data: *const core::ffi::c_void, c: i32),
+    pub(crate) update_screen_size_time: unsafe extern "C" fn(
+        data: *const core::ffi::c_void,
+        display_h: f32,
+        display_w: f32,
+        w: f32,
+        h: f32,
+        delta_time: f32,
+    ),
 }
 
 #[cfg(feature = "static")]
@@ -47,13 +55,21 @@ extern "C" {
     );
     pub fn fl_input_add_focus_event_impl(data: *const core::ffi::c_void, focused: bool);
     pub fn fl_input_add_char_event_impl(data: *const core::ffi::c_void, c: i32);
+    pub fn fl_input_update_screen_size_time_impl(
+        data: *const core::ffi::c_void,
+        display_h: f32,
+        display_w: f32,
+        w: f32,
+        h: f32,
+        delta_time: f32,
+    );
 }
 
 #[no_mangle]
 pub static mut g_flowi_input_api: *const InputFfiApi = std::ptr::null_mut();
 
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Key {
     Tab = 0,
     LeftArrow = 1,
@@ -189,7 +205,7 @@ pub enum Key {
 }
 
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum MouseSource {
     /// Input is coming from an actual mouse.
     Mouse = 0,
@@ -297,6 +313,25 @@ impl Input {
             fl_input_add_char_event_impl(_api.data, c);
             #[cfg(any(feature = "dynamic", feature = "plugin"))]
             (_api.add_char_event)(_api.data, c);
+        }
+    }
+
+    /// This is a bit temporary and should be moved
+    pub fn update_screen_size_time(
+        display_h: f32,
+        display_w: f32,
+        w: f32,
+        h: f32,
+        delta_time: f32,
+    ) {
+        unsafe {
+            let _api = &*g_flowi_input_api;
+            #[cfg(feature = "static")]
+            fl_input_update_screen_size_time_impl(
+                _api.data, display_h, display_w, w, h, delta_time,
+            );
+            #[cfg(any(feature = "dynamic", feature = "plugin"))]
+            (_api.update_screen_size_time)(_api.data, display_h, display_w, w, h, delta_time);
         }
     }
 }

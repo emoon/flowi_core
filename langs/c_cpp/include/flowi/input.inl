@@ -8,6 +8,8 @@ typedef struct FlInputApi {
     void (*add_mouse_source_event)(struct FlInternalData* priv, FlMouseSource source);
     void (*add_focus_event)(struct FlInternalData* priv, bool focused);
     void (*add_char_event)(struct FlInternalData* priv, int c);
+    void (*update_screen_size_time)(struct FlInternalData* priv, float display_h, float display_w, float w, float h,
+                                    float delta_time);
 } FlInputApi;
 
 extern FlInputApi* g_flowi_input_api;
@@ -21,6 +23,8 @@ void fl_input_add_mouse_wheel_event_impl(struct FlInternalData* priv, float x, f
 void fl_input_add_mouse_source_event_impl(struct FlInternalData* priv, FlMouseSource source);
 void fl_input_add_focus_event_impl(struct FlInternalData* priv, bool focused);
 void fl_input_add_char_event_impl(struct FlInternalData* priv, int c);
+void fl_input_update_screen_size_time_impl(struct FlInternalData* priv, float display_h, float display_w, float w,
+                                           float h, float delta_time);
 #endif
 
 // Queue a new key down/up event.
@@ -95,5 +99,14 @@ FL_INLINE void fl_input_add_char_event(int c) {
     fl_input_add_char_event_impl(g_flowi_input_api->priv, c);
 #else
     (g_flowi_input_api->add_char_event)(g_flowi_input_api->priv, c);
+#endif
+}
+
+// This is a bit temporary and should be moved
+FL_INLINE void fl_input_update_screen_size_time(float display_h, float display_w, float w, float h, float delta_time) {
+#ifdef FLOWI_STATIC
+    fl_input_update_screen_size_time_impl(g_flowi_input_api->priv, display_h, display_w, w, h, delta_time);
+#else
+    (g_flowi_input_api->update_screen_size_time)(g_flowi_input_api->priv, display_h, display_w, w, h, delta_time);
 #endif
 }

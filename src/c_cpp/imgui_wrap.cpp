@@ -1344,6 +1344,8 @@ extern "C" FlPainterApi* fl_get_painter_api(AppState* app_state, int version) {
     return nullptr;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 extern "C" FlImage fl_image_create_from_file_impl(struct FlInternalData* priv, FlString filename);
 extern "C" FlImage fl_image_create_from_file_block_impl(struct FlInternalData* priv, FlString filename);
 extern "C" FlImageInfo* fl_image_get_info_impl(struct FlInternalData* priv, FlImage image);
@@ -1368,6 +1370,7 @@ extern "C" void fl_input_add_mouse_pos_event_impl(struct FlInternalData* priv, f
 extern "C" void fl_input_add_mouse_button_event_impl(struct FlInternalData* priv, int button, bool down) {
     FL_UNUSED(priv);
     ImGuiIO& io = ImGui::GetIO();
+    printf("fl_input_add_mouse_button_event_impl %d %d\n", button, down);
     io.AddMouseButtonEvent(button, down);
 }
 
@@ -1399,6 +1402,28 @@ extern "C" void fl_input_add_focus_event_impl(struct FlInternalData* priv, bool 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+extern "C" void fl_input_add_char_event_impl(struct FlInternalData* priv, int c) {
+    FL_UNUSED(priv);
+    ImGuiIO& io = ImGui::GetIO();
+    io.AddInputCharacter(c);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void fl_input_update_screen_size_time_impl(struct FlInternalData* priv, float display_w, float display_h,
+                                           float w, float h, float delta_time) {
+    FL_UNUSED(priv);
+    ImGuiIO& io = ImGui::GetIO();
+
+    io.DisplaySize = ImVec2((float)w, (float)h);
+    if (w > 0 && h > 0)
+        io.DisplayFramebufferScale = ImVec2((float)display_w / (float)w, (float)display_h / (float)h);
+
+    io.DeltaTime = delta_time;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 extern "C" void fl_input_add_key_event_impl(struct FlInternalData* priv, FlKey key, bool down);
 extern "C" void fl_input_add_key_analog_event_impl(struct FlInternalData* priv, FlKey key, bool down, float value);
 
@@ -1413,15 +1438,9 @@ FlInputApi g_input_funcs = {
     fl_input_add_mouse_wheel_event_impl,
     fl_input_add_mouse_source_event_impl,
     fl_input_add_focus_event_impl,
+    fl_input_add_char_event_impl,
+    fl_input_update_screen_size_time_impl,
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void fl_input_add_char_event_impl(struct FlInternalData* priv, int c) {
-    FL_UNUSED(priv);
-    ImGuiIO& io = ImGui::GetIO();
-    io.AddInputCharacter(c);
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1569,7 +1588,7 @@ extern "C" void* c_create(const FlApplicationSettings* settings, void* rust_stat
     g_flowi_io_api = &state->io_api;
     g_flowi_item_api = &state->item_api;
     g_flowi_menu_api = &state->menu_api;
-    g_flowi_painter_api = nullptr;//&state->painter;
+    //g_flowi_painter_api = nullptr;//&state->painter;
     g_flowi_style_api = &state->style_api;
     g_flowi_text_api = &state->text_api;
     g_flowi_ui_api = &state->ui_api;

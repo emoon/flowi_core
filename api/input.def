@@ -171,6 +171,9 @@ struct Input {
 
     /// Queue a new character input
     [static] add_char_event(c: i32),
+
+    /// This is a bit temporary and should be moved 
+    [static] update_screen_size_time(display_h: f32, display_w: f32, w: f32, h: f32, delta_time: f32),
 }
 
 // vim: syntax=rust expandtab ts=4 sw=4

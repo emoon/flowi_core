@@ -8,7 +8,7 @@ use bitflags::bitflags;
 
 /// Texture format specificed when using [CreateTexture] command
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum TextureFormat {
     /// Single byte texture in linear format
     R8Linear = 0,
