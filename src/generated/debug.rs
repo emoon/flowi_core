@@ -7,7 +7,7 @@ use crate::manual::{get_last_error, Color, FlString, Result};
 use bitflags::bitflags;
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum DebugMode {
     Off = 0,
     Layout = 1,

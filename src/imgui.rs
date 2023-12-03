@@ -26,7 +26,7 @@ use std::slice;
 
 extern "C" {
     fn imgui_get_draw_data() -> DrawData;
-    //fn imgui_build_rgba32_texture() -> FontAtlas;
+    fn imgui_build_rgba32_texture() -> FontAtlas;
     fn imgui_build_r8_texture() -> FontAtlas;
 }
 
@@ -191,18 +191,16 @@ pub struct DrawList {
 
 #[repr(C)]
 pub struct FontAtlas {
-    pub(crate) width: u16,
-    pub(crate) height: u16,
+    pub width: u16,
+    pub height: u16,
     data_size: u32,
     data: *const cty::c_void,
 }
 
 impl FontAtlas {
-    /*
-    pub(crate) fn build_rgba32_texture() -> Self {
+    pub fn build_rgba32_texture() -> Self {
         unsafe { imgui_build_rgba32_texture() }
     }
-    */
 
     pub fn build_r8_texture() -> Self {
         unsafe { imgui_build_r8_texture() }

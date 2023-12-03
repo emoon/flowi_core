@@ -34,7 +34,7 @@ extern "C" {
 pub static mut g_flowi_image_api: *const ImageFfiApi = std::ptr::null_mut();
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum ImageFormat {
     /// 8-bit per channel Red, Green and Blue
     Rgb = 0,
@@ -49,7 +49,7 @@ pub enum ImageFormat {
 }
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum SvgFlags {
     /// Render the SVG image using RGBA format
     Rgba = 0,

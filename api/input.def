@@ -23,16 +23,6 @@ enum Key {
     RightAlt,
     RightSuper,
     Menu,
-    Alpha0,
-    Alpha1,
-    Alpha2,
-    Alpha3,
-    Alpha4,
-    Alpha5,
-    Alpha6,
-    Alpha7,
-    Alpha8,
-    Alpha9,
     A,
     B,
     C,
@@ -135,10 +125,6 @@ enum Key {
     MouseX2,
     MouseWheelX,
     MouseWheelY,
-    ReservedForModCtrl,
-    ReservedForModShift,
-    ReservedForModAlt,
-    ReservedForModSuper,
     ModCtrl,
     ModShift,
     ModAlt,
@@ -161,7 +147,7 @@ enum MouseSource {
 struct Input {
     /// Queue a new key down/up event. 
     /// Key should be "translated" (as in, generally [Key::A] matches the key end-user would use to emit an 'A' character)
-    [static] add_key(key: Key),
+    [static] add_key_event(key: Key, down: bool),
 
     /// Queue a new key down/up event for analog values (
     /// e.g. ImGuiKey_Gamepad_ values). Dead-zones should be handled by the backend.
@@ -181,7 +167,7 @@ struct Input {
     [static] add_mouse_source_event(source: MouseSource),
         
     /// Queue a gain/loss of focus for the application (generally based on OS/platform focus of your window)
-    [static] app_focus_event(focused: bool),
+    [static] add_focus_event(focused: bool),
 
     /// Queue a new character input
     [static] add_char_event(c: i32),

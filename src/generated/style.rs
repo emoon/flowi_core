@@ -60,7 +60,7 @@ extern "C" {
 pub static mut g_flowi_style_api: *const StyleFfiApi = std::ptr::null_mut();
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum StyleColor {
     Text = 0,
     TextDisabled = 1,
@@ -120,7 +120,7 @@ pub enum StyleColor {
 }
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum StyleSingle {
     Alpha = 0,
     DisabledAlpha = 1,
@@ -141,7 +141,7 @@ pub enum StyleSingle {
 }
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum StyleVec2 {
     WindowPadding = 0,
     WindowMinSize = 1,

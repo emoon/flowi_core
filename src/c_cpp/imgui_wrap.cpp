@@ -150,6 +150,30 @@ extern "C" void c_destroy(FlInternalData* data) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+extern "C" void fl_set_display_size_impl(FlInternalData* data, uint32_t width, uint32_t height) {
+    FL_UNUSED(data);
+    ImGuiIO& io = ImGui::GetIO();
+    io.DisplaySize = ImVec2((float)width, (float)height);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void fl_set_display_buffer_scale_impl(FlInternalData* data, float width, float height) {
+    FL_UNUSED(data);
+    ImGuiIO& io = ImGui::GetIO();
+    io.DisplayFramebufferScale = ImVec2(width, height);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void fl_set_delta_time_impl(FlInternalData* data, float delta_time) {
+    FL_UNUSED(data);
+    ImGuiIO& io = ImGui::GetIO();
+    io.DeltaTime = delta_time;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void image_show(FlInternalData* ctx, FlImage image) {
     FL_UNUSED(ctx);
     FL_UNUSED(image);
@@ -1333,6 +1357,74 @@ FlImageApi g_image_funcs = {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+extern "C" void fl_input_add_mouse_pos_event_impl(struct FlInternalData* priv, float x, float y) {
+    FL_UNUSED(priv);
+    ImGuiIO& io = ImGui::GetIO();
+    io.AddMousePosEvent(x, y);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void fl_input_add_mouse_button_event_impl(struct FlInternalData* priv, int button, bool down) {
+    FL_UNUSED(priv);
+    ImGuiIO& io = ImGui::GetIO();
+    io.AddMouseButtonEvent(button, down);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void fl_input_add_mouse_wheel_event_impl(struct FlInternalData* priv, float x, float y) {
+    FL_UNUSED(priv);
+    ImGuiIO& io = ImGui::GetIO();
+    io.AddMouseWheelEvent(x, y);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void fl_input_add_mouse_source_event_impl(struct FlInternalData* priv, FlMouseSource source) {
+    FL_UNUSED(priv);
+    FL_UNUSED(source);
+    //ImGuiIO& io = ImGui::GetIO();
+    //io.AddMouseSourceEvent((ImGuiMouseSource)source);
+    printf("fl_input_add_mouse_source_event_impl - not implemented\n");
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void fl_input_add_focus_event_impl(struct FlInternalData* priv, bool focused) {
+    FL_UNUSED(priv);
+    ImGuiIO& io = ImGui::GetIO();
+    io.AddFocusEvent(focused);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void fl_input_add_key_event_impl(struct FlInternalData* priv, FlKey key, bool down);
+extern "C" void fl_input_add_key_analog_event_impl(struct FlInternalData* priv, FlKey key, bool down, float value);
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+FlInputApi g_input_funcs = {
+    nullptr,
+    fl_input_add_key_event_impl,
+    fl_input_add_key_analog_event_impl,
+    fl_input_add_mouse_pos_event_impl,
+    fl_input_add_mouse_button_event_impl,
+    fl_input_add_mouse_wheel_event_impl,
+    fl_input_add_mouse_source_event_impl,
+    fl_input_add_focus_event_impl,
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void fl_input_add_char_event_impl(struct FlInternalData* priv, int c) {
+    FL_UNUSED(priv);
+    ImGuiIO& io = ImGui::GetIO();
+    io.AddInputCharacter(c);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 extern "C" void* c_create(const FlApplicationSettings* settings, void* rust_state) {
     FL_UNUSED(settings);
 
@@ -1343,7 +1435,7 @@ extern "C" void* c_create(const FlApplicationSettings* settings, void* rust_stat
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
-    io.DisplaySize = ImVec2(1280.0f, 720.0f);
+    io.DisplaySize = ImVec2(settings->width, settings->height);
     io.DeltaTime = 1.0f / 60.0f;
     io.IniFilename = NULL;
 
@@ -1449,33 +1541,35 @@ extern "C" void* c_create(const FlApplicationSettings* settings, void* rust_stat
     state->cursor_api = g_cursor_funcs;
     //state->font_api = g_font_funcs;
     state->image_api = g_image_funcs;
+    state->input_api = g_input_funcs;
     state->item_api = g_item_funcs;
     state->menu_api = g_menu_funcs;
+    state->style_api = g_style_funcs;
     state->text_api = g_text_funcs;
     state->ui_api = g_ui_funcs;
-    state->style_api = g_style_funcs;
     state->window_api = g_window_funcs;
 
     state->button_api.priv = state;
     state->cursor_api.priv = state;
     state->font_api.priv = state;
     state->image_api.priv = state;
+    state->input_api.priv = state;
     state->item_api.priv = state;
     state->menu_api.priv = state;
+    state->style_api.priv = state;
     state->text_api.priv = state;
     state->ui_api.priv = state;
-    state->style_api.priv = state;
     state->window_api.priv = state;
     
     // TODO: Move
     g_flowi_button_api = &state->button_api;
     g_flowi_cursor_api = &state->cursor_api;
-    g_flowi_input_api = nullptr;//&state->input_api;
+    g_flowi_input_api = &state->input_api;
     g_flowi_image_api = &state->image_api; 
     g_flowi_io_api = &state->io_api;
     g_flowi_item_api = &state->item_api;
     g_flowi_menu_api = &state->menu_api;
-    g_flowi_painter_api = nullptr;//&state->painterApplicationSettings::new());_api;
+    g_flowi_painter_api = nullptr;//&state->painter;
     g_flowi_style_api = &state->style_api;
     g_flowi_text_api = &state->text_api;
     g_flowi_ui_api = &state->ui_api;
@@ -1503,4 +1597,164 @@ extern "C" void Errors_add(FlError err, const char* filename, int line, const ch
     // printf("ERROR:%d | %s:%d: %s\n", err, filename, line, buffer);
     va_end(args);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static ImGuiKey translate_flkey_to_imgui(FlKey key) {
+    ImGuiKey imgui_key = ImGuiKey_COUNT;
+
+    // the compiler will translate this to a jump table
+    switch (key) {
+        case FlKey_Tab: imgui_key = ImGuiKey_Tab; break;
+        case FlKey_LeftArrow: imgui_key = ImGuiKey_LeftArrow; break;
+        case FlKey_RightArrow: imgui_key = ImGuiKey_RightArrow; break;
+        case FlKey_UpArrow: imgui_key = ImGuiKey_UpArrow; break;
+        case FlKey_DownArrow: imgui_key = ImGuiKey_DownArrow; break;
+        case FlKey_PageUp: imgui_key = ImGuiKey_PageUp; break;
+        case FlKey_PageDown: imgui_key = ImGuiKey_PageDown; break;
+        case FlKey_Home: imgui_key = ImGuiKey_Home; break;
+        case FlKey_End: imgui_key = ImGuiKey_End; break;
+        case FlKey_Insert: imgui_key = ImGuiKey_Insert; break;
+        case FlKey_Delete : imgui_key = ImGuiKey_Delete; break;
+        case FlKey_Backspace : imgui_key = ImGuiKey_Backspace; break;
+        case FlKey_Space : imgui_key = ImGuiKey_Space; break;
+        case FlKey_Enter : imgui_key = ImGuiKey_Enter; break;
+        case FlKey_Escape : imgui_key = ImGuiKey_Escape; break;
+        case FlKey_LeftCtrl : imgui_key = ImGuiKey_LeftCtrl; break;
+        case FlKey_LeftShift : imgui_key = ImGuiKey_LeftShift; break;
+        case FlKey_LeftAlt : imgui_key = ImGuiKey_LeftAlt; break;
+        case FlKey_LeftSuper : imgui_key = ImGuiKey_LeftSuper; break;
+        case FlKey_RightCtrl : imgui_key = ImGuiKey_RightCtrl; break;
+        case FlKey_RightShift : imgui_key = ImGuiKey_RightShift; break;
+        case FlKey_RightAlt : imgui_key = ImGuiKey_RightAlt; break;
+        case FlKey_RightSuper : imgui_key = ImGuiKey_RightSuper; break;
+        case FlKey_Menu : imgui_key = ImGuiKey_Menu; break;
+        case FlKey_A : imgui_key = ImGuiKey_A; break;
+        case FlKey_B : imgui_key = ImGuiKey_B; break;
+        case FlKey_C : imgui_key = ImGuiKey_C; break;
+        case FlKey_D : imgui_key = ImGuiKey_D; break;
+        case FlKey_E : imgui_key = ImGuiKey_E; break;
+        case FlKey_F : imgui_key = ImGuiKey_F; break;
+        case FlKey_G : imgui_key = ImGuiKey_G; break;
+        case FlKey_H : imgui_key = ImGuiKey_H; break;
+        case FlKey_I : imgui_key = ImGuiKey_I; break;
+        case FlKey_J : imgui_key = ImGuiKey_J; break;
+        case FlKey_K : imgui_key = ImGuiKey_K; break;
+        case FlKey_L : imgui_key = ImGuiKey_L; break;
+        case FlKey_M : imgui_key = ImGuiKey_M; break;
+        case FlKey_N : imgui_key = ImGuiKey_N; break;
+        case FlKey_O : imgui_key = ImGuiKey_O; break;
+        case FlKey_P : imgui_key = ImGuiKey_P; break;
+        case FlKey_Q : imgui_key = ImGuiKey_Q; break;
+        case FlKey_R : imgui_key = ImGuiKey_R; break;
+        case FlKey_S : imgui_key = ImGuiKey_S; break;
+        case FlKey_T : imgui_key = ImGuiKey_T; break;
+        case FlKey_U : imgui_key = ImGuiKey_U; break;
+        case FlKey_V : imgui_key = ImGuiKey_V; break;
+        case FlKey_W : imgui_key = ImGuiKey_W; break;
+        case FlKey_X : imgui_key = ImGuiKey_X; break;
+        case FlKey_Y : imgui_key = ImGuiKey_Y; break;
+        case FlKey_Z : imgui_key = ImGuiKey_Z; break;
+        case FlKey_F1 : imgui_key = ImGuiKey_F1; break;
+        case FlKey_F2 : imgui_key = ImGuiKey_F2; break;
+        case FlKey_F3 : imgui_key = ImGuiKey_F3; break;
+        case FlKey_F4 : imgui_key = ImGuiKey_F4; break;
+        case FlKey_F5 : imgui_key = ImGuiKey_F5; break;
+        case FlKey_F6 : imgui_key = ImGuiKey_F6; break;
+        case FlKey_F7 : imgui_key = ImGuiKey_F7; break;
+        case FlKey_F8 : imgui_key = ImGuiKey_F8; break;
+        case FlKey_F9 : imgui_key = ImGuiKey_F9; break;
+        case FlKey_F10 : imgui_key = ImGuiKey_F10; break;
+        case FlKey_F11 : imgui_key = ImGuiKey_F11; break;
+        case FlKey_F12 : imgui_key = ImGuiKey_F12; break;
+        case FlKey_Apostrophe : imgui_key = ImGuiKey_Apostrophe; break;
+        case FlKey_Comma : imgui_key = ImGuiKey_Comma; break;
+        case FlKey_Minus : imgui_key = ImGuiKey_Minus; break;
+        case FlKey_Period : imgui_key = ImGuiKey_Period; break;
+        case FlKey_Slash : imgui_key = ImGuiKey_Slash; break;
+        case FlKey_Semicolon : imgui_key = ImGuiKey_Semicolon; break;
+        case FlKey_Equal : imgui_key = ImGuiKey_Equal; break;
+        case FlKey_LeftBracket : imgui_key = ImGuiKey_LeftBracket; break;
+        case FlKey_Backslash : imgui_key = ImGuiKey_Backslash; break;
+        case FlKey_RightBracket : imgui_key = ImGuiKey_RightBracket; break;
+        case FlKey_GraveAccent : imgui_key = ImGuiKey_GraveAccent; break;
+        case FlKey_CapsLock : imgui_key = ImGuiKey_CapsLock; break;
+        case FlKey_ScrollLock : imgui_key = ImGuiKey_ScrollLock; break;
+        case FlKey_NumLock : imgui_key = ImGuiKey_NumLock; break;
+        case FlKey_PrintScreen : imgui_key = ImGuiKey_PrintScreen; break;
+        case FlKey_Pause : imgui_key = ImGuiKey_Pause; break;
+        case FlKey_Keypad0 : imgui_key = ImGuiKey_Keypad0; break;
+        case FlKey_Keypad1 : imgui_key = ImGuiKey_Keypad1; break;
+        case FlKey_Keypad2 : imgui_key = ImGuiKey_Keypad2; break;
+        case FlKey_Keypad3 : imgui_key = ImGuiKey_Keypad3; break;
+        case FlKey_Keypad4 : imgui_key = ImGuiKey_Keypad4; break;
+        case FlKey_Keypad5 : imgui_key = ImGuiKey_Keypad5; break;
+        case FlKey_Keypad6 : imgui_key = ImGuiKey_Keypad6; break;
+        case FlKey_Keypad7 : imgui_key = ImGuiKey_Keypad7; break;
+        case FlKey_Keypad8 : imgui_key = ImGuiKey_Keypad8; break;
+        case FlKey_Keypad9 : imgui_key = ImGuiKey_Keypad9; break;
+        case FlKey_KeypadDecimal : imgui_key = ImGuiKey_KeypadDecimal; break;
+        case FlKey_KeypadDivide : imgui_key = ImGuiKey_KeypadDivide; break;
+        case FlKey_KeypadMultiply : imgui_key = ImGuiKey_KeypadMultiply; break; 
+        case FlKey_KeypadSubtract: imgui_key = ImGuiKey_KeypadSubtract; break;
+        case FlKey_KeypadAdd: imgui_key = ImGuiKey_KeypadAdd; break;
+        case FlKey_KeypadEnter: imgui_key = ImGuiKey_KeypadEnter; break;
+        case FlKey_KeypadEqual: imgui_key = ImGuiKey_KeypadEqual; break;
+        case FlKey_GamepadStart: imgui_key = ImGuiKey_GamepadStart; break;
+        case FlKey_GamepadBack: imgui_key = ImGuiKey_GamepadBack; break;
+        case FlKey_GamepadFaceLeft: imgui_key = ImGuiKey_GamepadFaceLeft; break;
+        case FlKey_GamepadFaceRight: imgui_key = ImGuiKey_GamepadFaceRight; break;
+        case FlKey_GamepadFaceUp: imgui_key = ImGuiKey_GamepadFaceUp; break;
+        case FlKey_GamepadFaceDown: imgui_key = ImGuiKey_GamepadFaceDown; break;
+        case FlKey_GamepadDpadLeft: imgui_key = ImGuiKey_GamepadDpadLeft; break;
+        case FlKey_GamepadDpadRight: imgui_key = ImGuiKey_GamepadDpadRight; break;
+        case FlKey_GamepadDpadUp: imgui_key = ImGuiKey_GamepadDpadUp; break;
+        case FlKey_GamepadDpadDown: imgui_key = ImGuiKey_GamepadDpadDown; break;
+        case FlKey_GamepadL1: imgui_key = ImGuiKey_GamepadL1; break;
+        case FlKey_GamepadR1: imgui_key = ImGuiKey_GamepadR1; break;
+        case FlKey_GamepadL2: imgui_key = ImGuiKey_GamepadL2; break;
+        case FlKey_GamepadR2: imgui_key = ImGuiKey_GamepadR2; break;
+        case FlKey_GamepadL3: imgui_key = ImGuiKey_GamepadL3; break;
+        case FlKey_GamepadR3: imgui_key = ImGuiKey_GamepadR3; break;
+        case FlKey_GamepadLStickLeft: imgui_key = ImGuiKey_GamepadLStickLeft; break;
+        case FlKey_GamepadLStickRight: imgui_key = ImGuiKey_GamepadLStickRight; break;
+        case FlKey_GamepadLStickUp: imgui_key = ImGuiKey_GamepadLStickUp; break;
+        case FlKey_GamepadLStickDown: imgui_key = ImGuiKey_GamepadLStickDown; break;
+        case FlKey_GamepadRStickLeft: imgui_key = ImGuiKey_GamepadRStickLeft; break;
+        case FlKey_GamepadRStickRight: imgui_key = ImGuiKey_GamepadRStickRight; break;
+        case FlKey_GamepadRStickUp: imgui_key = ImGuiKey_GamepadRStickUp; break;
+        case FlKey_GamepadRStickDown: imgui_key = ImGuiKey_GamepadRStickDown; break;
+        case FlKey_MouseLeft: imgui_key = ImGuiKey_MouseLeft; break;
+        case FlKey_MouseRight: imgui_key = ImGuiKey_MouseRight; break;
+        case FlKey_MouseMiddle: imgui_key = ImGuiKey_MouseMiddle; break;
+        case FlKey_MouseX1: imgui_key = ImGuiKey_MouseX1; break;
+        case FlKey_MouseX2: imgui_key = ImGuiKey_MouseX2; break;
+        case FlKey_MouseWheelX: imgui_key = ImGuiKey_MouseWheelX; break;
+        case FlKey_MouseWheelY: imgui_key = ImGuiKey_MouseWheelY; break;
+        case FlKey_ModCtrl: imgui_key = ImGuiMod_Ctrl; break;
+        case FlKey_ModShift: imgui_key = ImGuiMod_Shift; break;
+        case FlKey_ModAlt: imgui_key = ImGuiMod_Alt; break;
+        case FlKey_ModSuper: imgui_key = ImGuiMod_Super; break;
+        case FlKey_ModShortcut: imgui_key = ImGuiMod_Super; break;
+    }
+
+    return imgui_key;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void fl_input_add_key_event_impl(struct FlInternalData* priv, FlKey key, bool down) {
+    FL_UNUSED(priv);
+    ImGuiIO& io = ImGui::GetIO();
+    io.AddKeyEvent(translate_flkey_to_imgui(key), down);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" void fl_input_add_key_analog_event_impl(struct FlInternalData* priv, FlKey key, bool down, float value) {
+    FL_UNUSED(priv);
+    ImGuiIO& io = ImGui::GetIO();
+    io.AddKeyAnalogEvent(translate_flkey_to_imgui(key), down, value);
+}
+
 

@@ -217,6 +217,7 @@ enum Image {
     Data(Vec<u8>),
 }
 
+#[repr(C)]
 pub(crate) struct ImageHandler {
     images: HashMap<u64, Image>,
     id_counter: u64,

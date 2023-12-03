@@ -1,35 +1,35 @@
 typedef struct FlInputApi {
     struct FlInternalData* priv;
-    void (*add_key)(struct FlInternalData* priv, FlKey key);
+    void (*add_key_event)(struct FlInternalData* priv, FlKey key, bool down);
     void (*add_key_analog_event)(struct FlInternalData* priv, FlKey key, bool down, float value);
     void (*add_mouse_pos_event)(struct FlInternalData* priv, float x, float y);
     void (*add_mouse_button_event)(struct FlInternalData* priv, int button, bool down);
     void (*add_mouse_wheel_event)(struct FlInternalData* priv, float x, float y);
     void (*add_mouse_source_event)(struct FlInternalData* priv, FlMouseSource source);
-    void (*app_focus_event)(struct FlInternalData* priv, bool focused);
+    void (*add_focus_event)(struct FlInternalData* priv, bool focused);
     void (*add_char_event)(struct FlInternalData* priv, int c);
 } FlInputApi;
 
 extern FlInputApi* g_flowi_input_api;
 
 #ifdef FLOWI_STATIC
-void fl_input_add_key_impl(struct FlInternalData* priv, FlKey key);
+void fl_input_add_key_event_impl(struct FlInternalData* priv, FlKey key, bool down);
 void fl_input_add_key_analog_event_impl(struct FlInternalData* priv, FlKey key, bool down, float value);
 void fl_input_add_mouse_pos_event_impl(struct FlInternalData* priv, float x, float y);
 void fl_input_add_mouse_button_event_impl(struct FlInternalData* priv, int button, bool down);
 void fl_input_add_mouse_wheel_event_impl(struct FlInternalData* priv, float x, float y);
 void fl_input_add_mouse_source_event_impl(struct FlInternalData* priv, FlMouseSource source);
-void fl_input_app_focus_event_impl(struct FlInternalData* priv, bool focused);
+void fl_input_add_focus_event_impl(struct FlInternalData* priv, bool focused);
 void fl_input_add_char_event_impl(struct FlInternalData* priv, int c);
 #endif
 
 // Queue a new key down/up event.
 // Key should be "translated" (as in, generally [Key::A] matches the key end-user would use to emit an 'A' character)
-FL_INLINE void fl_input_add_key(FlKey key) {
+FL_INLINE void fl_input_add_key_event(FlKey key, bool down) {
 #ifdef FLOWI_STATIC
-    fl_input_add_key_impl(g_flowi_input_api->priv, key);
+    fl_input_add_key_event_impl(g_flowi_input_api->priv, key, down);
 #else
-    (g_flowi_input_api->add_key)(g_flowi_input_api->priv, key);
+    (g_flowi_input_api->add_key_event)(g_flowi_input_api->priv, key, down);
 #endif
 }
 
@@ -81,11 +81,11 @@ FL_INLINE void fl_input_add_mouse_source_event(FlMouseSource source) {
 }
 
 // Queue a gain/loss of focus for the application (generally based on OS/platform focus of your window)
-FL_INLINE void fl_input_app_focus_event(bool focused) {
+FL_INLINE void fl_input_add_focus_event(bool focused) {
 #ifdef FLOWI_STATIC
-    fl_input_app_focus_event_impl(g_flowi_input_api->priv, focused);
+    fl_input_add_focus_event_impl(g_flowi_input_api->priv, focused);
 #else
-    (g_flowi_input_api->app_focus_event)(g_flowi_input_api->priv, focused);
+    (g_flowi_input_api->add_focus_event)(g_flowi_input_api->priv, focused);
 #endif
 }
 

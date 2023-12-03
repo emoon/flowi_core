@@ -90,7 +90,7 @@ extern "C" {
 pub static mut g_flowi_painter_api: *const PainterFfiApi = std::ptr::null_mut();
 
 #[repr(C)]
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum PainterLayer {
     ActiveWindow = 0,
     Background = 1,
